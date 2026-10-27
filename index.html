@@ -86,7 +86,6 @@
       color: var(--text-muted);
     }
 
-    /* Üst Sağ Butonlar (Gece/Gündüz ve Gizli Yönetici) */
     .header-actions {
       display: flex;
       gap: 8px;
@@ -346,10 +345,10 @@
       </div>
     </div>
     
-    <!-- Üst Sağ Taraf: Gece/Gündüz Butonu ve Şifreli Yönetici Butonu -->
+    <!-- Gece/Gündüz ve Şifreli Gizli Yönetici Butonu -->
     <div class="header-actions">
-      <button id="themeToggleBtn" class="icon-round-btn" title="تېما ئالماشتۇرۇش (Mode)">🌓</button>
-      <button id="secretAdminBtn" class="icon-round-btn" title="باشقۇرغۇچى (Admin)">🛡️</button>
+      <button id="themeToggleBtn" class="icon-round-btn" title="تېما ئالماشتۇرۇش">🌓</button>
+      <button id="secretAdminBtn" class="icon-round-btn" title="باشقۇرغۇچى">🛡️</button>
     </div>
   </header>
 
@@ -416,7 +415,7 @@
       </div>
     </section>
 
-    <!-- ŞİFRELİ YÖNETİCİ PANELİ (Şifre: bilalemin) -->
+    <!-- ŞİFRELİ YÖNETİCİ PANELİ (Şifre: bilal) -->
     <section id="adminTab" class="tab-content">
       <div class="form-card" style="border-color: #f59e0b;">
         <h3 style="margin-bottom: 10px; font-size: 1.05rem; color: #f59e0b;">🛡️ باشقۇرغۇچى كۆزنىكى (Admin)</h3>
@@ -530,7 +529,7 @@
     }
 
     async function saveState() {
-      await StorageEngine.set("real_sham_state_v5", appState);
+      await StorageEngine.set("real_sham_state_v7", appState);
     }
 
     function renderProducts(filter = "") {
@@ -630,7 +629,7 @@
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
-      const saved = await StorageEngine.get("real_sham_state_v5", null);
+      const saved = await StorageEngine.get("real_sham_state_v7", null);
       if (saved && Array.isArray(saved.products)) {
         appState = saved;
       } else {
@@ -654,23 +653,22 @@
         });
       });
 
-      // Gece/Gündüz Modu Değiştirme
       document.getElementById("themeToggleBtn").addEventListener("click", async () => {
         document.body.classList.toggle("light-mode");
         appState.lightMode = document.body.classList.contains("light-mode");
         await saveState();
       });
 
-      // Şifreli Yönetici Girişi (Şifre: bilalemin)
+      // Şifreli Gizli Yönetici Butonu (Şifre: bilal)
       document.getElementById("secretAdminBtn").addEventListener("click", () => {
-        const password = prompt("🛡️ باشقۇرغۇچى شىپرىسىنى كىرگۈزۈڭ (Parola):");
-        if (password === "bilalemin") {
+        const password = prompt("🛡️ باشقۇرغۇچى مەخپى نومۇرىنى كىرگۈزۈڭ (Parola):");
+        if (password === "bilal") {
           document.querySelectorAll(".bottom-nav .nav-item").forEach(b => b.classList.remove("active"));
           document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
           document.getElementById("adminTab").classList.add("active");
           showToast("🛡️ باشقۇرغۇچى كۆزنىكى ئېچىلدى.");
         } else if (password !== null) {
-          showToast("⚠️ خاتا شىپرە!");
+          showToast("⚠️ خاتا مەخپى نومۇر!");
         }
       });
 
