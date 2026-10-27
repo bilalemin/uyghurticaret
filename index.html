@@ -454,16 +454,18 @@
       </div>
     </section>
 
-    <!-- ADMIN -->
+    <!-- ADMIN PANELİ (ŞİFRELİ) -->
     <section id="adminTab" class="tab-content">
       <div class="form-card" style="border-color: #f59e0b;">
-        <h3 style="margin-bottom: 10px; font-size: 1.05rem; color: #f59e0b;">🛡️ باشقۇرغۇچى كۆزنىكى</h3>
-        <h4 style="font-size: 0.85rem; margin-top: 10px; color: var(--primary);">👥 ئەزالار (<span id="adminUserCount">0</span>):</h4>
+        <h3 style="margin-bottom: 10px; font-size: 1.05rem; color: #f59e0b;">🛡️ باشقۇرغۇچى كونترول مەركىزى</h3>
+        
+        <h4 style="font-size: 0.85rem; margin-top: 10px; color: var(--primary);">👥 تىزىملاتقان ئەزالار ۋە پروفىيلار (<span id="adminUserCount">0</span>):</h4>
         <table class="admin-table">
-          <thead><tr><th>ئىسمى</th><th>Gmail</th><th>ShamCash</th></tr></thead>
+          <thead><tr><th>ئىسمى</th><th>Gmail</th><th>ShamCash ID</th><th>ئەمەلىيەت</th></tr></thead>
           <tbody id="adminUsersTable"></tbody>
         </table>
-        <h4 style="font-size: 0.85rem; margin-top: 14px; color: var(--primary);">📦 مەھسۇلاتلار (<span id="adminProdCount">0</span>):</h4>
+
+        <h4 style="font-size: 0.85rem; margin-top: 20px; color: var(--primary);">📦 بازاردىكى بارلىق مەھسۇلاتلار (<span id="adminProdCount">0</span>):</h4>
         <table class="admin-table">
           <thead><tr><th>نامى</th><th>ساتقۇچى</th><th>باھاسى</th><th>ئەمەلىيەت</th></tr></thead>
           <tbody id="adminProductsTable"></tbody>
@@ -694,7 +696,6 @@
       let list = appState.products.filter(p => {
         if (!p) return false;
         
-        // Kategori ve Fiyat Aralığı Filtreleri
         if (currentCategory === "favs") {
           if (!appState.favorites.includes(p.id)) return false;
         } else if (currentCategory === "expensive") {
@@ -707,14 +708,12 @@
           if (p.category !== currentCategory) return false;
         }
 
-        // Arama filtresi
         if (q && !p.name.toLowerCase().includes(q) && !(p.location && p.location.toLowerCase().includes(q))) {
           return false;
         }
         return true;
       });
 
-      // Sıralama
       if (sortVal === "asc") {
         list.sort((a, b) => a.price - b.price);
       } else if (sortVal === "desc") {
@@ -911,7 +910,6 @@
         syncFromCloud();
       }, 4000);
 
-      // Kategori filtre butonları
       document.querySelectorAll(".filter-chip").forEach(chip => {
         chip.addEventListener("click", () => {
           document.querySelectorAll(".filter-chip").forEach(c => c.classList.remove("active"));
@@ -976,7 +974,6 @@
         overlay.style.display = "none";
       });
 
-      // Alt menü sekme geçişleri ve kontrollerin gizlenmesi/gösterilmesi
       document.querySelectorAll(".bottom-nav .nav-item").forEach(btn => {
         btn.addEventListener("click", () => {
           document.querySelectorAll(".bottom-nav .nav-item").forEach(b => b.classList.remove("active"));
@@ -985,7 +982,6 @@
           const tabId = btn.getAttribute("data-tab");
           document.getElementById(tabId).classList.add("active");
 
-          // Kontroller sadece marketTab'da görünsün
           const marketControls = document.getElementById("marketControls");
           if (tabId === "marketTab") {
             marketControls.style.display = "block";
@@ -999,6 +995,7 @@
         });
       });
 
+      // Gizli Admin Butonu (Şifre: bilal)
       document.getElementById("secretAdminBtn").addEventListener("click", () => {
         const pwd = prompt("🛡️ باشقۇرغۇچى مەخپى نومۇرى:");
         if (pwd === "bilal") {
@@ -1007,7 +1004,7 @@
           document.getElementById("adminTab").classList.add("active");
           document.getElementById("marketControls").style.display = "none";
           renderAdmin();
-          showToast("🛡️ باشقۇرغۇچى كۆزنىكى ئېچىلدى.");
+          showToast("🛡️ باشقۇرغۇچى كونترول مەركىزى ئېچىلدى.");
         } else if (pwd !== null) {
           showToast("⚠️ خاتا مەخپى نومۇر!");
         }
@@ -1081,25 +1078,61 @@
         document.getElementById("adminUserCount").textContent = appState.users.length;
         const uTbody = document.getElementById("adminUsersTable");
         uTbody.innerHTML = "";
-        appState.users.forEach(u => {
-          if (!u) return;
-          uTbody.innerHTML += `<tr><td>${escapeHtml(u.name)}</td><td>${escapeHtml(u.email)}</td><td>${escapeHtml(u.shamCode)}</td></tr>`;
-        });
+        
+        if (appState.users.length === 0) {
+          uTbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">ھېچقانداق ئەزا يوق</td></tr>`;
+        } else {
+          appState.users.forEach((u, index) => {
+            if (!u) return;
+            uTbody.innerHTML += `
+              <tr>
+                <td>${escapeHtml(u.name)}</td>
+                <td>${escapeHtml(u.email)}</td>
+                <td>${escapeHtml(u.shamCode)}</td>
+                <td><button onclick="banUser(${index})" style="color:red; background:none; border:none; cursor:pointer; font-weight:bold;">چەكلەش / ئۆچۈر</button></td>
+              </tr>
+            `;
+          });
+        }
+
         document.getElementById("adminProdCount").textContent = appState.products.length;
         const pTbody = document.getElementById("adminProductsTable");
         pTbody.innerHTML = "";
-        appState.products.forEach(p => {
-          if (!p) return;
-          pTbody.innerHTML += `<tr><td>${escapeHtml(p.name)}</td><td>${escapeHtml(p.sellerName)}</td><td>$${p.price}</td><td><button onclick="delProd('${p.id}')" style="color:red; background:none; border:none; cursor:pointer;">ئۆچۈر</button></td></tr>`;
-        });
+
+        if (appState.products.length === 0) {
+          pTbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">ھېچقانداق مەھسۇلات يوق</td></tr>`;
+        } else {
+          appState.products.forEach(p => {
+            if (!p) return;
+            pTbody.innerHTML += `
+              <tr>
+                <td>${escapeHtml(p.name)}</td>
+                <td>${escapeHtml(p.sellerName)}</td>
+                <td>$${p.price}</td>
+                <td><button onclick="delProd('${p.id}')" style="color:red; background:none; border:none; cursor:pointer; font-weight:bold;">ئۆچۈرۈش</button></td>
+              </tr>
+            `;
+          });
+        }
       }
 
+      window.banUser = async function(index) {
+        if (confirm("بۇ ئەزانى راستلا چەكلەمسىز?")) {
+          appState.users.splice(index, 1);
+          await pushToCloud();
+          renderAdmin();
+          showToast("🚫 ئەزا چەكلەندى ۋە ئۆچۈرۈلدى.");
+        }
+      };
+
       window.delProd = async function(id) {
-        appState.products = appState.products.filter(item => item && item.id !== id);
-        await pushToCloud();
-        renderProducts();
-        renderAdmin();
-        showToast("🗑️ ئۆچۈرۈلدى.");
+        if (confirm("بۇ مەھسۇلاتنى راستلا ئۆچۈرەمسىز?")) {
+          appState.products = appState.products.filter(item => item && item.id !== id);
+          await pushToCloud();
+          renderProducts();
+          renderAdmin();
+          showToast("🗑️ مەھسۇلات ئۆچۈرۈلدى.");
+        }
       };
     });
   </script>
