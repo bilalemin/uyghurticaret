@@ -9,5 +9,13 @@
   "start_url": "/",
   "theme_color": "#ffffff",
   "id": "com.uyghur.bazaar",
-  "description": "Uyghur community marketplace and trading platform"
+  "description": "Uyghur community marketplace and trading platform",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
 }
