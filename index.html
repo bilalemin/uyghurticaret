@@ -76,6 +76,25 @@
       color: var(--text-muted);
     }
 
+    /* Üst Köşedeki Küçük Yuvarlak Yönetici Butonu */
+    .admin-icon-btn {
+      background: rgba(2, 132, 199, 0.2);
+      border: 1px solid var(--sham-blue);
+      color: #38bdf8;
+      padding: 6px 12px;
+      border-radius: 99px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .admin-icon-btn:hover {
+      background: var(--sham-blue);
+      color: white;
+    }
+
     .search-box {
       padding: 16px;
     }
@@ -282,24 +301,6 @@
       display: none;
     }
 
-    /* Gizli Yönetici Butonu */
-    .secret-admin-btn {
-      position: fixed;
-      bottom: 75px;
-      left: 10px;
-      background: rgba(0,0,0,0.4);
-      color: #64748b;
-      border: none;
-      border-radius: 50%;
-      width: 28px;
-      height: 28px;
-      font-size: 0.8rem;
-      cursor: pointer;
-      z-index: 9999;
-      opacity: 0.3;
-    }
-    .secret-admin-btn:hover { opacity: 1; color: #f59e0b; }
-
     .admin-table {
       width: 100%;
       border-collapse: collapse;
@@ -323,12 +324,13 @@
         <div class="logo-sub">ShamCash Tövlemlik Bazarı</div>
       </div>
     </div>
+    <!-- İstediğin Üst Sağ Köşedeki Yuvarlak Yönetici Butonu -->
+    <button id="headerAdminBtn" class="admin-icon-btn">
+      🛡️ باشقۇرغۇچى
+    </button>
   </header>
 
   <div id="toastBox" class="toast"></div>
-
-  <!-- Gizli Yönetici Butonu (Sadece senin görebileceğin küçük köşe simgesi) -->
-  <button id="secretAdminToggle" class="secret-admin-btn" title="Admin">🛡️</button>
 
   <div class="search-box">
     <input type="text" id="searchInput" class="search-input" placeholder="🔍 مەھسۇلات ياكى ساتقۇچى ئىزدەڭ...">
@@ -341,7 +343,7 @@
       <div id="productList" class="product-grid"></div>
     </section>
 
-    <!-- ÜRÜN EKLE (FOTOĞRAF YÜKLEME DAHİL) -->
+    <!-- ÜRÜN EKLE -->
     <section id="addProductTab" class="tab-content">
       <div class="form-card">
         <h3 style="margin-bottom: 14px; font-size: 1.05rem; color: var(--primary);">📦 مەھسۇلات ئېلان قىلىش ۋە رەسمى</h3>
@@ -370,7 +372,7 @@
       </div>
     </section>
 
-    <!-- GOOGLE GİRİŞ / PROFİL -->
+    <!-- GOOGLE GİRİŞ -->
     <section id="authTab" class="tab-content">
       <div class="form-card">
         <h3 style="margin-bottom: 10px; font-size: 1.05rem;">🔐 Google ھېساباتى بىلەن كىرىش</h3>
@@ -383,7 +385,7 @@
           <input type="email" id="googleEmailInput" class="form-control" placeholder="abdullah@gmail.com">
         </div>
         <div class="form-group">
-          <label class="form-label">شەخسىي ShamCash كودىڭىز (رəsmi ID):</label>
+          <label class="form-label">شەخسىي ShamCash كودىڭىز (ID):</label>
           <input type="text" id="userShamInput" class="form-control" placeholder="SC-5520-IDLIB">
         </div>
         <button type="button" id="googleLoginBtn" class="btn-primary" style="background:#2563eb;">🔵 Google بىلەن كىرىش</button>
@@ -391,12 +393,12 @@
       </div>
     </section>
 
-    <!-- GİZLİ YÖNETİCİ PANELİ -->
+    <!-- YÖNETİCİ PANELİ (ŞİFRELİ: bilalemin) -->
     <section id="adminTab" class="tab-content">
       <div class="form-card" style="border-color: #f59e0b;">
         <h3 style="margin-bottom: 10px; font-size: 1.05rem; color: #f59e0b;">🛡️ باشقۇرغۇچى كۆزنىكى (Admin)</h3>
         
-        <h4 style="font-size: 0.85rem; margin-top: 10px; color: var(--primary);">👥 تىزىملاتقان ئەزالөр (<span id="adminUserCount">0</span>):</h4>
+        <h4 style="font-size: 0.85rem; margin-top: 10px; color: var(--primary);">👥 تىزىملاتقان ئەزالار (<span id="adminUserCount">0</span>):</h4>
         <table class="admin-table">
           <thead><tr><th>ئىسمى</th><th>Gmail</th><th>ShamCash</th></tr></thead>
           <tbody id="adminUsersTable"></tbody>
@@ -485,16 +487,6 @@
         sellerEmail: "amin@gmail.com",
         shamCode: "SC-1042-IDLIB",
         image: ""
-      },
-      {
-        id: "p2",
-        name: "قولدا تىكىلگەن ئۇيغۇر دوپپىسى",
-        price: 20,
-        desc: "مىللىي ئەنئەنىۋى قول ھۈنەرۋەنچىلىك.",
-        sellerName: "زەينەپ خانىم",
-        sellerEmail: "zeynep@gmail.com",
-        shamCode: "SC-8830-ALEPPO",
-        image: ""
       }
     ];
 
@@ -514,7 +506,7 @@
     }
 
     async function saveState() {
-      await StorageEngine.set("real_sham_state_v3", appState);
+      await StorageEngine.set("real_sham_state_v4", appState);
     }
 
     function renderProducts(filter = "") {
@@ -614,7 +606,7 @@
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
-      const saved = await StorageEngine.get("real_sham_state_v3", null);
+      const saved = await StorageEngine.get("real_sham_state_v4", null);
       if (saved && Array.isArray(saved.products)) {
         appState = saved;
       } else {
@@ -634,12 +626,17 @@
         });
       });
 
-      // Gizli Admin Butonu Tıklanınca
-      document.getElementById("secretAdminToggle").addEventListener("click", () => {
-        document.querySelectorAll(".bottom-nav .nav-item").forEach(b => b.classList.remove("active"));
-        document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
-        document.getElementById("adminTab").classList.add("active");
-        showToast("🛡️ باشقۇرغۇچى كۆزنىكى ئېچىلدى.");
+      // ŞİFRELİ YÖNETİCİ GİRİŞİ (Şifre: bilalemin)
+      document.getElementById("headerAdminBtn").addEventListener("click", () => {
+        const password = prompt("🛡️ باشقۇرغۇچى شىپرىسىنى كىرگۈزۈڭ (Parola):");
+        if (password === "bilalemin") {
+          document.querySelectorAll(".bottom-nav .nav-item").forEach(b => b.classList.remove("active"));
+          document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+          document.getElementById("adminTab").classList.add("active");
+          showToast("🛡️ باشقۇرغۇچى كۆزنىكى ئېچىلدى.");
+        } else if (password !== null) {
+          showToast("⚠️ خاتا شىپرە!");
+        }
       });
 
       document.getElementById("searchInput").addEventListener("input", (e) => {
@@ -667,12 +664,10 @@
           return;
         }
 
-        let imageUrl = "";
         if (fileInput.files && fileInput.files[0]) {
           const reader = new FileReader();
           reader.onload = async function(e) {
-            imageUrl = e.target.result;
-            saveNewProduct(name, price, desc, sham, imageUrl);
+            saveNewProduct(name, price, desc, sham, e.target.result);
           };
           reader.readAsDataURL(fileInput.files[0]);
         } else {
@@ -717,12 +712,6 @@
         await saveState();
         renderAdmin();
         showToast(`🔵 خۇش كەپسىز ${name}!`);
-      });
-
-      document.getElementById("logoutBtn").addEventListener("click", async () => {
-        appState.currentUser = { name: "مېھمان", email: "guest@gmail.com", shamCode: "SC-9940-UYG" };
-        await saveState();
-        showToast("🚪 تىزىمدىن چېكىندىڭىز.");
       });
     });
   </script>
