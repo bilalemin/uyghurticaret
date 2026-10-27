@@ -3,9 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="color-scheme" content="light only">
   <title>ئۇيغۇر تىجارەتلىرى | ShamCash Bazarı</title>
   <style>
     :root {
+      color-scheme: light only;
       --primary: #0284c7;
       --primary-dark: #0369a1;
       --accent: #10b981;
@@ -25,10 +27,10 @@
       font-family: 'UKIJ Tuz', 'ALKATIP Basma', 'Uyghur Pashto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Tahoma, sans-serif;
     }
 
-    body {
+    html, body {
       direction: rtl;
-      background-color: var(--bg-color);
-      color: var(--text-main);
+      background-color: #f8fafc !important;
+      color: #0f172a !important;
       padding-bottom: 90px;
       min-height: 100vh;
     }
@@ -45,7 +47,7 @@
     }
 
     .header {
-      background: var(--card-bg);
+      background: #ffffff;
       border-bottom: 1px solid var(--border);
       padding: 14px 16px;
       position: sticky;
@@ -114,7 +116,7 @@
       padding: 12px 16px;
       border-radius: var(--radius);
       border: 1px solid var(--border);
-      background: var(--card-bg);
+      background: #ffffff;
       color: var(--text-main);
       font-size: 0.92rem;
       outline: none;
@@ -136,7 +138,7 @@
     }
 
     .product-card {
-      background: var(--card-bg);
+      background: #ffffff;
       border-radius: var(--radius);
       border: 1px solid var(--border);
       overflow: hidden;
@@ -147,7 +149,7 @@
       position: relative;
     }
 
-    .img-container { position: relative; height: 145px; background: #e2e8f0; }
+    .img-container { position: relative; height: 155px; background: #e2e8f0; }
     .product-img { height: 100%; width: 100%; object-fit: cover; }
     
     .sold-badge {
@@ -167,7 +169,7 @@
     .product-body { padding: 12px; }
     .product-title {
       font-weight: 700;
-      font-size: 0.92rem;
+      font-size: 0.95rem;
       margin-bottom: 4px;
       color: var(--text-main);
       display: -webkit-box;
@@ -193,7 +195,7 @@
     .btn-buy:disabled { background: #cbd5e1; cursor: not-allowed; }
 
     .form-card {
-      background: var(--card-bg);
+      background: #ffffff;
       border-radius: var(--radius);
       border: 1px solid var(--border);
       padding: 18px;
@@ -237,7 +239,7 @@
       padding: 16px;
     }
     .modal-card {
-      background: var(--card-bg);
+      background: #ffffff;
       width: 100%; max-width: 500px;
       border-radius: var(--radius);
       padding: 20px;
@@ -249,7 +251,7 @@
 
     .bottom-nav {
       position: fixed; bottom: 0; left: 0; right: 0;
-      background: var(--card-bg);
+      background: #ffffff;
       border-top: 1px solid var(--border);
       display: flex;
       justify-content: space-around;
@@ -348,15 +350,15 @@
         </div>
         <div class="form-group">
           <label class="form-label">مەھسۇلات نامى:</label>
-          <input type="text" id="prodNameInput" class="form-control" placeholder="مەسىلەن: Uyghur Doppa">
+          <input type="text" id="prodNameInput" class="form-control" placeholder="مەسىلەن: گازىر / دوپپا">
         </div>
         <div class="form-group">
           <label class="form-label">باھاسى (ShamCash $):</label>
-          <input type="number" id="prodPriceInput" class="form-control" placeholder="25" min="1">
+          <input type="number" id="prodPriceInput" class="form-control" placeholder="3" min="0.1" step="0.5">
         </div>
         <div class="form-group">
           <label class="form-label">جايى / ئورنى (كونوم - Location):</label>
-          <input type="text" id="prodLocationInput" class="form-control" placeholder="مەسىلەن: ئىدلىب / شام / ھەلەب">
+          <input type="text" id="prodLocationInput" class="form-control" placeholder="مەسىلەن: ئىدلىپ / شام / ھەلەب">
         </div>
         <div class="form-group">
           <label class="form-label">مەھسۇلات تەپسىلاتى:</label>
@@ -408,11 +410,21 @@
   </nav>
 
   <script>
+    // Firebase Bağlantı Adresi (Entegre Edildi)[cite: 14]
+    const FIREBASE_DB_URL = "https://uyghurticaret-default-rtdb.firebaseio.com";
+
     const PROFILE_KEY = "uyghur_saved_user_profile_v1";
     const MARKET_KEY = "uyghur_saved_market_data_v1";
 
-    // Fotoğrafları otomatik küçülten fonksiyon (Hafızanın dolmasını %100 engeller)
-    function compressImage(file, maxWidth = 600, quality = 0.7) {
+    function isCloudEnabled() {
+      return FIREBASE_DB_URL && FIREBASE_DB_URL.startsWith("https://") && !FIREBASE_DB_URL.includes("BURAYA_");
+    }
+
+    function cleanDbUrl() {
+      return FIREBASE_DB_URL.replace(/\/+$/, "");
+    }
+
+    function compressImage(file, maxWidth = 550, quality = 0.65) {
       return new Promise((resolve) => {
         if (!file) { resolve(""); return; }
         const reader = new FileReader();
@@ -440,7 +452,6 @@
       });
     }
 
-    // Hem LocalStorage hem IndexedDB kullanan Çift Korumalı Hafıza Motoru
     const PermanentDB = {
       openDB() {
         return new Promise((resolve, reject) => {
@@ -456,9 +467,7 @@
         });
       },
       async set(key, val) {
-        try {
-          localStorage.setItem(key, JSON.stringify(val));
-        } catch (e) {}
+        try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {}
         try {
           const db = await this.openDB();
           await new Promise((resolve, reject) => {
@@ -510,23 +519,74 @@
       await PermanentDB.set(PROFILE_KEY, currentUser);
     }
 
-    async function saveMarketData() {
+    async function syncFromCloud() {
+      if (!isCloudEnabled()) return;
+      try {
+        const res = await fetch(cleanDbUrl() + "/market.json");
+        if (!res.ok) return;
+        const cloudData = await res.json();
+        if (cloudData) {
+          const cloudProducts = Array.isArray(cloudData.products)
+            ? cloudData.products
+            : Object.values(cloudData.products || {});
+          const cloudUsers = Array.isArray(cloudData.users)
+            ? cloudData.users
+            : Object.values(cloudData.users || {});
+          const cloudChats = cloudData.chats || {};
+
+          let needsPush = false;
+          for (const localProd of appState.products) {
+            if (!cloudProducts.some(cp => cp && cp.id === localProd.id)) {
+              cloudProducts.unshift(localProd);
+              needsPush = true;
+            }
+          }
+
+          cloudProducts.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+          appState.products = cloudProducts;
+          appState.users = cloudUsers;
+          appState.chats = cloudChats;
+
+          await PermanentDB.set(MARKET_KEY, appState);
+          if (needsPush) {
+            await pushToCloud();
+          }
+          renderProducts(document.getElementById("searchInput")?.value || "");
+        } else if (appState.products.length > 0 || appState.users.length > 0) {
+          await pushToCloud();
+        }
+      } catch (e) {
+        console.warn("Cloud sync error:", e);
+      }
+    }
+
+    async function pushToCloud() {
       await PermanentDB.set(MARKET_KEY, appState);
+      if (!isCloudEnabled()) return;
+      try {
+        await fetch(cleanDbUrl() + "/market.json", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(appState)
+        });
+      } catch (e) {
+        console.warn("Cloud push error:", e);
+      }
     }
 
     function checkExpiredProducts() {
       const now = Date.now();
       let changed = false;
       appState.products = appState.products.filter(p => {
-        if (p.isSold && p.soldTime) {
+        if (p && p.isSold && p.soldTime) {
           if (now - p.soldTime > 24 * 60 * 60 * 1000) {
             changed = true;
             return false;
           }
         }
-        return true;
+        return Boolean(p);
       });
-      if (changed) saveMarketData();
+      if (changed) pushToCloud();
     }
 
     function renderProducts(filter = "") {
@@ -536,7 +596,7 @@
       container.innerHTML = "";
 
       const q = filter.trim().toLowerCase();
-      const list = appState.products.filter(p => !q || p.name.toLowerCase().includes(q) || (p.location && p.location.toLowerCase().includes(q)));
+      const list = appState.products.filter(p => p && (!q || p.name.toLowerCase().includes(q) || (p.location && p.location.toLowerCase().includes(q))));
 
       if (list.length === 0) {
         container.innerHTML = `<div style="grid-column: span 2; text-align:center; padding:30px; color:var(--text-muted);">ھېچقانداق مەھسۇلات تېپىلمىدى.</div>`;
@@ -556,7 +616,7 @@
           </div>
           <div class="product-body" style="cursor:pointer;" onclick="openProductModal('${p.id}')">
             <div class="product-title">${escapeHtml(p.name)}</div>
-            <div class="product-price">${Number(p.price).toFixed(2)} $</div>
+            <div class="product-price">$ ${Number(p.price).toFixed(2)}</div>
             <div class="product-location">📍 ${escapeHtml(p.location || 'جايى يوق')}</div>
             <div class="product-seller">👤 ${escapeHtml(p.sellerName)}</div>
           </div>
@@ -573,7 +633,7 @@
     }
 
     window.openProductModal = function(id) {
-      const p = appState.products.find(item => item.id === id);
+      const p = appState.products.find(item => item && item.id === id);
       if (!p) return;
 
       const modal = document.getElementById("productModal");
@@ -590,7 +650,7 @@
         <h2 style="margin-bottom:10px; font-size:1.1rem; color:var(--primary);">${escapeHtml(p.name)}</h2>
         <p style="font-size:0.9rem; margin-bottom:8px;">${escapeHtml(p.desc)}</p>
         <div style="font-size:0.85rem; color:var(--accent); font-weight:600; margin-bottom:8px;">📍 جايى: ${escapeHtml(p.location || 'بەلگىلەنمىگەن')}</div>
-        <div style="font-size:1rem; font-weight:bold; color:var(--primary); margin-bottom:8px;">باھاسى: ${p.price}$</div>
+        <div style="font-size:1rem; font-weight:bold; color:var(--primary); margin-bottom:8px;">باھاسى: $${Number(p.price).toFixed(2)}</div>
         
         <div style="background:#f1f5f9; padding:12px; border-radius:10px; margin-bottom:12px; font-size:0.86rem; line-height:1.7;">
           <p><strong>👤 ساتقۇچى:</strong> ${escapeHtml(p.sellerName)}</p>
@@ -606,7 +666,7 @@
           <div style="margin-bottom:15px;">
             <button onclick="requestBuy('${p.id}')" class="btn-primary" style="background:var(--accent);">💳 پۇل ئەۋەتتىم (ساتقۇچىغا ئۇقتۇرۇش)</button>
           </div>
-        ` : `<div style="color:#ef4444; font-weight:bold; text-align:center; margin-bottom:15px;">بۇ مەھسۇلات ساتىلدى!</div>`}
+        ` : `<div style="color:#ef4444; font-weight:bold; text-align:center; margin-bottom:15px;">بۇ مەھسۇلات ساتىлды!</div>`}
 
         ${isOwner && p.buyerName && !p.isSold ? `
           <div style="background:#ecfdf5; border:1px solid var(--accent); padding:10px; border-radius:8px; margin-bottom:15px; text-align:center;">
@@ -630,20 +690,20 @@
     };
 
     window.requestBuy = async function(id) {
-      const p = appState.products.find(item => item.id === id);
+      const p = appState.products.find(item => item && item.id === id);
       if (!p || !currentUser) return;
       p.buyerName = currentUser.name;
-      await saveMarketData();
+      await pushToCloud();
       showToast("✅ پۇل ئەۋەتكەنلىكىڭىز ساتقۇچىغا ئۇقتۇرۇلدى!");
       openProductModal(id);
     };
 
     window.confirmSold = async function(id) {
-      const p = appState.products.find(item => item.id === id);
+      const p = appState.products.find(item => item && item.id === id);
       if (!p) return;
       p.isSold = true;
       p.soldTime = Date.now();
-      await saveMarketData();
+      await pushToCloud();
       renderProducts();
       document.getElementById("productModal").style.display = "none";
       showToast("✅ مەھسۇلات ساتىلدى! 1 كۈندىن كېيىن ئۆچۈرۈلىدۇ.");
@@ -656,7 +716,7 @@
       if (!appState.chats[id]) appState.chats[id] = [];
       appState.chats[id].push({ sender: currentUser.name, text });
       input.value = "";
-      await saveMarketData();
+      await pushToCloud();
       openProductModal(id);
     };
 
@@ -678,9 +738,7 @@
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
-      // 1. Önce Cihazdaki Kayıtlı Profili Yükle
       const savedProfile = await PermanentDB.get(PROFILE_KEY, null);
-      // 2. Kayıtlı Ürünleri ve Pazar Verisini Yükle
       const savedMarket = await PermanentDB.get(MARKET_KEY, null);
 
       if (savedMarket && Array.isArray(savedMarket.products)) {
@@ -698,8 +756,12 @@
       }
 
       renderProducts();
+      await syncFromCloud();
 
-      // Profil Kaydetme Butonu
+      setInterval(() => {
+        syncFromCloud();
+      }, 4000);
+
       document.getElementById("createProfileBtn").addEventListener("click", async () => {
         const name = document.getElementById("regNameInput").value.trim();
         const email = document.getElementById("regEmailInput").value.trim();
@@ -721,21 +783,21 @@
         currentUser = { name, email, shamCode: sham, whatsapp, telegram, qrImage };
         await saveProfileData();
 
-        const existingUserIdx = appState.users.findIndex(u => u.email === email);
+        await syncFromCloud();
+        const existingUserIdx = appState.users.findIndex(u => u && u.email === email);
         if (existingUserIdx >= 0) {
           appState.users[existingUserIdx] = { name, email, shamCode: sham, whatsapp, telegram };
         } else {
           appState.users.unshift({ name, email, shamCode: sham, whatsapp, telegram });
         }
-        await saveMarketData();
+        await pushToCloud();
 
         updateProfileView();
         renderProducts();
         overlay.style.display = "none";
-        showToast(`🎉 خۇش كەپسىز ${name}! پروفىلىڭىز مەڭگۈلۈك ساقلاندى.`);
+        showToast(`🎉 خۇش كەپسىز ${name}! پروفىلىڭىز ساقلاندى.`);
       });
 
-      // Hesabım Sekmesinden Profil Düzenleme
       document.getElementById("changeProfileBtn").addEventListener("click", () => {
         if (currentUser) {
           document.getElementById("regNameInput").value = currentUser.name || "";
@@ -752,7 +814,6 @@
         overlay.style.display = "none";
       });
 
-      // Alt Menü Sekme Geçişleri
       document.querySelectorAll(".bottom-nav .nav-item").forEach(btn => {
         btn.addEventListener("click", () => {
           document.querySelectorAll(".bottom-nav .nav-item").forEach(b => b.classList.remove("active"));
@@ -762,7 +823,6 @@
         });
       });
 
-      // Şifreli Yönetici Paneli (Şifre: bilal)
       document.getElementById("secretAdminBtn").addEventListener("click", () => {
         const pwd = prompt("🛡️ باشقۇرغۇچى مەخپى نومۇرى:");
         if (pwd === "bilal") {
@@ -778,7 +838,6 @@
 
       document.getElementById("searchInput").addEventListener("input", (e) => renderProducts(e.target.value));
 
-      // Ürün Yayınlama (Fotoğraf Sıkıştırmalı ve Kalıcı Kayıtlı)
       document.getElementById("publishProductBtn").addEventListener("click", async () => {
         if (!currentUser) {
           overlay.style.display = "flex";
@@ -796,14 +855,17 @@
           return;
         }
 
-        showToast("⏳ مەھسۇلات ساقلىنىۋاتىدۇ...");
+        showToast("⏳ مەھسۇلات يۈكلىنىۋاتىدۇ...");
         let compressedImg = "";
         if (imgFile) {
-          compressedImg = await compressImage(imgFile, 600, 0.7);
+          compressedImg = await compressImage(imgFile, 550, 0.65);
         }
+
+        await syncFromCloud();
 
         appState.products.unshift({
           id: "p_" + Date.now(),
+          createdAt: Date.now(),
           name,
           price,
           location,
@@ -820,7 +882,7 @@
           soldTime: null
         });
 
-        await saveMarketData();
+        await pushToCloud();
         renderProducts();
 
         document.getElementById("prodNameInput").value = "";
@@ -829,13 +891,12 @@
         document.getElementById("prodDescInput").value = "";
         document.getElementById("prodImageFile").value = "";
 
-        // Otomatik olarak Pazar (Market) sekmesine geç
         document.querySelectorAll(".bottom-nav .nav-item").forEach(b => b.classList.remove("active"));
         document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
         document.querySelector('[data-tab="marketTab"]').classList.add("active");
         document.getElementById("marketTab").classList.add("active");
 
-        showToast("✅ مەھسۇلات بازارغا چىقتى ۋە مەڭگۈلۈك ساقلاندى!");
+        showToast("✅ مەھسۇلات بازارغا چىقتى ۋە بارلىق ئۈسكۈنىلەرگە تارقىتىلدى!");
       });
 
       function renderAdmin() {
@@ -843,19 +904,21 @@
         const uTbody = document.getElementById("adminUsersTable");
         uTbody.innerHTML = "";
         appState.users.forEach(u => {
+          if (!u) return;
           uTbody.innerHTML += `<tr><td>${escapeHtml(u.name)}</td><td>${escapeHtml(u.email)}</td><td>${escapeHtml(u.shamCode)}</td></tr>`;
         });
         document.getElementById("adminProdCount").textContent = appState.products.length;
         const pTbody = document.getElementById("adminProductsTable");
         pTbody.innerHTML = "";
         appState.products.forEach(p => {
-          pTbody.innerHTML += `<tr><td>${escapeHtml(p.name)}</td><td>${escapeHtml(p.sellerName)}</td><td>${p.price}$</td><td><button onclick="delProd('${p.id}')" style="color:red; background:none; border:none; cursor:pointer;">ئۆچۈر</button></td></tr>`;
+          if (!p) return;
+          pTbody.innerHTML += `<tr><td>${escapeHtml(p.name)}</td><td>${escapeHtml(p.sellerName)}</td><td>$${p.price}</td><td><button onclick="delProd('${p.id}')" style="color:red; background:none; border:none; cursor:pointer;">ئۆچۈر</button></td></tr>`;
         });
       }
 
       window.delProd = async function(id) {
-        appState.products = appState.products.filter(item => item.id !== id);
-        await saveMarketData();
+        appState.products = appState.products.filter(item => item && item.id !== id);
+        await pushToCloud();
         renderProducts();
         renderAdmin();
         showToast("🗑️ ئۆچۈرۈلدى.");
