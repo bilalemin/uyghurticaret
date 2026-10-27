@@ -110,7 +110,11 @@
     }
     .icon-round-btn:hover { border-color: var(--primary); }
 
-    /* Filtreler ve Kategoriler */
+    /* Sadece Market Sekmesinde Görünecek Kısım */
+    #marketControls {
+      display: block;
+    }
+
     .filter-bar {
       padding: 12px 16px 0 16px;
       display: flex;
@@ -148,7 +152,7 @@
     }
     .search-input:focus { border-color: var(--primary); }
 
-    .container { padding: 0 16px; }
+    .container { padding: 12px 16px 0 16px; }
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
@@ -368,24 +372,29 @@
 
   <div id="toastBox" class="toast"></div>
 
-  <!-- KATEGORİ & FİLTRE ÇUBUĞU -->
-  <div class="filter-bar" id="categoryFilterBar">
-    <div class="filter-chip active" data-cat="all">🌟 ھەممىسى</div>
-    <div class="filter-chip" data-cat="food">🍲 يېمەكلىك</div>
-    <div class="filter-chip" data-cat="clothes">👕 كىيىم-كېچەك</div>
-    <div class="filter-chip" data-cat="electronics">💻 ئېلېكترونلۇق</div>
-    <div class="filter-chip" data-cat="home">🏠 ئۆي سايمانلىرى</div>
-    <div class="filter-chip" data-cat="favs">❤️ ياقتۇرغانلىرىم</div>
-  </div>
+  <!-- SADECE PAZAR (MARKET) SEKMESİNDE GÖRÜNECEK KISIM -->
+  <div id="marketControls">
+    <div class="filter-bar" id="categoryFilterBar">
+      <div class="filter-chip active" data-cat="all">🌟 ھەممىسى</div>
+      <div class="filter-chip" data-cat="food">🍲 يېمەكلىك</div>
+      <div class="filter-chip" data-cat="clothes">👕 كىيىم-كېچەك</div>
+      <div class="filter-chip" data-cat="electronics">💻 ئېلېكترونلۇق</div>
+      <div class="filter-chip" data-cat="home">🏠 ئۆي سايمانلىرى</div>
+      <div class="filter-chip" data-cat="expensive">💎 300$ دىن يۇقىرى (پاهالى)</div>
+      <div class="filter-chip" data-cat="normal">⚖️ 100$~300$ (نورمال)</div>
+      <div class="filter-chip" data-cat="cheap">🏷️ 100$ دىن تۆۋەن (ئەرزان)</div>
+      <div class="filter-chip" data-cat="favs">❤️ ياقتۇرغانلىرىم</div>
+    </div>
 
-  <div class="search-box">
-    <div style="display:flex; gap:8px;">
-      <input type="text" id="searchInput" class="search-input" placeholder="🔍 مەھسۇلات ياكى جاي (كونوم) ئىزدەڭ...">
-      <select id="sortSelect" class="form-control" style="width: 130px; font-size: 0.8rem; padding: 0 8px;">
-        <option value="new">يېڭى قوشۇلغان</option>
-        <option value="asc">باھاسى: ئەرزان</option>
-        <option value="desc">باھاسى: قىممەت</option>
-      </select>
+    <div class="search-box">
+      <div style="display:flex; gap:8px;">
+        <input type="text" id="searchInput" class="search-input" placeholder="🔍 مەھسۇلات ياكى جاي (كونوم) ئىزدەڭ...">
+        <select id="sortSelect" class="form-control" style="width: 130px; font-size: 0.8rem; padding: 0 8px;">
+          <option value="new">يېڭى قوشۇلغان</option>
+          <option value="asc">باھاسى: ئەرزان</option>
+          <option value="desc">باھاسى: قىممەت</option>
+        </select>
+      </div>
     </div>
   </div>
 
@@ -572,7 +581,7 @@
       products: [],
       users: [],
       chats: {},
-      favorites: [] // Favori ürün id listesi
+      favorites: []
     };
 
     let currentCategory = "all";
@@ -684,12 +693,20 @@
 
       let list = appState.products.filter(p => {
         if (!p) return false;
-        // Kategori filtresi
+        
+        // Kategori ve Fiyat Aralığı Filtreleri
         if (currentCategory === "favs") {
           if (!appState.favorites.includes(p.id)) return false;
+        } else if (currentCategory === "expensive") {
+          if (p.price <= 300) return false;
+        } else if (currentCategory === "normal") {
+          if (p.price < 100 || p.price > 300) return false;
+        } else if (currentCategory === "cheap") {
+          if (p.price >= 100) return false;
         } else if (currentCategory !== "all") {
           if (p.category !== currentCategory) return false;
         }
+
         // Arama filtresi
         if (q && !p.name.toLowerCase().includes(q) && !(p.location && p.location.toLowerCase().includes(q))) {
           return false;
@@ -852,7 +869,6 @@
         ${currentUser.qrImage ? `<div style="margin-top:10px;"><p><strong>ShamCash QR كودىڭىز:</strong></p><img src="${currentUser.qrImage}" style="max-width:150px; border-radius:8px; border:2px solid var(--primary); margin-top:5px;"></div>` : ""}
       `;
 
-      // Kullanıcının kendi ürünleri
       const myProds = appState.products.filter(p => p && p.sellerEmail === currentUser.email);
       const myProdContainer = document.getElementById("myProductsList");
       if (myProds.length === 0) {
@@ -960,13 +976,24 @@
         overlay.style.display = "none";
       });
 
+      // Alt menü sekme geçişleri ve kontrollerin gizlenmesi/gösterilmesi
       document.querySelectorAll(".bottom-nav .nav-item").forEach(btn => {
         btn.addEventListener("click", () => {
           document.querySelectorAll(".bottom-nav .nav-item").forEach(b => b.classList.remove("active"));
           document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
           btn.classList.add("active");
-          document.getElementById(btn.getAttribute("data-tab")).classList.add("active");
-          if (btn.getAttribute("data-tab") === "authTab") {
+          const tabId = btn.getAttribute("data-tab");
+          document.getElementById(tabId).classList.add("active");
+
+          // Kontroller sadece marketTab'da görünsün
+          const marketControls = document.getElementById("marketControls");
+          if (tabId === "marketTab") {
+            marketControls.style.display = "block";
+          } else {
+            marketControls.style.display = "none";
+          }
+
+          if (tabId === "authTab") {
             updateProfileView();
           }
         });
@@ -978,6 +1005,7 @@
           document.querySelectorAll(".bottom-nav .nav-item").forEach(b => b.classList.remove("active"));
           document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
           document.getElementById("adminTab").classList.add("active");
+          document.getElementById("marketControls").style.display = "none";
           renderAdmin();
           showToast("🛡️ باشقۇرغۇچى كۆزنىكى ئېچىلدى.");
         } else if (pwd !== null) {
@@ -1044,6 +1072,7 @@
         document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
         document.querySelector('[data-tab="marketTab"]').classList.add("active");
         document.getElementById("marketTab").classList.add("active");
+        document.getElementById("marketControls").style.display = "block";
 
         showToast("✅ مەھسۇلات بازارغا چىقتى ۋە بارلىق ئۈسكۈنىلەرگە تارقىتىلدى!");
       });
