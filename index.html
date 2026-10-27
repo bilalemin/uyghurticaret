@@ -6,25 +6,16 @@
   <title>ئۇيغۇر تىجارەتلىرى | ShamCash Bazarı</title>
   <style>
     :root {
-      --primary: #10b981;
-      --primary-dark: #059669;
-      --sham-blue: #0284c7;
-      --bg-color: #0f172a;
-      --card-bg: #1e293b;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --border: rgba(255, 255, 255, 0.1);
-      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-      --radius: 16px;
-    }
-
-    body.light-mode {
-      --bg-color: #f1f5f9;
+      --primary: #0284c7;
+      --primary-dark: #0369a1;
+      --accent: #10b981;
+      --bg-color: #f8fafc;
       --card-bg: #ffffff;
       --text-main: #0f172a;
       --text-muted: #64748b;
       --border: #e2e8f0;
-      --shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.08);
+      --shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.06);
+      --radius: 16px;
     }
 
     * {
@@ -32,7 +23,6 @@
       margin: 0;
       padding: 0;
       font-family: 'UKIJ Tuz', 'ALKATIP Basma', 'Uyghur Pashto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Tahoma, sans-serif;
-      transition: background-color 0.2s ease, color 0.2s ease;
     }
 
     body {
@@ -53,7 +43,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
     }
 
     .logo-area {
@@ -65,7 +55,7 @@
     .logo-icon {
       width: 42px;
       height: 42px;
-      background: linear-gradient(135deg, var(--primary), var(--sham-blue));
+      background: linear-gradient(135deg, var(--primary), var(--accent));
       color: white;
       border-radius: 12px;
       display: flex;
@@ -93,7 +83,7 @@
     }
 
     .icon-round-btn {
-      background: rgba(255, 255, 255, 0.08);
+      background: #f1f5f9;
       border: 1px solid var(--border);
       color: var(--text-main);
       width: 38px;
@@ -105,7 +95,7 @@
       cursor: pointer;
       font-size: 1rem;
     }
-    body.light-mode .icon-round-btn { background: #f8fafc; }
+    .icon-round-btn:hover { border-color: var(--primary); }
 
     .search-box { padding: 16px; }
     .search-input {
@@ -119,6 +109,7 @@
       outline: none;
       box-shadow: var(--shadow);
     }
+    .search-input:focus { border-color: var(--primary); }
 
     .container { padding: 0 16px; }
     .tab-content { display: none; }
@@ -145,19 +136,18 @@
       position: relative;
     }
 
-    .img-container { position: relative; height: 140px; background: #334155; }
+    .img-container { position: relative; height: 140px; background: #e2e8f0; }
     .product-img { height: 100%; width: 100%; object-fit: cover; }
     
-    /* Satıldı Damgası */
     .sold-badge {
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.65);
+      background: rgba(15, 23, 42, 0.75);
       color: #ef4444;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       font-weight: 900;
       letter-spacing: 2px;
       transform: rotate(-10deg);
@@ -167,15 +157,16 @@
     .product-title {
       font-weight: 700;
       font-size: 0.92rem;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       color: var(--text-main);
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
-    .product-price { color: var(--primary); font-weight: 800; font-size: 1.1rem; margin-bottom: 6px; }
-    .product-seller { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 10px; }
+    .product-price { color: var(--primary); font-weight: 800; font-size: 1.1rem; margin-bottom: 4px; }
+    .product-location { font-size: 0.75rem; color: var(--accent); font-weight: 600; margin-bottom: 4px; }
+    .product-seller { font-size: 0.72rem; color: var(--text-muted); margin-bottom: 8px; }
 
     .btn-buy {
       background: var(--primary);
@@ -188,7 +179,7 @@
       font-size: 0.82rem;
       cursor: pointer;
     }
-    .btn-buy:disabled { background: #64748b; cursor: not-allowed; }
+    .btn-buy:disabled { background: #cbd5e1; cursor: not-allowed; }
 
     .form-card {
       background: var(--card-bg);
@@ -207,10 +198,10 @@
       border: 1px solid var(--border);
       font-size: 0.92rem;
       outline: none;
-      background: rgba(15, 23, 42, 0.4);
+      background: #f8fafc;
       color: var(--text-main);
     }
-    body.light-mode .form-control { background: #f8fafc; }
+    .form-control:focus { border-color: var(--primary); background: #ffffff; }
 
     .btn-primary {
       background: var(--primary);
@@ -223,23 +214,11 @@
       font-size: 0.95rem;
       cursor: pointer;
     }
-    .btn-translate {
-      background: linear-gradient(135deg, #6366f1, #8b5cf6);
-      color: white;
-      border: none;
-      padding: 9px 14px;
-      border-radius: 10px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      margin-top: 8px;
-      cursor: pointer;
-      width: 100%;
-    }
+    .btn-primary:hover { background: var(--primary-dark); }
 
-    /* Modal / Detay Penceresi */
     .modal-overlay {
       position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.7);
+      background: rgba(0,0,0,0.5);
       display: none;
       align-items: center;
       justify-content: center;
@@ -254,6 +233,7 @@
       max-height: 90vh;
       overflow-y: auto;
       border: 1px solid var(--border);
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
     }
 
     .bottom-nav {
@@ -264,7 +244,7 @@
       justify-content: space-around;
       padding: 10px 0;
       z-index: 100;
-      box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
     }
     .nav-item {
       background: none; border: none;
@@ -276,9 +256,9 @@
 
     .toast {
       position: fixed; top: 80px; left: 16px; right: 16px;
-      background: #065f46; color: white; padding: 12px;
+      background: #0f172a; color: white; padding: 12px;
       border-radius: 12px; font-size: 0.88rem; text-align: center;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3); z-index: 999; display: none;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 999; display: none;
     }
     .admin-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 10px; }
     .admin-table th, .admin-table td { border-bottom: 1px solid var(--border); padding: 9px 6px; text-align: right; }
@@ -295,7 +275,6 @@
       </div>
     </div>
     <div class="header-actions">
-      <button id="themeToggleBtn" class="icon-round-btn" title="تېما">🌓</button>
       <button id="secretAdminBtn" class="icon-round-btn" title="باشقۇرغۇچى">🛡️</button>
     </div>
   </header>
@@ -303,7 +282,7 @@
   <div id="toastBox" class="toast"></div>
 
   <div class="search-box">
-    <input type="text" id="searchInput" class="search-input" placeholder="🔍 مەھسۇلات ياكى ساتقۇچى ئىزدەڭ...">
+    <input type="text" id="searchInput" class="search-input" placeholder="🔍 مەھسۇلات ياكى جاي (كونوم) ئىزدەڭ...">
   </div>
 
   <div class="container">
@@ -315,7 +294,7 @@
     <!-- ÜRÜN EKLE -->
     <section id="addProductTab" class="tab-content">
       <div class="form-card">
-        <h3 style="margin-bottom: 14px; font-size: 1.05rem; color: var(--primary);">📦 مەھسۇلات ئېلان قىلىش ۋە QR كود</h3>
+        <h3 style="margin-bottom: 14px; font-size: 1.05rem; color: var(--primary);">📦 مەھسۇلات ئېلان قىلىش</h3>
         <div class="form-group">
           <label class="form-label">مەھسۇلات سۈرىتى:</label>
           <input type="file" id="prodImageFile" class="form-control" accept="image/*">
@@ -333,9 +312,12 @@
           <input type="number" id="prodPriceInput" class="form-control" placeholder="25" min="1">
         </div>
         <div class="form-group">
+          <label class="form-label">جايى / ئورنى (كونوم - Location):</label>
+          <input type="text" id="prodLocationInput" class="form-control" placeholder="مەسىلەن: ئىدلىب / شام / ھەلەب">
+        </div>
+        <div class="form-group">
           <label class="form-label">مەھسۇلات تەپسىلاتى:</label>
-          <textarea id="prodDescInput" class="form-control" rows="3" placeholder="مەھسۇلات ھالىتى..."></textarea>
-          <button type="button" id="translateBtn" class="btn-translate">🌐 تەرجىمە قىلىش</button>
+          <textarea id="prodDescInput" class="form-control" rows="3" placeholder="مەھسۇلات ئەھۋالى..."></textarea>
         </div>
         <div class="form-group">
           <label class="form-label">ساتقۇچىنىڭ ShamCash نومۇرى (ID):</label>
@@ -361,8 +343,8 @@
           <label class="form-label">ShamCash كودىڭىز (ID):</label>
           <input type="text" id="userShamInput" class="form-control" placeholder="SC-5520">
         </div>
-        <button type="button" id="googleLoginBtn" class="btn-primary" style="background:#2563eb;">🔵 كىرىش</button>
-        <button type="button" id="logoutBtn" style="width:100%; margin-top:10px; background:rgba(239,68,68,0.2); color:#fca5a5; border:none; padding:11px; border-radius:12px; font-weight:600; cursor:pointer;">🚪 چېكىنىش</button>
+        <button type="button" id="googleLoginBtn" class="btn-primary">🔵 كىرىش</button>
+        <button type="button" id="logoutBtn" style="width:100%; margin-top:10px; background:#fee2e2; color:#b91c1c; border:none; padding:11px; border-radius:12px; font-weight:600; cursor:pointer;">🚪 چېكىنىش</button>
       </div>
     </section>
 
@@ -375,7 +357,7 @@
           <thead><tr><th>ئىسمى</th><th>Gmail</th><th>ShamCash</th></tr></thead>
           <tbody id="adminUsersTable"></tbody>
         </table>
-        <h4 style="font-size: 0.85rem; margin-top: 14px; color: var(--primary);">📦 مەھсۇلاتلار (<span id="adminProdCount">0</span>):</h4>
+        <h4 style="font-size: 0.85rem; margin-top: 14px; color: var(--primary);">📦 مەھسۇلاتلار (<span id="adminProdCount">0</span>):</h4>
         <table class="admin-table">
           <thead><tr><th>نامى</th><th>ساتقۇچى</th><th>باھاسى</th><th>ئەمەلىيەت</th></tr></thead>
           <tbody id="adminProductsTable"></tbody>
@@ -399,15 +381,6 @@
   </nav>
 
   <script>
-    async function translateGoogle(text) {
-      if (!text || !text.trim()) return text;
-      try {
-        const r = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|ug`);
-        const d = await r.json();
-        return d.responseData?.translatedText || text;
-      } catch { return text; }
-    }
-
     const StorageEngine = {
       async get(key, defaultVal) {
         try { const raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : defaultVal; }
@@ -423,8 +396,7 @@
       currentUser: { name: "مېھمان", email: "guest@gmail.com", shamCode: "SC-9940" },
       products: [],
       users: [],
-      chats: {}, // productId -> [{sender, text}]
-      lightMode: false
+      chats: {}
     };
 
     function showToast(msg) {
@@ -436,10 +408,9 @@
     }
 
     async function saveState() {
-      await StorageEngine.set("real_sham_state_v9", appState);
+      await StorageEngine.set("real_sham_state_v10", appState);
     }
 
-    // 1 Gün Geçen Ürünleri Temizleme Kontrolü
     function checkExpiredProducts() {
       const now = Date.now();
       let changed = false;
@@ -447,7 +418,7 @@
         if (p.isSold && p.soldTime) {
           if (now - p.soldTime > 24 * 60 * 60 * 1000) {
             changed = true;
-            return false; // Sil
+            return false;
           }
         }
         return true;
@@ -462,7 +433,7 @@
       container.innerHTML = "";
 
       const q = filter.trim().toLowerCase();
-      const list = appState.products.filter(p => !q || p.name.toLowerCase().includes(q));
+      const list = appState.products.filter(p => !q || p.name.toLowerCase().includes(q) || (p.location && p.location.toLowerCase().includes(q)));
 
       if (list.length === 0) {
         container.innerHTML = `<div style="grid-column: span 2; text-align:center; padding:30px; color:var(--text-muted);">ھېچقانداق مەھسۇلات تېپىلمىدى.</div>`;
@@ -473,7 +444,7 @@
         const card = document.createElement("div");
         card.className = "product-card";
         const imgTag = p.image ? `<img src="${p.image}" class="product-img">` : `<div style="height:100%; display:flex; align-items:center; justify-content:center; font-size:2rem;">🛍️</div>`;
-        const soldBadge = p.isSold ? `<div class="sold-badge">ساتىлды (Sold)</div>` : "";
+        const soldBadge = p.isSold ? `<div class="sold-badge">ساتىлды</div>` : "";
 
         card.innerHTML = `
           <div class="img-container" style="cursor:pointer;" onclick="openProductModal('${p.id}')">
@@ -483,6 +454,7 @@
           <div class="product-body" style="cursor:pointer;" onclick="openProductModal('${p.id}')">
             <div class="product-title">${escapeHtml(p.name)}</div>
             <div class="product-price">${Number(p.price).toFixed(2)} $</div>
+            <div class="product-location">📍 ${escapeHtml(p.location || 'جايى يوق')}</div>
             <div class="product-seller">👤 ${escapeHtml(p.sellerName)}</div>
           </div>
           <div style="padding: 0 12px 12px 12px;">
@@ -497,7 +469,6 @@
       return String(str || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
 
-    // Ürün Detay ve Sohbet Modalı
     window.openProductModal = function(id) {
       const p = appState.products.find(item => item.id === id);
       if (!p) return;
@@ -507,35 +478,36 @@
       const isOwner = appState.currentUser.email === p.sellerEmail;
 
       let chatMsgs = (appState.chats[p.id] || []).map(m => `
-        <div style="margin-bottom:6px; background:rgba(255,255,255,0.05); padding:8px; border-radius:8px;">
+        <div style="margin-bottom:6px; background:#f1f5f9; padding:8px; border-radius:8px;">
           <strong>${escapeHtml(m.sender)}:</strong> ${escapeHtml(m.text)}
         </div>
       `).join("") || `<div style="color:var(--text-muted); font-size:0.8rem;">خەۋەر يوق...</div>`;
 
       body.innerHTML = `
         <h2 style="margin-bottom:10px; font-size:1.1rem; color:var(--primary);">${escapeHtml(p.name)}</h2>
-        <p style="font-size:0.9rem; margin-bottom:10px;">${escapeHtml(p.desc)}</p>
-        <div style="font-size:1rem; font-weight:bold; color:var(--primary); margin-bottom:10px;">باھاسى: ${p.price}$</div>
+        <p style="font-size:0.9rem; margin-bottom:8px;">${escapeHtml(p.desc)}</p>
+        <div style="font-size:0.85rem; color:var(--accent); font-weight:600; margin-bottom:8px;">📍 جايى: ${escapeHtml(p.location || 'بەلگىلەنمىگەن')}</div>
+        <div style="font-size:1rem; font-weight:bold; color:var(--primary); margin-bottom:8px;">باھاسى: ${p.price}$</div>
         <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:15px;">ساتقۇچى ShamCash ID: <strong>${p.shamCode}</strong></div>
 
-        ${p.qrImage ? `<div style="text-align:center; margin-bottom:15px;"><p style="font-size:0.85rem; margin-bottom:5px;">ShamCash QR كودى (پارىنى ئەۋەتىش ئۈچۈن):</p><img src="${p.qrImage}" style="max-width:180px; border-radius:8px; border:2px solid var(--primary);"></div>` : ""}
+        ${p.qrImage ? `<div style="text-align:center; margin-bottom:15px;"><p style="font-size:0.85rem; margin-bottom:5px;">ShamCash QR كودى (پۇل ئۆتۈش ئۈچۈن):</p><img src="${p.qrImage}" style="max-width:180px; border-radius:8px; border:2px solid var(--primary);"></div>` : ""}
 
         ${!p.isSold ? `
           <div style="margin-bottom:15px;">
-            <button onclick="requestBuy('${p.id}')" class="btn-primary" style="background:var(--sham-blue);">💳 پۇل ئەۋەتتىم (ساتقۇچىغا خەۋەر قىلىش)</button>
+            <button onclick="requestBuy('${p.id}')" class="btn-primary" style="background:var(--accent);">💳 پۇل ئەۋەتتىم (ساتقۇچىغا ئۇقتۇرۇش)</button>
           </div>
         ` : `<div style="color:#ef4444; font-weight:bold; text-align:center; margin-bottom:15px;">بۇ مەھسۇلات ساتىлды!</div>`}
 
         ${isOwner && p.buyerName && !p.isSold ? `
-          <div style="background:rgba(16,185,129,0.1); border:1px solid var(--primary); padding:10px; border-radius:8px; margin-bottom:15px; text-align:center;">
-            <p style="font-size:0.85rem; margin-bottom:5px;">سېتىۋالغۇچى: <strong>${p.buyerName}</strong> پۇل ئەۋەتتى!</p>
-            <button onclick="confirmSold('${p.id}')" class="btn-primary">✅ پۇل كەلدى (ساتىلدى دەپ بېكىتىش)</button>
+          <div style="background:#ecfdf5; border:1px solid var(--accent); padding:10px; border-radius:8px; margin-bottom:15px; text-align:center;">
+            <p style="font-size:0.85rem; margin-bottom:5px; color:#065f46;">سېتىۋالغۇچى: <strong>${p.buyerName}</strong> پۇل ئەۋەتتى!</p>
+            <button onclick="confirmSold('${p.id}')" class="btn-primary" style="background:#059669;">✅ پۇل كەلدى (ساتىلدى دەپ بېكىتىش)</button>
           </div>
         ` : ""}
 
         <hr style="border-color:var(--border); margin:15px 0;">
-        <h4 style="font-size:0.9rem; margin-bottom:8px;">💬 ساتقۇچى بىلەن پاراڭلىشىش (سۆھبەت):</h4>
-        <div style="max-height:120px; overflow-y:auto; margin-bottom:10px; background:rgba(0,0,0,0.2); padding:8px; border-radius:8px;">
+        <h4 style="font-size:0.9rem; margin-bottom:8px;">💬 ساتقۇچى بىلەن پاراڭلىشىش (تاراتقۇ):</h4>
+        <div style="max-height:120px; overflow-y:auto; margin-bottom:10px; background:#f8fafc; padding:8px; border-radius:8px; border:1px solid var(--border);">
           ${chatMsgs}
         </div>
         <div style="display:flex; gap:6px;">
@@ -564,7 +536,7 @@
       await saveState();
       renderProducts();
       document.getElementById("productModal").style.display = "none";
-      showToast("✅ مەھسۇلات ساتىلدى دەپ بېكىتىلدى! 1 كۈندىن كېيىن ئۆچۈرۈلىدۇ.");
+      showToast("✅ مەھسۇلات ساتىلدى! 1 كۈندىن كېيىن ئۆچۈرۈلىدۇ.");
     };
 
     window.sendChatMessage = async function(id) {
@@ -583,9 +555,8 @@
     });
 
     document.addEventListener("DOMContentLoaded", async () => {
-      const saved = await StorageEngine.get("real_sham_state_v9", null);
+      const saved = await StorageEngine.get("real_sham_state_v10", null);
       if (saved && Array.isArray(saved.products)) appState = saved;
-      if (appState.lightMode) document.body.classList.add("light-mode");
 
       renderProducts();
 
@@ -596,12 +567,6 @@
           btn.classList.add("active");
           document.getElementById(btn.getAttribute("data-tab")).classList.add("active");
         });
-      });
-
-      document.getElementById("themeToggleBtn").addEventListener("click", async () => {
-        document.body.classList.toggle("light-mode");
-        appState.lightMode = document.body.classList.contains("light-mode");
-        await saveState();
       });
 
       document.getElementById("secretAdminBtn").addEventListener("click", () => {
@@ -617,18 +582,10 @@
 
       document.getElementById("searchInput").addEventListener("input", (e) => renderProducts(e.target.value));
 
-      document.getElementById("translateBtn").addEventListener("click", async () => {
-        const nEl = document.getElementById("prodNameInput");
-        const dEl = document.getElementById("prodDescInput");
-        showToast("⏳ تەرجىمە قىلىنىۋاتىدۇ...");
-        if (nEl.value) nEl.value = await translateGoogle(nEl.value);
-        if (dEl.value) dEl.value = await translateGoogle(dEl.value);
-        showToast("🌐 تاماملاندى!");
-      });
-
       document.getElementById("publishProductBtn").addEventListener("click", async () => {
         const name = document.getElementById("prodNameInput").value.trim();
         const price = parseFloat(document.getElementById("prodPriceInput").value);
+        const location = document.getElementById("prodLocationInput").value.trim();
         const desc = document.getElementById("prodDescInput").value.trim();
         const sham = document.getElementById("prodSellerShamInput").value.trim() || appState.currentUser.shamCode;
         const imgFile = document.getElementById("prodImageFile").files[0];
@@ -648,11 +605,11 @@
           if (qrFile) {
             readerQr.onload = function(ev) {
               qrImage = ev.target.result;
-              saveProduct(name, price, desc, sham, image, qrImage);
+              saveProduct(name, price, location, desc, sham, image, qrImage);
             };
             readerQr.readAsDataURL(qrFile);
           } else {
-            saveProduct(name, price, desc, sham, image, "");
+            saveProduct(name, price, location, desc, sham, image, "");
           }
         };
 
@@ -661,19 +618,19 @@
         } else {
           if (qrFile) {
             readerQr.onload = function(ev) {
-              saveProduct(name, price, desc, sham, "", ev.target.result);
+              saveProduct(name, price, location, desc, sham, "", ev.target.result);
             };
             readerQr.readAsDataURL(qrFile);
           } else {
-            saveProduct(name, price, desc, sham, "", "");
+            saveProduct(name, price, location, desc, sham, "", "");
           }
         }
       });
 
-      function saveProduct(name, price, desc, sham, image, qrImage) {
+      function saveProduct(name, price, location, desc, sham, image, qrImage) {
         appState.products.unshift({
           id: "p_" + Date.now(),
-          name, price, desc,
+          name, price, location, desc,
           sellerName: appState.currentUser.name,
           sellerEmail: appState.currentUser.email,
           shamCode: sham,
@@ -686,6 +643,7 @@
         renderProducts();
         document.getElementById("prodNameInput").value = "";
         document.getElementById("prodPriceInput").value = "";
+        document.getElementById("prodLocationInput").value = "";
         document.getElementById("prodDescInput").value = "";
         document.getElementById("prodImageFile").value = "";
         document.getElementById("prodQrFile").value = "";
