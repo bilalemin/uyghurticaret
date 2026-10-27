@@ -110,7 +110,6 @@
     }
     .icon-round-btn:hover { border-color: var(--primary); }
 
-    /* Sadece Market Sekmesinde Görünecek Kısım */
     #marketControls {
       display: block;
     }
@@ -315,8 +314,26 @@
       border-radius: 12px; font-size: 0.88rem; text-align: center;
       box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 10000; display: none;
     }
-    .admin-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 10px; }
-    .admin-table th, .admin-table td { border-bottom: 1px solid var(--border); padding: 9px 6px; text-align: right; }
+    
+    /* Telefonda Bozulmayı Önleyen Tablo Düzenlemesi */
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-top: 8px;
+    }
+    .admin-table {
+      width: 100%;
+      min-width: 420px;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+    }
+    .admin-table th, .admin-table td {
+      border-bottom: 1px solid var(--border);
+      padding: 10px 8px;
+      text-align: right;
+      white-space: nowrap;
+    }
   </style>
 </head>
 <body>
@@ -460,16 +477,20 @@
         <h3 style="margin-bottom: 10px; font-size: 1.05rem; color: #f59e0b;">🛡️ باشقۇرغۇچى كونترول مەركىزى</h3>
         
         <h4 style="font-size: 0.85rem; margin-top: 10px; color: var(--primary);">👥 تىزىملاتقان ئەزالار ۋە پروفىيلار (<span id="adminUserCount">0</span>):</h4>
-        <table class="admin-table">
-          <thead><tr><th>ئىسمى</th><th>Gmail</th><th>ShamCash ID</th><th>ئەمەلىيەت</th></tr></thead>
-          <tbody id="adminUsersTable"></tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="admin-table">
+            <thead><tr><th>ئىسمى</th><th>Gmail</th><th>ShamCash ID</th><th>ئەمەلىيەت</th></tr></thead>
+            <tbody id="adminUsersTable"></tbody>
+          </table>
+        </div>
 
         <h4 style="font-size: 0.85rem; margin-top: 20px; color: var(--primary);">📦 بازاردىكى بارلىق مەھسۇلاتلار (<span id="adminProdCount">0</span>):</h4>
-        <table class="admin-table">
-          <thead><tr><th>نامى</th><th>ساتقۇچى</th><th>باھاسى</th><th>ئەمەلىيەت</th></tr></thead>
-          <tbody id="adminProductsTable"></tbody>
-        </table>
+        <div class="table-responsive">
+          <table class="admin-table">
+            <thead><tr><th>نامى</th><th>ساتقۇچى</th><th>باھاسى</th><th>ئەمەلىيەت</th></tr></thead>
+            <tbody id="adminProductsTable"></tbody>
+          </table>
+        </div>
       </div>
     </section>
   </div>
@@ -995,7 +1016,6 @@
         });
       });
 
-      // Gizli Admin Butonu (Şifre: bilal)
       document.getElementById("secretAdminBtn").addEventListener("click", () => {
         const pwd = prompt("🛡️ باشقۇرغۇچى مەخپى نومۇرى:");
         if (pwd === "bilal") {
