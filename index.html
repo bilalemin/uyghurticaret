@@ -112,7 +112,7 @@
     }
     .icon-round-btn:hover { border-color: var(--primary); background: #e0f2fe; }
 
-    /* Doğu Türkistan Banner (Temiz ve Şık Tasarım) */
+    /* Doğu Türkistan Banner */
     .east-turkistan-banner {
       background: linear-gradient(135deg, #0284c7, #0369a1);
       color: white;
@@ -428,7 +428,7 @@
     </div>
   </header>
 
-  <!-- DOĞU TÜRKİSTAN BANNER (EMOJİSİZ VE TERTEMİZ) -->
+  <!-- DOĞU TÜRKİSTAN BANNER -->
   <div class="east-turkistan-banner">
     <h4>شەرقىي تۈركىستان ئانا يۇرت سودا سارايلىرى</h4>
     <p>ئەركىنلىك، بىرلىك ۋە تىجارەت - سىز ئۈچۈن مەخسۇس ئورتاق بازار!</p>
@@ -683,26 +683,15 @@
             : Object.values(cloudData.users || {});
           const cloudChats = cloudData.chats || {};
 
-          let needsPush = false;
-          for (const localProd of appState.products) {
-            if (!cloudProducts.some(cp => cp && cp.id === localProd.id)) {
-              cloudProducts.unshift(localProd);
-              needsPush = true;
-            }
-          }
-
-          cloudProducts.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
           appState.products = cloudProducts;
           appState.users = cloudUsers;
           appState.chats = cloudChats;
 
           await PermanentDB.set(MARKET_KEY, appState);
-          if (needsPush) {
-            await pushToCloud();
-          }
           renderProducts();
-        } else if (appState.products.length > 0 || appState.users.length > 0) {
-          await pushToCloud();
+          if (document.getElementById("adminTab").classList.contains("active")) {
+            renderAdmin();
+          }
         }
       } catch (e) {
         console.warn("Cloud sync error:", e);
