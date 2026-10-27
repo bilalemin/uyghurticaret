@@ -4,19 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="color-scheme" content="light only">
-  <title>ئۇيغۇر تىجارەتلىرى | ShamCash Bazarı</title>
+  <title>شەرقىي تۈركىستان بازىرى | ShamCash Bazarı</title>
   <style>
     :root {
       color-scheme: light only;
-      --primary: #0284c7;
+      --primary: #0284c7;       /* Gök Bayrak Mavisi */
       --primary-dark: #0369a1;
-      --accent: #10b981;
-      --bg-color: #f8fafc;
+      --accent: #0ea5e9;
+      --bg-color: #f0f9ff;     /* Hafif maviye çalan ferah arka plan */
       --card-bg: #ffffff;
       --text-main: #0f172a;
       --text-muted: #64748b;
-      --border: #e2e8f0;
-      --shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.06);
+      --border: #bae6fd;
+      --shadow: 0 4px 20px -2px rgba(2, 132, 199, 0.08);
       --radius: 16px;
     }
 
@@ -29,15 +29,15 @@
 
     html, body {
       direction: rtl;
-      background-color: #f8fafc !important;
-      color: #0f172a !important;
+      background-color: var(--bg-color) !important;
+      color: var(--text-main) !important;
       padding-bottom: 90px;
       min-height: 100vh;
     }
 
     #profileOverlay {
       position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(15, 23, 42, 0.96);
+      background: rgba(15, 23, 42, 0.92);
       z-index: 9999;
       display: none;
       align-items: center;
@@ -48,7 +48,7 @@
 
     .header {
       background: #ffffff;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 2px solid var(--border);
       padding: 14px 16px;
       position: sticky;
       top: 0;
@@ -56,7 +56,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+      box-shadow: 0 2px 10px rgba(2,132,199,0.06);
     }
 
     .logo-area {
@@ -66,16 +66,17 @@
     }
 
     .logo-icon {
-      width: 42px;
-      height: 42px;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #0284c7, #0369a1);
       color: white;
       border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: bold;
-      font-size: 1.2rem;
+      font-size: 1.25rem;
+      box-shadow: 0 2px 8px rgba(2,132,199,0.3);
     }
 
     .logo-title {
@@ -86,7 +87,8 @@
 
     .logo-sub {
       font-size: 0.75rem;
-      color: var(--text-muted);
+      color: var(--primary);
+      font-weight: 700;
     }
 
     .header-actions {
@@ -96,9 +98,9 @@
     }
 
     .icon-round-btn {
-      background: #f1f5f9;
+      background: #f0f9ff;
       border: 1px solid var(--border);
-      color: var(--text-main);
+      color: var(--primary);
       width: 38px;
       height: 38px;
       border-radius: 50%;
@@ -108,7 +110,28 @@
       cursor: pointer;
       font-size: 1rem;
     }
-    .icon-round-btn:hover { border-color: var(--primary); }
+    .icon-round-btn:hover { border-color: var(--primary); background: #e0f2fe; }
+
+    /* Doğu Türkistan Özel Banner Detayı */
+    .east-turkistan-banner {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      color: white;
+      margin: 12px 16px 0 16px;
+      padding: 12px 16px;
+      border-radius: 14px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
+    }
+    .east-turkistan-banner h4 {
+      font-size: 0.95rem;
+      font-weight: 800;
+      margin-bottom: 2px;
+      letter-spacing: 0.5px;
+    }
+    .east-turkistan-banner p {
+      font-size: 0.75rem;
+      opacity: 0.9;
+    }
 
     #marketControls {
       display: block;
@@ -135,6 +158,7 @@
       background: var(--primary);
       color: white;
       border-color: var(--primary);
+      box-shadow: 0 2px 6px rgba(2,132,199,0.3);
     }
 
     .search-box { padding: 12px 16px 4px 16px; }
@@ -177,13 +201,13 @@
       position: relative;
     }
 
-    .img-container { position: relative; height: 150px; background: #e2e8f0; }
+    .img-container { position: relative; height: 150px; background: #e0f2fe; }
     .product-img { height: 100%; width: 100%; object-fit: cover; }
     
     .fav-btn {
       position: absolute;
       top: 8px; left: 8px;
-      background: rgba(255,255,255,0.85);
+      background: rgba(255,255,255,0.9);
       border: none;
       width: 32px; height: 32px;
       border-radius: 50%;
@@ -219,7 +243,7 @@
       overflow: hidden;
     }
     .product-price { color: var(--primary); font-weight: 800; font-size: 1.05rem; margin-bottom: 4px; }
-    .product-location { font-size: 0.72rem; color: var(--accent); font-weight: 600; margin-bottom: 4px; }
+    .product-location { font-size: 0.72rem; color: #0369a1; font-weight: 600; margin-bottom: 4px; }
     .product-seller { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 6px; }
 
     .btn-buy {
@@ -267,6 +291,7 @@
       font-weight: 700;
       font-size: 0.95rem;
       cursor: pointer;
+      box-shadow: 0 4px 12px rgba(2,132,199,0.2);
     }
     .btn-primary:hover { background: var(--primary-dark); }
 
@@ -293,12 +318,12 @@
     .bottom-nav {
       position: fixed; bottom: 0; left: 0; right: 0;
       background: #ffffff;
-      border-top: 1px solid var(--border);
+      border-top: 2px solid var(--border);
       display: flex;
       justify-content: space-around;
       padding: 10px 0;
       z-index: 100;
-      box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+      box-shadow: 0 -4px 20px rgba(2,132,199,0.06);
     }
     .nav-item {
       background: none; border: none;
@@ -314,8 +339,7 @@
       border-radius: 12px; font-size: 0.88rem; text-align: center;
       box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 10000; display: none;
     }
-    
-    /* Telefonda Bozulmayı Önleyen Tablo Düzenlemesi */
+
     .table-responsive {
       width: 100%;
       overflow-x: auto;
@@ -341,9 +365,9 @@
   <!-- PROFİL GİRİŞ EKRANI -->
   <div id="profileOverlay">
     <div class="form-card" style="width: 100%; max-width: 440px; background: #ffffff; color: #0f172a; margin: auto;">
-      <h2 style="margin-bottom: 6px; font-size: 1.25rem; color: var(--primary); text-align: center;">🌟 خۇش كەپسىز!</h2>
+      <h2 style="margin-bottom: 6px; font-size: 1.25rem; color: var(--primary); text-align: center;">☪️ شەرقىي تۈركىستان بازىرىغا خۇش كەپسىز!</h2>
       <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 14px; text-align: center;">
-        پروفىل ئۇچۇرلىرىڭىزنى بىر قېتىم كىرگۈزسىڭىز بۇ ئۈسكۈنىدە دائىم ساقلىنىدۇ.
+        ئالاقە نومۇرىڭىزنى ۋە پروفىل ئۇچۇرلىرىڭىزنى تولدۇرۇڭ.
       </p>
       <div class="form-group">
         <label class="form-label">ئىسم - فامىلىڭىز:</label>
@@ -357,10 +381,27 @@
         <label class="form-label">ShamCash ھېسابات نومۇرى (ID):</label>
         <input type="text" id="regShamInput" class="form-control" placeholder="SC-5520-IDLIB">
       </div>
+
+      <!-- ÜLKE KODU SEÇENEKLİ TELEFON / WHATSAPP ALANI -->
       <div class="form-group">
-        <label class="form-label">WhatsApp نومۇرىڭىز:</label>
-        <input type="text" id="regWhatsappInput" class="form-control" placeholder="+90 555 ...">
+        <label class="form-label">WhatsApp تېلېفون نومۇرى:</label>
+        <div style="display:flex; gap:8px;">
+          <select id="regCountryCode" class="form-control" style="width: 130px; font-size: 0.8rem;">
+            <option value="+90">🇹🇷 +90 (تۈركىيە)</option>
+            <option value="+963">🇸🇾 +963 (سۈرىيە)</option>
+            <option value="+996">🇰🇬 +996 (قىرغىزىستان)</option>
+            <option value="+998">🇺🇿 +998 (ئۆزبېكىستان)</option>
+            <option value="+966">🇸🇦 +966 (سەئۇدى)</option>
+            <option value="+1">🇺🇸 +1 (ئامېرىكا)</option>
+            <option value="+44">🇬🇧 +44 (ئانگلىيە)</option>
+            <option value="+49">🇩🇪 +49 (گېرمانىيە)</option>
+            <option value="+971">🇦🇪 +971 (بەىرەئەت)</option>
+            <option value="+other">🌐 باشقا دۆلەت</option>
+          </select>
+          <input type="text" id="regWhatsappInput" class="form-control" placeholder="555 123 4567" style="flex:1;">
+        </div>
       </div>
+
       <div class="form-group">
         <label class="form-label">Telegram ئادرېسىڭىز:</label>
         <input type="text" id="regTelegramInput" class="form-control" placeholder="@username">
@@ -376,9 +417,9 @@
 
   <header class="header">
     <div class="logo-area">
-      <div class="logo-icon">ئۇ</div>
+      <div class="logo-icon">⭐</div>
       <div>
-        <div class="logo-title">ئۇيغۇر تىجارەتلىرى</div>
+        <div class="logo-title">شەرقىي تۈركىستان بازىرى</div>
         <div class="logo-sub" id="headerUserSub">ShamCash Tövlemlik Bazarı</div>
       </div>
     </div>
@@ -386,6 +427,12 @@
       <button id="secretAdminBtn" class="icon-round-btn" title="باشقۇرغۇچى">🛡️</button>
     </div>
   </header>
+
+  <!-- DOĞU TÜRKİSTAN ÖZEL BANNER -->
+  <div class="east-turkistan-banner">
+    <h4>☪️ شەرقىي تۈركىستان ئانا يۇرت سودا سارايلىرى</h4>
+    <p>ئەركىنلىك، بىرلىك ۋە تىجارەت - سىز ئۈچۈن مەخسۇس ئورتاق بازار!</p>
+  </div>
 
   <div id="toastBox" class="toast"></div>
 
@@ -947,7 +994,9 @@
         const name = document.getElementById("regNameInput").value.trim();
         const email = document.getElementById("regEmailInput").value.trim();
         const sham = document.getElementById("regShamInput").value.trim();
-        const whatsapp = document.getElementById("regWhatsappInput").value.trim();
+        const countryCode = document.getElementById("regCountryCode").value;
+        const rawPhone = document.getElementById("regWhatsappInput").value.trim();
+        const whatsapp = rawPhone ? (countryCode + " " + rawPhone) : "";
         const telegram = document.getElementById("regTelegramInput").value.trim();
         const qrFile = document.getElementById("regQrFile").files[0];
 
@@ -1129,7 +1178,7 @@
                 <td>${escapeHtml(p.name)}</td>
                 <td>${escapeHtml(p.sellerName)}</td>
                 <td>$${p.price}</td>
-                <td><button onclick="delProd('${p.id}')" style="color:red; background:none; border:none; cursor:pointer; font-weight:bold;">ئۆچۈرۈش</button></td>
+                <td><button onclick="adminDelProd('${p.id}')" style="color:red; background:none; border:none; cursor:pointer; font-weight:bold;">ئۆچۈرۈش</button></td>
               </tr>
             `;
           });
@@ -1145,13 +1194,14 @@
         }
       };
 
-      window.delProd = async function(id) {
-        if (confirm("بۇ مەھسۇلاتنى راستلا ئۆچۈرەمسىز?")) {
+      // Admin Panelinden Ürünü Kaldırma / Silme Fonksiyonu
+      window.adminDelProd = async function(id) {
+        if (confirm("بۇ مەھسۇلاتنى بازاردىن راستلا ئۆچۈرەمسىز?")) {
           appState.products = appState.products.filter(item => item && item.id !== id);
           await pushToCloud();
           renderProducts();
           renderAdmin();
-          showToast("🗑️ مەھسۇلات ئۆچۈرۈلدى.");
+          showToast("🗑️ مەھسۇلات بازاردىن ئۆچۈرۈلدى.");
         }
       };
     });
