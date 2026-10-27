@@ -105,17 +105,9 @@
       cursor: pointer;
       font-size: 1rem;
     }
-    body.light-mode .icon-round-btn {
-      background: #f8fafc;
-    }
-    .icon-round-btn:hover {
-      border-color: var(--primary);
-    }
+    body.light-mode .icon-round-btn { background: #f8fafc; }
 
-    .search-box {
-      padding: 16px;
-    }
-
+    .search-box { padding: 16px; }
     .search-input {
       width: 100%;
       padding: 12px 16px;
@@ -128,28 +120,17 @@
       box-shadow: var(--shadow);
     }
 
-    .container {
-      padding: 0 16px;
-    }
-
-    .tab-content {
-      display: none;
-    }
-
-    .tab-content.active {
-      display: block;
-    }
+    .container { padding: 0 16px; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
 
     .product-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 12px;
     }
-
     @media (min-width: 768px) {
-      .product-grid {
-        grid-template-columns: repeat(4, 1fr);
-      }
+      .product-grid { grid-template-columns: repeat(4, 1fr); }
     }
 
     .product-card {
@@ -161,19 +142,28 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      position: relative;
     }
 
-    .product-img {
-      height: 140px;
-      background: #334155;
-      object-fit: cover;
-      width: 100%;
+    .img-container { position: relative; height: 140px; background: #334155; }
+    .product-img { height: 100%; width: 100%; object-fit: cover; }
+    
+    /* Satıldı Damgası */
+    .sold-badge {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.65);
+      color: #ef4444;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      transform: rotate(-10deg);
     }
 
-    .product-body {
-      padding: 12px;
-    }
-
+    .product-body { padding: 12px; }
     .product-title {
       font-weight: 700;
       font-size: 0.92rem;
@@ -184,19 +174,8 @@
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
-
-    .product-price {
-      color: var(--primary);
-      font-weight: 800;
-      font-size: 1.1rem;
-      margin-bottom: 6px;
-    }
-
-    .product-seller {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      margin-bottom: 10px;
-    }
+    .product-price { color: var(--primary); font-weight: 800; font-size: 1.1rem; margin-bottom: 6px; }
+    .product-seller { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 10px; }
 
     .btn-buy {
       background: var(--primary);
@@ -209,6 +188,7 @@
       font-size: 0.82rem;
       cursor: pointer;
     }
+    .btn-buy:disabled { background: #64748b; cursor: not-allowed; }
 
     .form-card {
       background: var(--card-bg);
@@ -218,19 +198,8 @@
       box-shadow: var(--shadow);
       margin-bottom: 16px;
     }
-
-    .form-group {
-      margin-bottom: 14px;
-    }
-
-    .form-label {
-      display: block;
-      font-size: 0.85rem;
-      font-weight: 600;
-      margin-bottom: 6px;
-      color: var(--text-muted);
-    }
-
+    .form-group { margin-bottom: 14px; }
+    .form-label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: var(--text-muted); }
     .form-control {
       width: 100%;
       padding: 11px 14px;
@@ -241,9 +210,7 @@
       background: rgba(15, 23, 42, 0.4);
       color: var(--text-main);
     }
-    body.light-mode .form-control {
-      background: #f8fafc;
-    }
+    body.light-mode .form-control { background: #f8fafc; }
 
     .btn-primary {
       background: var(--primary);
@@ -256,7 +223,6 @@
       font-size: 0.95rem;
       cursor: pointer;
     }
-
     .btn-translate {
       background: linear-gradient(135deg, #6366f1, #8b5cf6);
       color: white;
@@ -270,11 +236,28 @@
       width: 100%;
     }
 
+    /* Modal / Detay Penceresi */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 16px;
+    }
+    .modal-card {
+      background: var(--card-bg);
+      width: 100%; max-width: 500px;
+      border-radius: var(--radius);
+      padding: 20px;
+      max-height: 90vh;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+    }
+
     .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
+      position: fixed; bottom: 0; left: 0; right: 0;
       background: var(--card-bg);
       border-top: 1px solid var(--border);
       display: flex;
@@ -283,55 +266,22 @@
       z-index: 100;
       box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
     }
-
     .nav-item {
-      background: none;
-      border: none;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      color: var(--text-muted);
-      font-size: 0.75rem;
-      cursor: pointer;
-      font-weight: 600;
+      background: none; border: none;
+      display: flex; flex-direction: column; align-items: center;
+      color: var(--text-muted); font-size: 0.75rem; cursor: pointer; font-weight: 600;
     }
-
-    .nav-item span.icon {
-      font-size: 1.3rem;
-      margin-bottom: 3px;
-    }
-
-    .nav-item.active {
-      color: var(--primary);
-    }
+    .nav-item span.icon { font-size: 1.3rem; margin-bottom: 3px; }
+    .nav-item.active { color: var(--primary); }
 
     .toast {
-      position: fixed;
-      top: 80px;
-      left: 16px;
-      right: 16px;
-      background: #065f46;
-      color: white;
-      padding: 12px;
-      border-radius: 12px;
-      font-size: 0.88rem;
-      text-align: center;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-      z-index: 999;
-      display: none;
+      position: fixed; top: 80px; left: 16px; right: 16px;
+      background: #065f46; color: white; padding: 12px;
+      border-radius: 12px; font-size: 0.88rem; text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3); z-index: 999; display: none;
     }
-
-    .admin-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.8rem;
-      margin-top: 10px;
-    }
-    .admin-table th, .admin-table td {
-      border-bottom: 1px solid var(--border);
-      padding: 9px 6px;
-      text-align: right;
-    }
+    .admin-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 10px; }
+    .admin-table th, .admin-table td { border-bottom: 1px solid var(--border); padding: 9px 6px; text-align: right; }
   </style>
 </head>
 <body>
@@ -344,10 +294,8 @@
         <div class="logo-sub">ShamCash Tövlemlik Bazarı</div>
       </div>
     </div>
-    
-    <!-- Gece/Gündüz ve Şifreli Gizli Yönetici Butonu -->
     <div class="header-actions">
-      <button id="themeToggleBtn" class="icon-round-btn" title="تېما ئالماشتۇرۇش">🌓</button>
+      <button id="themeToggleBtn" class="icon-round-btn" title="تېما">🌓</button>
       <button id="secretAdminBtn" class="icon-round-btn" title="باشقۇرغۇچى">🛡️</button>
     </div>
   </header>
@@ -359,7 +307,6 @@
   </div>
 
   <div class="container">
-    
     <!-- MARKET -->
     <section id="marketTab" class="tab-content active">
       <div id="productList" class="product-grid"></div>
@@ -368,10 +315,14 @@
     <!-- ÜRÜN EKLE -->
     <section id="addProductTab" class="tab-content">
       <div class="form-card">
-        <h3 style="margin-bottom: 14px; font-size: 1.05rem; color: var(--primary);">📦 مەھسۇلات ئېلان قىلىش ۋە رەسمى</h3>
+        <h3 style="margin-bottom: 14px; font-size: 1.05rem; color: var(--primary);">📦 مەھسۇلات ئېلان قىلىش ۋە QR كود</h3>
         <div class="form-group">
-          <label class="form-label">مەھسۇلات سۈرىتى (رەسىم تاللاش):</label>
+          <label class="form-label">مەھسۇلات سۈرىتى:</label>
           <input type="file" id="prodImageFile" class="form-control" accept="image/*">
+        </div>
+        <div class="form-group">
+          <label class="form-label">ShamCash QR كودىڭىز (رەسىم):</label>
+          <input type="file" id="prodQrFile" class="form-control" accept="image/*">
         </div>
         <div class="form-group">
           <label class="form-label">مەھسۇلات نامى:</label>
@@ -383,11 +334,11 @@
         </div>
         <div class="form-group">
           <label class="form-label">مەھسۇلات تەپسىلاتى:</label>
-          <textarea id="prodDescInput" class="form-control" rows="3" placeholder="مەھسۇلات ھالىتىنى يېزىڭ..."></textarea>
-          <button type="button" id="translateBtn" class="btn-translate">🌐 ئىنگلىزچىدىن ئۇيغۇرچىغا تەرجىمە</button>
+          <textarea id="prodDescInput" class="form-control" rows="3" placeholder="مەھسۇلات ھالىتى..."></textarea>
+          <button type="button" id="translateBtn" class="btn-translate">🌐 تەرجىمە قىلىش</button>
         </div>
         <div class="form-group">
-          <label class="form-label">ساتقۇچىنىڭ ShamCash ھېسابات نومۇرى:</label>
+          <label class="form-label">ساتقۇچىنىڭ ShamCash نومۇرى (ID):</label>
           <input type="text" id="prodSellerShamInput" class="form-control" placeholder="SC-7781-DAM">
         </div>
         <button type="button" id="publishProductBtn" class="btn-primary">✅ بازارغا چىقىرىش</button>
@@ -400,123 +351,79 @@
         <h3 style="margin-bottom: 10px; font-size: 1.05rem;">🔐 Google ھېساباتى بىلەن كىرىش</h3>
         <div class="form-group">
           <label class="form-label">ئىسم-فامىلىڭىز:</label>
-          <input type="text" id="googleNameInput" class="form-control" placeholder="ئابدۇللاھ كاشغەرىي">
+          <input type="text" id="googleNameInput" class="form-control" placeholder="ئابدۇللاھ">
         </div>
         <div class="form-group">
           <label class="form-label">Google ئېلخەت (Gmail):</label>
           <input type="email" id="googleEmailInput" class="form-control" placeholder="abdullah@gmail.com">
         </div>
         <div class="form-group">
-          <label class="form-label">شەخسىي ShamCash كودىڭىز (ID):</label>
-          <input type="text" id="userShamInput" class="form-control" placeholder="SC-5520-IDLIB">
+          <label class="form-label">ShamCash كودىڭىز (ID):</label>
+          <input type="text" id="userShamInput" class="form-control" placeholder="SC-5520">
         </div>
-        <button type="button" id="googleLoginBtn" class="btn-primary" style="background:#2563eb;">🔵 Google بىلەن كىرىش</button>
-        <button type="button" id="logoutBtn" style="width:100%; margin-top:10px; background:rgba(239,68,68,0.2); color:#fca5a5; border:1px solid rgba(239,68,68,0.3); padding:11px; border-radius:12px; font-weight:600; cursor:pointer;">🚪 چېكىنىش</button>
+        <button type="button" id="googleLoginBtn" class="btn-primary" style="background:#2563eb;">🔵 كىرىش</button>
+        <button type="button" id="logoutBtn" style="width:100%; margin-top:10px; background:rgba(239,68,68,0.2); color:#fca5a5; border:none; padding:11px; border-radius:12px; font-weight:600; cursor:pointer;">🚪 چېكىنىش</button>
       </div>
     </section>
 
-    <!-- ŞİFRELİ YÖNETİCİ PANELİ (Şifre: bilal) -->
+    <!-- ADMIN -->
     <section id="adminTab" class="tab-content">
       <div class="form-card" style="border-color: #f59e0b;">
-        <h3 style="margin-bottom: 10px; font-size: 1.05rem; color: #f59e0b;">🛡️ باشقۇرغۇچى كۆزنىكى (Admin)</h3>
-        
-        <h4 style="font-size: 0.85rem; margin-top: 10px; color: var(--primary);">👥 تىزىملاتقان ئەزالار (<span id="adminUserCount">0</span>):</h4>
+        <h3 style="margin-bottom: 10px; font-size: 1.05rem; color: #f59e0b;">🛡️ باشقۇرغۇچى كۆزنىكى</h3>
+        <h4 style="font-size: 0.85rem; margin-top: 10px; color: var(--primary);">👥 ئەزالار (<span id="adminUserCount">0</span>):</h4>
         <table class="admin-table">
           <thead><tr><th>ئىسمى</th><th>Gmail</th><th>ShamCash</th></tr></thead>
           <tbody id="adminUsersTable"></tbody>
         </table>
-
-        <h4 style="font-size: 0.85rem; margin-top: 14px; color: var(--primary);">📦 مەھسۇلاتلار (<span id="adminProdCount">0</span>):</h4>
+        <h4 style="font-size: 0.85rem; margin-top: 14px; color: var(--primary);">📦 مەھсۇلاتلار (<span id="adminProdCount">0</span>):</h4>
         <table class="admin-table">
           <thead><tr><th>نامى</th><th>ساتقۇچى</th><th>باھاسى</th><th>ئەمەلىيەت</th></tr></thead>
           <tbody id="adminProductsTable"></tbody>
         </table>
-
-        <h4 style="font-size: 0.85rem; margin-top: 14px; color: var(--primary);">💳 ShamCash سودا خاتىرىلىرى:</h4>
-        <table class="admin-table">
-          <thead><tr><th>مەھسۇلات</th><th>سېتىۋالغۇچى</th><th>ساتقۇچى ShamCash</th><th>مىقدار</th></tr></thead>
-          <tbody id="adminOrdersTable"></tbody>
-        </table>
       </div>
     </section>
+  </div>
 
+  <!-- ÜRÜN DETAY VE SOHBET MODALI -->
+  <div id="productModal" class="modal-overlay">
+    <div class="modal-card">
+      <div id="modalBody"></div>
+      <button type="button" id="closeModalBtn" style="margin-top:15px; width:100%; background:#ef4444; color:white; border:none; padding:10px; border-radius:10px; font-weight:bold; cursor:pointer;">تاقاش</button>
+    </div>
   </div>
 
   <nav class="bottom-nav">
-    <button class="nav-item active" data-tab="marketTab">
-      <span class="icon">🛍️</span>
-      <span>بازار</span>
-    </button>
-    <button class="nav-item" data-tab="addProductTab">
-      <span class="icon">➕</span>
-      <span>مال سېتىش</span>
-    </button>
-    <button class="nav-item" data-tab="authTab">
-      <span class="icon">👤</span>
-      <span>ھېسابات</span>
-    </button>
+    <button class="nav-item active" data-tab="marketTab"><span class="icon">🛍️</span><span>بازار</span></button>
+    <button class="nav-item" data-tab="addProductTab"><span class="icon">➕</span><span>مال سېتىش</span></button>
+    <button class="nav-item" data-tab="authTab"><span class="icon">👤</span><span>ھېسابات</span></button>
   </nav>
 
   <script>
-    async function fetchWithTimeout(url, timeout = 8000) {
-      const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), timeout);
-      try {
-        const response = await fetch(url, { signal: controller.signal });
-        clearTimeout(timer);
-        return response;
-      } catch (err) {
-        clearTimeout(timer);
-        throw err;
-      }
-    }
-
     async function translateGoogle(text) {
       if (!text || !text.trim()) return text;
       try {
-        const r = await fetchWithTimeout(
-          `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text.substring(0, 400))}&langpair=en|ug`,
-          8000
-        );
-        if (!r.ok) return text;
+        const r = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|ug`);
         const d = await r.json();
-        const t = d.responseData?.translatedText;
-        if (t && t !== text && !/mymemory|quota|limit/i.test(t)) return t;
-      } catch {}
-      return text;
+        return d.responseData?.translatedText || text;
+      } catch { return text; }
     }
 
     const StorageEngine = {
       async get(key, defaultVal) {
-        try {
-          const raw = localStorage.getItem(key);
-          return raw ? JSON.parse(raw) : defaultVal;
-        } catch (e) { return defaultVal; }
+        try { const raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : defaultVal; }
+        catch { return defaultVal; }
       },
       async set(key, val) {
         try { localStorage.setItem(key, JSON.stringify(val)); return true; }
-        catch (e) { return false; }
+        catch { return false; }
       }
     };
 
-    const DEFAULT_PRODUCTS = [
-      {
-        id: "p1",
-        name: "شەرقىي تۈركىستان بادام ۋە ياڭاقلىرى",
-        price: 35,
-        desc: "تەبىئىي قۇرۇق يېمەكلىك.",
-        sellerName: "مۇھەممەد ئەمىن",
-        sellerEmail: "amin@gmail.com",
-        shamCode: "SC-1042-IDLIB",
-        image: ""
-      }
-    ];
-
     let appState = {
-      currentUser: { name: "مېھمان", email: "guest@gmail.com", shamCode: "SC-9940-UYG" },
+      currentUser: { name: "مېھمان", email: "guest@gmail.com", shamCode: "SC-9940" },
       products: [],
       users: [],
-      orders: [],
+      chats: {}, // productId -> [{sender, text}]
       lightMode: false
     };
 
@@ -529,18 +436,33 @@
     }
 
     async function saveState() {
-      await StorageEngine.set("real_sham_state_v8", appState);
+      await StorageEngine.set("real_sham_state_v9", appState);
+    }
+
+    // 1 Gün Geçen Ürünleri Temizleme Kontrolü
+    function checkExpiredProducts() {
+      const now = Date.now();
+      let changed = false;
+      appState.products = appState.products.filter(p => {
+        if (p.isSold && p.soldTime) {
+          if (now - p.soldTime > 24 * 60 * 60 * 1000) {
+            changed = true;
+            return false; // Sil
+          }
+        }
+        return true;
+      });
+      if (changed) saveState();
     }
 
     function renderProducts(filter = "") {
+      checkExpiredProducts();
       const container = document.getElementById("productList");
       if (!container) return;
       container.innerHTML = "";
 
       const q = filter.trim().toLowerCase();
-      const list = appState.products.filter(p => 
-        !q || p.name.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q)
-      );
+      const list = appState.products.filter(p => !q || p.name.toLowerCase().includes(q));
 
       if (list.length === 0) {
         container.innerHTML = `<div style="grid-column: span 2; text-align:center; padding:30px; color:var(--text-muted);">ھېچقانداق مەھسۇلات تېپىلمىدى.</div>`;
@@ -550,58 +472,24 @@
       list.forEach(p => {
         const card = document.createElement("div");
         card.className = "product-card";
-        const imgTag = p.image ? `<img src="${p.image}" class="product-img">` : `<div class="product-img" style="display:flex; align-items:center; justify-content:center; font-size:2rem;">🛍️</div>`;
+        const imgTag = p.image ? `<img src="${p.image}" class="product-img">` : `<div style="height:100%; display:flex; align-items:center; justify-content:center; font-size:2rem;">🛍️</div>`;
+        const soldBadge = p.isSold ? `<div class="sold-badge">ساتىлды (Sold)</div>` : "";
+
         card.innerHTML = `
-          <div>
+          <div class="img-container" style="cursor:pointer;" onclick="openProductModal('${p.id}')">
             ${imgTag}
-            <div class="product-body">
-              <div class="product-title">${escapeHtml(p.name)}</div>
-              <div class="product-price">${Number(p.price).toFixed(2)} $</div>
-              <div class="product-seller">👤 ${escapeHtml(p.sellerName)}</div>
-              <div style="font-size:0.7rem; color:var(--sham-blue);">Sham: <strong>${escapeHtml(p.shamCode)}</strong></div>
-            </div>
+            ${soldBadge}
+          </div>
+          <div class="product-body" style="cursor:pointer;" onclick="openProductModal('${p.id}')">
+            <div class="product-title">${escapeHtml(p.name)}</div>
+            <div class="product-price">${Number(p.price).toFixed(2)} $</div>
+            <div class="product-seller">👤 ${escapeHtml(p.sellerName)}</div>
           </div>
           <div style="padding: 0 12px 12px 12px;">
-            <button class="btn-buy" data-id="${p.id}">💳 ShamCash بىلەن تۆلەش</button>
+            <button class="btn-buy" ${p.isSold ? 'disabled' : ''} onclick="openProductModal('${p.id}')">${p.isSold ? 'ساتىلدى' : '💳 سېتىۋېلىش & QR'}</button>
           </div>
         `;
         container.appendChild(card);
-      });
-
-      container.querySelectorAll(".btn-buy").forEach(btn => {
-        btn.addEventListener("click", () => handleBuy(btn.getAttribute("data-id")));
-      });
-    }
-
-    function renderAdmin() {
-      document.getElementById("adminUserCount").textContent = appState.users.length;
-      const uTbody = document.getElementById("adminUsersTable");
-      uTbody.innerHTML = "";
-      appState.users.forEach(u => {
-        uTbody.innerHTML += `<tr><td>${escapeHtml(u.name)}</td><td>${escapeHtml(u.email)}</td><td>${escapeHtml(u.shamCode)}</td></tr>`;
-      });
-
-      document.getElementById("adminProdCount").textContent = appState.products.length;
-      const pTbody = document.getElementById("adminProductsTable");
-      pTbody.innerHTML = "";
-      appState.products.forEach(p => {
-        pTbody.innerHTML += `<tr><td>${escapeHtml(p.name)}</td><td>${escapeHtml(p.sellerName)}</td><td>${p.price}$</td><td><button class="del-btn" data-id="${p.id}" style="color:#f87171; background:none; border:none; cursor:pointer;">ئۆچۈر</button></td></tr>`;
-      });
-
-      pTbody.querySelectorAll(".del-btn").forEach(btn => {
-        btn.addEventListener("click", async () => {
-          appState.products = appState.products.filter(item => item.id !== btn.getAttribute("data-id"));
-          await saveState();
-          renderProducts();
-          renderAdmin();
-          showToast("🗑️ مەھسۇلات ئۆچۈرۈلدى.");
-        });
-      });
-
-      const oTbody = document.getElementById("adminOrdersTable");
-      oTbody.innerHTML = appState.orders.length === 0 ? `<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">سودا يوق</td></tr>` : "";
-      appState.orders.forEach(o => {
-        oTbody.innerHTML += `<tr><td>${escapeHtml(o.productName)}</td><td>${escapeHtml(o.buyerName)}</td><td>${escapeHtml(o.sellerSham)}</td><td>${o.amount}$</td></tr>`;
       });
     }
 
@@ -609,40 +497,97 @@
       return String(str || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
 
-    async function handleBuy(id) {
-      const prod = appState.products.find(p => p.id === id);
-      if (!prod) return;
-      
-      const buyerSham = prompt(`💳 ShamCash تۆلەم جەزملەش:\n\n«${prod.name}» نى سېتىۋېلىش ئۈچۈن ShamCash ھېسابات نومۇرىڭىزنى (ID) كىرگۈزۈڭ:`, appState.currentUser.shamCode);
-      if (!buyerSham) return;
+    // Ürün Detay ve Sohbet Modalı
+    window.openProductModal = function(id) {
+      const p = appState.products.find(item => item.id === id);
+      if (!p) return;
 
-      appState.orders.unshift({ 
-        productName: prod.name, 
-        buyerName: appState.currentUser.name + ` (${buyerSham})`, 
-        sellerSham: prod.shamCode,
-        amount: prod.price 
-      });
+      const modal = document.getElementById("productModal");
+      const body = document.getElementById("modalBody");
+      const isOwner = appState.currentUser.email === p.sellerEmail;
 
+      let chatMsgs = (appState.chats[p.id] || []).map(m => `
+        <div style="margin-bottom:6px; background:rgba(255,255,255,0.05); padding:8px; border-radius:8px;">
+          <strong>${escapeHtml(m.sender)}:</strong> ${escapeHtml(m.text)}
+        </div>
+      `).join("") || `<div style="color:var(--text-muted); font-size:0.8rem;">خەۋەر يوق...</div>`;
+
+      body.innerHTML = `
+        <h2 style="margin-bottom:10px; font-size:1.1rem; color:var(--primary);">${escapeHtml(p.name)}</h2>
+        <p style="font-size:0.9rem; margin-bottom:10px;">${escapeHtml(p.desc)}</p>
+        <div style="font-size:1rem; font-weight:bold; color:var(--primary); margin-bottom:10px;">باھاسى: ${p.price}$</div>
+        <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:15px;">ساتقۇچى ShamCash ID: <strong>${p.shamCode}</strong></div>
+
+        ${p.qrImage ? `<div style="text-align:center; margin-bottom:15px;"><p style="font-size:0.85rem; margin-bottom:5px;">ShamCash QR كودى (پارىنى ئەۋەتىش ئۈچۈن):</p><img src="${p.qrImage}" style="max-width:180px; border-radius:8px; border:2px solid var(--primary);"></div>` : ""}
+
+        ${!p.isSold ? `
+          <div style="margin-bottom:15px;">
+            <button onclick="requestBuy('${p.id}')" class="btn-primary" style="background:var(--sham-blue);">💳 پۇل ئەۋەتتىم (ساتقۇچىغا خەۋەر قىلىش)</button>
+          </div>
+        ` : `<div style="color:#ef4444; font-weight:bold; text-align:center; margin-bottom:15px;">بۇ مەھسۇلات ساتىлды!</div>`}
+
+        ${isOwner && p.buyerName && !p.isSold ? `
+          <div style="background:rgba(16,185,129,0.1); border:1px solid var(--primary); padding:10px; border-radius:8px; margin-bottom:15px; text-align:center;">
+            <p style="font-size:0.85rem; margin-bottom:5px;">سېتىۋالغۇچى: <strong>${p.buyerName}</strong> پۇل ئەۋەتتى!</p>
+            <button onclick="confirmSold('${p.id}')" class="btn-primary">✅ پۇل كەلدى (ساتىلدى دەپ بېكىتىش)</button>
+          </div>
+        ` : ""}
+
+        <hr style="border-color:var(--border); margin:15px 0;">
+        <h4 style="font-size:0.9rem; margin-bottom:8px;">💬 ساتقۇچى بىلەن پاراڭلىشىش (سۆھبەت):</h4>
+        <div style="max-height:120px; overflow-y:auto; margin-bottom:10px; background:rgba(0,0,0,0.2); padding:8px; border-radius:8px;">
+          ${chatMsgs}
+        </div>
+        <div style="display:flex; gap:6px;">
+          <input type="text" id="chatInput" class="form-control" placeholder="خەۋەر يېزىڭ...">
+          <button onclick="sendChatMessage('${p.id}')" class="btn-primary" style="width:80px;">ئەۋەت</button>
+        </div>
+      `;
+
+      modal.style.display = "flex";
+    };
+
+    window.requestBuy = async function(id) {
+      const p = appState.products.find(item => item.id === id);
+      if (!p) return;
+      p.buyerName = appState.currentUser.name;
       await saveState();
-      renderAdmin();
-      showToast(`✅ ShamCash ئارقىلىق ${prod.price}$ سېتىۋالغۇچىدىن ساتقۇچىغا (${prod.shamCode}) يۆتكەلدى!`);
-    }
+      showToast("✅ پۇل ئەۋەتكەنلىكىڭىز ساتقۇچىغا ئۇقتۇرۇلدى!");
+      openProductModal(id);
+    };
+
+    window.confirmSold = async function(id) {
+      const p = appState.products.find(item => item.id === id);
+      if (!p) return;
+      p.isSold = true;
+      p.soldTime = Date.now();
+      await saveState();
+      renderProducts();
+      document.getElementById("productModal").style.display = "none";
+      showToast("✅ مەھسۇلات ساتىلدى دەپ بېكىتىلدى! 1 كۈندىن كېيىن ئۆچۈرۈلىدۇ.");
+    };
+
+    window.sendChatMessage = async function(id) {
+      const input = document.getElementById("chatInput");
+      const text = input.value.trim();
+      if (!text) return;
+      if (!appState.chats[id]) appState.chats[id] = [];
+      appState.chats[id].push({ sender: appState.currentUser.name, text });
+      input.value = "";
+      await saveState();
+      openProductModal(id);
+    };
+
+    document.getElementById("closeModalBtn").addEventListener("click", () => {
+      document.getElementById("productModal").style.display = "none";
+    });
 
     document.addEventListener("DOMContentLoaded", async () => {
-      const saved = await StorageEngine.get("real_sham_state_v8", null);
-      if (saved && Array.isArray(saved.products)) {
-        appState = saved;
-      } else {
-        appState.products = DEFAULT_PRODUCTS;
-        await saveState();
-      }
-
-      if (appState.lightMode) {
-        document.body.classList.add("light-mode");
-      }
+      const saved = await StorageEngine.get("real_sham_state_v9", null);
+      if (saved && Array.isArray(saved.products)) appState = saved;
+      if (appState.lightMode) document.body.classList.add("light-mode");
 
       renderProducts();
-      renderAdmin();
 
       document.querySelectorAll(".bottom-nav .nav-item").forEach(btn => {
         btn.addEventListener("click", () => {
@@ -659,22 +604,18 @@
         await saveState();
       });
 
-      // Şifreli Gizli Yönetici Butonu (Şifre: bilal)
       document.getElementById("secretAdminBtn").addEventListener("click", () => {
-        const password = prompt("🛡️ باشقۇرغۇچى مەخپى نومۇرىنى كىرگۈزۈڭ (Parola):");
-        if (password === "bilal") {
+        const pwd = prompt("🛡️ باشقۇرغۇچى مەخپى نومۇرى:");
+        if (pwd === "bilal") {
           document.querySelectorAll(".bottom-nav .nav-item").forEach(b => b.classList.remove("active"));
           document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
           document.getElementById("adminTab").classList.add("active");
-          showToast("🛡️ باشقۇرغۇچى كۆزنىكى ئېچىلدى.");
-        } else if (password !== null) {
-          showToast("⚠️ خاتا مەخپى نومۇر!");
-        }
+          renderAdmin();
+          showToast("🛡️ ئېچىلدى.");
+        } else if (pwd !== null) { showToast("⚠️ خاتا مەخپى نومۇر!"); }
       });
 
-      document.getElementById("searchInput").addEventListener("input", (e) => {
-        renderProducts(e.target.value);
-      });
+      document.getElementById("searchInput").addEventListener("input", (e) => renderProducts(e.target.value));
 
       document.getElementById("translateBtn").addEventListener("click", async () => {
         const nEl = document.getElementById("prodNameInput");
@@ -682,7 +623,7 @@
         showToast("⏳ تەرجىمە قىلىنىۋاتىدۇ...");
         if (nEl.value) nEl.value = await translateGoogle(nEl.value);
         if (dEl.value) dEl.value = await translateGoogle(dEl.value);
-        showToast("🌐 تەرجىمە تاماملاندى!");
+        showToast("🌐 تاماملاندى!");
       });
 
       document.getElementById("publishProductBtn").addEventListener("click", async () => {
@@ -690,60 +631,101 @@
         const price = parseFloat(document.getElementById("prodPriceInput").value);
         const desc = document.getElementById("prodDescInput").value.trim();
         const sham = document.getElementById("prodSellerShamInput").value.trim() || appState.currentUser.shamCode;
-        const fileInput = document.getElementById("prodImageFile");
+        const imgFile = document.getElementById("prodImageFile").files[0];
+        const qrFile = document.getElementById("prodQrFile").files[0];
 
         if (!name || isNaN(price) || !desc) {
           showToast("⚠️ زۆرۈر ئۇچۇرلارنى تولۇق تولدۇرۇڭ!");
           return;
         }
 
-        if (fileInput.files && fileInput.files[0]) {
-          const reader = new FileReader();
-          reader.onload = async function(e) {
-            saveNewProduct(name, price, desc, sham, e.target.result);
-          };
-          reader.readAsDataURL(fileInput.files[0]);
+        let image = "", qrImage = "";
+        const readerImg = new FileReader();
+        const readerQr = new FileReader();
+
+        readerImg.onload = function(e) {
+          image = e.target.result;
+          if (qrFile) {
+            readerQr.onload = function(ev) {
+              qrImage = ev.target.result;
+              saveProduct(name, price, desc, sham, image, qrImage);
+            };
+            readerQr.readAsDataURL(qrFile);
+          } else {
+            saveProduct(name, price, desc, sham, image, "");
+          }
+        };
+
+        if (imgFile) {
+          readerImg.readAsDataURL(imgFile);
         } else {
-          saveNewProduct(name, price, desc, sham, "");
+          if (qrFile) {
+            readerQr.onload = function(ev) {
+              saveProduct(name, price, desc, sham, "", ev.target.result);
+            };
+            readerQr.readAsDataURL(qrFile);
+          } else {
+            saveProduct(name, price, desc, sham, "", "");
+          }
         }
       });
 
-      async function saveNewProduct(name, price, desc, sham, image) {
+      function saveProduct(name, price, desc, sham, image, qrImage) {
         appState.products.unshift({
           id: "p_" + Date.now(),
           name, price, desc,
           sellerName: appState.currentUser.name,
+          sellerEmail: appState.currentUser.email,
           shamCode: sham,
-          image
+          image, qrImage,
+          isSold: false,
+          buyerName: null,
+          soldTime: null
         });
-
-        await saveState();
+        saveState();
         renderProducts();
-        renderAdmin();
         document.getElementById("prodNameInput").value = "";
         document.getElementById("prodPriceInput").value = "";
         document.getElementById("prodDescInput").value = "";
         document.getElementById("prodImageFile").value = "";
-        showToast("✅ مەھسۇلاتىڭىز رەسىمى بىلەن بازارغا چىقتى!");
+        document.getElementById("prodQrFile").value = "";
+        showToast("✅ مەھسۇلات بازارغا چىقتى!");
       }
+
+      function renderAdmin() {
+        document.getElementById("adminUserCount").textContent = appState.users.length;
+        const uTbody = document.getElementById("adminUsersTable");
+        uTbody.innerHTML = "";
+        appState.users.forEach(u => {
+          uTbody.innerHTML += `<tr><td>${escapeHtml(u.name)}</td><td>${escapeHtml(u.email)}</td><td>${escapeHtml(u.shamCode)}</td></tr>`;
+        });
+        document.getElementById("adminProdCount").textContent = appState.products.length;
+        const pTbody = document.getElementById("adminProductsTable");
+        pTbody.innerHTML = "";
+        appState.products.forEach(p => {
+          pTbody.innerHTML += `<tr><td>${escapeHtml(p.name)}</td><td>${escapeHtml(p.sellerName)}</td><td>${p.price}$</td><td><button onclick="delProd('${p.id}')" style="color:red; background:none; border:none; cursor:pointer;">ئۆچۈر</button></td></tr>`;
+        });
+      }
+
+      window.delProd = function(id) {
+        appState.products = appState.products.filter(item => item.id !== id);
+        saveState();
+        renderProducts();
+        renderAdmin();
+        showToast("🗑️ ئۆچۈرۈلدى.");
+      };
 
       document.getElementById("googleLoginBtn").addEventListener("click", async () => {
         const name = document.getElementById("googleNameInput").value.trim();
         const email = document.getElementById("googleEmailInput").value.trim();
-        const sham = document.getElementById("userShamInput").value.trim() || "SC-3350-SY";
-
+        const sham = document.getElementById("userShamInput").value.trim() || "SC-5520";
         if (!name || !email.includes("@")) {
-          showToast("⚠️ توغرا ئىسىم ۋە ئېلخەت كىرگۈزۈڭ!");
+          showToast("⚠️ توغرا ئۇچۇر يېزىڭ!");
           return;
         }
-
         appState.currentUser = { name, email, shamCode: sham };
-        if (!appState.users.some(u => u.email === email)) {
-          appState.users.unshift({ name, email, shamCode: sham });
-        }
-
-        await saveState();
-        renderAdmin();
+        if (!appState.users.some(u => u.email === email)) appState.users.unshift({ name, email, shamCode: sham });
+        saveState();
         showToast(`🔵 خۇش كەپسىز ${name}!`);
       });
     });
