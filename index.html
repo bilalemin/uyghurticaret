@@ -566,6 +566,7 @@
 
   <script>
     const FIREBASE_DB_URL = "https://uyghurticaret-default-rtdb.firebaseio.com";
+    const ADMIN_EMAIL = "vahsibilal36@gmail.com"; // Site Sahibi
 
     const PROFILE_KEY = "uyghur_saved_user_profile_v1";
     const MARKET_KEY = "uyghur_saved_market_data_v1";
@@ -717,6 +718,9 @@
 
     function checkUserBlocked() {
       if (!currentUser || !currentUser.email) return;
+      // Eğer kullanıcı site sahibiyse asla engellenemez
+      if (currentUser.email.trim().toLowerCase() === ADMIN_EMAIL.toLowerCase()) return;
+
       const isBlocked = appState.blockedUsers.some(b => b.email === currentUser.email);
       if (isBlocked) {
         document.body.innerHTML = `
@@ -724,7 +728,7 @@
             <div style="font-size:4rem; margin-bottom:16px;">🚫</div>
             <h1 style="font-size:1.4rem; color:#ef4444; margin-bottom:12px; font-family:'UKIJ Tuz', sans-serif;">بۇ تور بېكەتنىڭ باشقۇرغۇچىسى سىزنى چەكلىdi!</h1>
             <p style="font-size:0.95rem; color:#94a3b8; max-width:400px; line-height:1.6; font-family:'UKIJ Tuz', sans-serif;">
-              باشقۇرغۇچى تەرىپىدىن بۇ تور بېكەتكە كىرىشىڭىز چەكلەندى. شۇڭلاشقا بۇ سۇپىدىن پايدىلىنالмайسىز.
+              باشقۇرغۇچى تەرىپىدىن بۇ تور بېكەتكە كىرىشىڭىز چەكلەندى. شۇڭلاشقا بۇ سۇپىدىن پايدىلىنالمايسىز.
             </p>
           </div>
         `;
@@ -877,7 +881,7 @@
           <div style="margin-bottom:15px;">
             <button onclick="requestBuy('${p.id}')" class="btn-primary" style="background:var(--accent);">💳 پۇل ئەۋەتتىم (ساتقۇچىغا ئۇقتۇرۇش)</button>
           </div>
-        ` : `<div style="color:#ef4444; font-weight:bold; text-align:center; margin-bottom:15px;">بۇ مەھسۇلات ساتىلدى!</div>`}
+        ` : `<div style="color:#ef4444; font-weight:bold; text-align:center; margin-bottom:15px;">بۇ مەھسۇلات ساتىлды!</div>`}
 
         ${isOwner && p.buyerName && !p.isSold ? `
           <div style="background:#ecfdf5; border:1px solid var(--accent); padding:10px; border-radius:8px; margin-bottom:15px; text-align:center;">
@@ -937,7 +941,14 @@
 
     function updateProfileView() {
       if (!currentUser) return;
-      document.getElementById("headerUserSub").textContent = currentUser.name + " (" + currentUser.shamCode + ")";
+      
+      // Sahip kontrolü ve rozeti
+      let roleText = "ShamCash Tövlemlik Bazarı";
+      if (currentUser.email.trim().toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
+        roleText = "⭐ بېكەت ئىگىسى (Sahibi)";
+      }
+
+      document.getElementById("headerUserSub").textContent = currentUser.name + " (" + roleText + ")";
       document.getElementById("profileDetails").innerHTML = `
         <p><strong>👤 ئىسمى:</strong> ${escapeHtml(currentUser.name)}</p>
         <p><strong>📧 Gmail:</strong> ${escapeHtml(currentUser.email)}</p>
@@ -1245,23 +1256,36 @@
         }
       };
 
+      // Engeli Kaldırma ve 3 Saniyelik Geri Sayım Ekranı
       window.unblockUser = async function(index) {
         if (confirm("بۇ ئەزانىڭ چېكىنىشىنى بىكار قىلامسىز?")) {
           const userToUnblock = appState.blockedUsers.splice(index, 1)[0];
           appState.users.unshift(userToUnblock);
           await pushToCloud();
 
-          // 2 Saniyelik Tebrik/Kaldırma Bildirimi Ekranı
-          const banner = document.createElement("div");
-          banner.style.cssText = "position:fixed; top:20px; left:50%; transform:translateX(-50%); background:#10b981; color:white; padding:12px 24px; border-radius:12px; font-weight:bold; z-index:99999; font-family:'UKIJ Tuz', sans-serif;";
-          banner.textContent = "سەزنىڭ چەكلىشىڭىز باشقۇرغۇچى تەرىپىدىن بىكار قىلىнды!";
-          document.body.appendChild(banner);
-          setTimeout(() => {
-            banner.remove();
-            renderAdmin();
-            renderProducts();
-          }, 2000);
+          // Engellenen kişinin ekranında (veya bu sekmede) 3 saniyelik geri sayım bildirimi
+          const overlayDiv = document.createElement("div");
+          overlayDiv.style.cssText = "position:fixed; top:0; left:0; right:0; bottom:0; background:#0f172a; color:#ffffff; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px; text-align:center; z-index:999999; direction:rtl; font-family:'UKIJ Tuz', sans-serif;";
+          overlayDiv.innerHTML = `
+            <div style="font-size:3.5rem; margin-bottom:16px;">✅</div>
+            <h1 style="font-size:1.3rem; color:#10b981; margin-bottom:12px;">بۇ تور بېكەتنىڭ باشقۇرغۇچىسى سىزنى چەكلەشتىن چىقاردى!</h1>
+            <p id="countdownText" style="font-size:1.1rem; color:#94a3b8; margin-top:8px;">تور بېكەتكە كىرىشكە تەييارلىنىۋاتىدۇ... 3</p>
+          `;
+          document.body.appendChild(overlayDiv);
 
+          let timeLeft = 3;
+          const timer = setInterval(() => {
+            timeLeft--;
+            if (timeLeft > 0) {
+              document.getElementById("countdownText").textContent = `تور بېكەتكە كىرىشكە تەييارلىنىۋاتىدۇ... ${timeLeft}`;
+            } else {
+              clearInterval(timer);
+              window.location.reload();
+            }
+          }, 1000);
+
+          renderAdmin();
+          renderProducts();
           showToast("✅ ئەزا ئەسلىگە قايتۇرۇلدى.");
         }
       };
