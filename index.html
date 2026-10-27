@@ -33,7 +33,6 @@
       min-height: 100vh;
     }
 
-    /* Profil Zorunlu Ekranı (Modal / Tam Ekran) */
     #profileOverlay {
       position: fixed; top: 0; left: 0; right: 0; bottom: 0;
       background: #0f172a;
@@ -277,12 +276,12 @@
 </head>
 <body>
 
-  <!-- İLK GİRİŞ ZORUNLU PROFİL OLUŞTURMA EKRANI -->
+  <!-- PROFİL GİRİŞ EKRANI -->
   <div id="profileOverlay">
     <div class="form-card" style="width: 100%; max-width: 440px; background: #ffffff; color: #0f172a;">
       <h2 style="margin-bottom: 6px; font-size: 1.25rem; color: var(--primary); text-align: center;">🌟 خۇش كەپسىز!</h2>
       <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px; text-align: center;">
-        بازارغا كىرىشتىن بۇرۇن ئۆزىڭىزگە شەخسىي profil (ھېسابات) ھاسىل قىلىڭ.
+        بازارغا كىرىشتىن بۇرۇن ئۆزىڭىزگە شەخسىي profil ھاسىل قىلىڭ.
       </p>
       <div class="form-group">
         <label class="form-label">ئىسم - فامىلىڭىز:</label>
@@ -427,7 +426,7 @@
     }
 
     async function saveState() {
-      await StorageEngine.set("real_sham_state_v11", appState);
+      await StorageEngine.set("real_sham_state_v12", appState);
     }
 
     function checkExpiredProducts() {
@@ -585,7 +584,7 @@
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
-      const saved = await StorageEngine.get("real_sham_state_v11", null);
+      const saved = await StorageEngine.get("real_sham_state_v12", null);
       if (saved) appState = saved;
 
       const overlay = document.getElementById("profileOverlay");
