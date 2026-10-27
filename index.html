@@ -718,7 +718,6 @@
 
     function checkUserBlocked() {
       if (!currentUser || !currentUser.email) return;
-      // Eğer kullanıcı site sahibiyse asla engellenemez
       if (currentUser.email.trim().toLowerCase() === ADMIN_EMAIL.toLowerCase()) return;
 
       const isBlocked = appState.blockedUsers.some(b => b.email === currentUser.email);
@@ -726,7 +725,7 @@
         document.body.innerHTML = `
           <div style="position:fixed; top:0; left:0; right:0; bottom:0; background:#0f172a; color:#ffffff; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px; text-align:center; z-index:999999; direction:rtl;">
             <div style="font-size:4rem; margin-bottom:16px;">🚫</div>
-            <h1 style="font-size:1.4rem; color:#ef4444; margin-bottom:12px; font-family:'UKIJ Tuz', sans-serif;">بۇ تور بېكەتنىڭ باشقۇرغۇچىسى سىزنى چەكلىdi!</h1>
+            <h1 style="font-size:1.4rem; color:#ef4444; margin-bottom:12px; font-family:'UKIJ Tuz', sans-serif;">بۇ تور بېكەتنىڭ باشقۇرغۇچىسى سىزنى چەكلىدى!</h1>
             <p style="font-size:0.95rem; color:#94a3b8; max-width:400px; line-height:1.6; font-family:'UKIJ Tuz', sans-serif;">
               باشقۇرغۇچى تەرىپىدىن بۇ تور بېكەتكە كىرىشىڭىز چەكلەندى. شۇڭلاشقا بۇ سۇپىدىن پايدىلىنالمايسىز.
             </p>
@@ -881,7 +880,7 @@
           <div style="margin-bottom:15px;">
             <button onclick="requestBuy('${p.id}')" class="btn-primary" style="background:var(--accent);">💳 پۇل ئەۋەتتىم (ساتقۇچىغا ئۇقتۇرۇش)</button>
           </div>
-        ` : `<div style="color:#ef4444; font-weight:bold; text-align:center; margin-bottom:15px;">بۇ مەھسۇلات ساتىлды!</div>`}
+        ` : `<div style="color:#ef4444; font-weight:bold; text-align:center; margin-bottom:15px;">بۇ مەھسۇلات ساتىلدى!</div>`}
 
         ${isOwner && p.buyerName && !p.isSold ? `
           <div style="background:#ecfdf5; border:1px solid var(--accent); padding:10px; border-radius:8px; margin-bottom:15px; text-align:center;">
@@ -942,7 +941,6 @@
     function updateProfileView() {
       if (!currentUser) return;
       
-      // Sahip kontrolü ve rozeti
       let roleText = "ShamCash Tövlemlik Bazarı";
       if (currentUser.email.trim().toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
         roleText = "⭐ بېكەت ئىگىسى (Sahibi)";
@@ -1008,7 +1006,41 @@
         return;
       }
 
-      setInterval(() => {
+      // Her 4 saniyede bir buluttan kontrol et: Eğer engeli kaldırıldıysa engelli ekranını otomatik kaldır ve siteyi aç!
+      setInterval(async () => {
+        if (!isCloudEnabled() || !currentUser || !currentUser.email) return;
+        if (currentUser.email.trim().toLowerCase() === ADMIN_EMAIL.toLowerCase()) return;
+
+        try {
+          const res = await fetch(cleanDbUrl() + "/market.json");
+          if (!res.ok) return;
+          const cloudData = await res.json();
+          if (cloudData && cloudData.blockedUsers) {
+            const blockedList = Array.isArray(cloudData.blockedUsers) ? cloudData.blockedUsers : Object.values(cloudData.blockedUsers);
+            const stillBlocked = blockedList.some(b => b.email === currentUser.email);
+            
+            // Eğer daha önce engelliyse ve şimdi engelli listesinde yoksa (yani engeli kaldırıldıysa!)
+            const blockScreen = document.getElementById("blockedScreenOverlay");
+            if (!stillBlocked && blockScreen) {
+              blockScreen.innerHTML = `
+                <div style="font-size:3.5rem; margin-bottom:16px;">✅</div>
+                <h1 style="font-size:1.3rem; color:#10b981; margin-bottom:12px; font-family:'UKIJ Tuz', sans-serif;">بۇ تور بېكەتنىڭ باشقۇرغۇچىسى سىزنى چەكلەشتىن چىقاردى!</h1>
+                <p id="countdownText" style="font-size:1.1rem; color:#94a3b8; margin-top:8px; font-family:'UKIJ Tuz', sans-serif;">تور بېكەتكە كىرىشكە تەييارلىنىۋاتىدۇ... 3</p>
+              `;
+              let timeLeft = 3;
+              const timer = setInterval(() => {
+                timeLeft--;
+                if (timeLeft > 0) {
+                  document.getElementById("countdownText").textContent = `تور بېكەتكە كىرىشكە تەييارلىنىۋاتىدۇ... ${timeLeft}`;
+                } else {
+                  clearInterval(timer);
+                  window.location.reload();
+                }
+              }, 1000);
+            }
+          }
+        } catch (e) {}
+
         syncFromCloud();
       }, 4000);
 
@@ -1256,34 +1288,11 @@
         }
       };
 
-      // Engeli Kaldırma ve 3 Saniyelik Geri Sayım Ekranı
       window.unblockUser = async function(index) {
         if (confirm("بۇ ئەزانىڭ چېكىنىشىنى بىكار قىلامسىز?")) {
           const userToUnblock = appState.blockedUsers.splice(index, 1)[0];
           appState.users.unshift(userToUnblock);
           await pushToCloud();
-
-          // Engellenen kişinin ekranında (veya bu sekmede) 3 saniyelik geri sayım bildirimi
-          const overlayDiv = document.createElement("div");
-          overlayDiv.style.cssText = "position:fixed; top:0; left:0; right:0; bottom:0; background:#0f172a; color:#ffffff; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px; text-align:center; z-index:999999; direction:rtl; font-family:'UKIJ Tuz', sans-serif;";
-          overlayDiv.innerHTML = `
-            <div style="font-size:3.5rem; margin-bottom:16px;">✅</div>
-            <h1 style="font-size:1.3rem; color:#10b981; margin-bottom:12px;">بۇ تور بېكەتنىڭ باشقۇرغۇچىسى سىزنى چەكلەشتىن چىقاردى!</h1>
-            <p id="countdownText" style="font-size:1.1rem; color:#94a3b8; margin-top:8px;">تور بېكەتكە كىرىشكە تەييارلىنىۋاتىدۇ... 3</p>
-          `;
-          document.body.appendChild(overlayDiv);
-
-          let timeLeft = 3;
-          const timer = setInterval(() => {
-            timeLeft--;
-            if (timeLeft > 0) {
-              document.getElementById("countdownText").textContent = `تور بېكەتكە كىرىشكە تەييارلىنىۋاتىدۇ... ${timeLeft}`;
-            } else {
-              clearInterval(timer);
-              window.location.reload();
-            }
-          }, 1000);
-
           renderAdmin();
           renderProducts();
           showToast("✅ ئەزا ئەسلىگە قايتۇرۇلدى.");
