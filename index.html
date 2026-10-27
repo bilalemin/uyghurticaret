@@ -531,7 +531,7 @@
           </table>
         </div>
 
-        <h4 style="font-size: 0.85rem; margin-top: 20px; color: #ef4444;">🚫 چەكلەنگەن ئەزالөр (Engellenenler):</h4>
+        <h4 style="font-size: 0.85rem; margin-top: 20px; color: #ef4444;">🚫 چەكلەنگەن ئەزالار:</h4>
         <div class="table-responsive">
           <table class="admin-table">
             <thead><tr><th>ئىسمى</th><th>Gmail</th><th>ShamCash ID</th><th>ئەمەلىيەت</th></tr></thead>
@@ -720,11 +720,11 @@
       const isBlocked = appState.blockedUsers.some(b => b.email === currentUser.email);
       if (isBlocked) {
         document.body.innerHTML = `
-          <div style="position:fixed; top:0; left:0; right:0; bottom:0; background:#0f172a; color:#ffffff; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px; text-align:center; z-index:999999;">
+          <div style="position:fixed; top:0; left:0; right:0; bottom:0; background:#0f172a; color:#ffffff; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px; text-align:center; z-index:999999; direction:rtl;">
             <div style="font-size:4rem; margin-bottom:16px;">🚫</div>
-            <h1 style="font-size:1.5rem; color:#ef4444; margin-bottom:12px;">بۇ تور بېكەتنىڭ باشقۇرغۇچىسى سىزنى چەكلىdi!</h1>
-            <p style="font-size:0.95rem; color:#94a3b8; max-width:400px; line-height:1.6;">
-              باشقۇرغۇچى تەرىپىدىن bu تور بېكەتكە كىرىشىڭىز چەكلەندى. شۇڭلاشقا بۇ سۇپىدىن پايدicialىنەلمەйсىز.
+            <h1 style="font-size:1.4rem; color:#ef4444; margin-bottom:12px; font-family:'UKIJ Tuz', sans-serif;">بۇ تور بېكەتنىڭ باشقۇرغۇچىسى سىزنى چەكلىdi!</h1>
+            <p style="font-size:0.95rem; color:#94a3b8; max-width:400px; line-height:1.6; font-family:'UKIJ Tuz', sans-serif;">
+              باشقۇرغۇچى تەرىپىدىن بۇ تور بېكەتكە كىرىشىڭىز چەكلەندى. شۇڭلاشقا بۇ سۇپىدىن پايدىلىنالмайسىز.
             </p>
           </div>
         `;
@@ -1250,8 +1250,18 @@
           const userToUnblock = appState.blockedUsers.splice(index, 1)[0];
           appState.users.unshift(userToUnblock);
           await pushToCloud();
-          renderAdmin();
-          renderProducts();
+
+          // 2 Saniyelik Tebrik/Kaldırma Bildirimi Ekranı
+          const banner = document.createElement("div");
+          banner.style.cssText = "position:fixed; top:20px; left:50%; transform:translateX(-50%); background:#10b981; color:white; padding:12px 24px; border-radius:12px; font-weight:bold; z-index:99999; font-family:'UKIJ Tuz', sans-serif;";
+          banner.textContent = "سەزنىڭ چەكلىشىڭىز باشقۇرغۇچى تەرىپىدىن بىكار قىلىнды!";
+          document.body.appendChild(banner);
+          setTimeout(() => {
+            banner.remove();
+            renderAdmin();
+            renderProducts();
+          }, 2000);
+
           showToast("✅ ئەزا ئەسلىگە قايتۇرۇلدى.");
         }
       };
