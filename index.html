@@ -110,7 +110,31 @@
     }
     .icon-round-btn:hover { border-color: var(--primary); }
 
-    .search-box { padding: 16px; }
+    /* Filtreler ve Kategoriler */
+    .filter-bar {
+      padding: 12px 16px 0 16px;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    .filter-chip {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .filter-chip.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .search-box { padding: 12px 16px 4px 16px; }
     .search-input {
       width: 100%;
       padding: 12px 16px;
@@ -132,6 +156,7 @@
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 12px;
+      margin-top: 12px;
     }
     @media (min-width: 768px) {
       .product-grid { grid-template-columns: repeat(4, 1fr); }
@@ -149,9 +174,22 @@
       position: relative;
     }
 
-    .img-container { position: relative; height: 155px; background: #e2e8f0; }
+    .img-container { position: relative; height: 150px; background: #e2e8f0; }
     .product-img { height: 100%; width: 100%; object-fit: cover; }
     
+    .fav-btn {
+      position: absolute;
+      top: 8px; left: 8px;
+      background: rgba(255,255,255,0.85);
+      border: none;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      font-size: 1rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
     .sold-badge {
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -166,10 +204,10 @@
       transform: rotate(-10deg);
     }
 
-    .product-body { padding: 12px; }
+    .product-body { padding: 10px 12px; }
     .product-title {
       font-weight: 700;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       margin-bottom: 4px;
       color: var(--text-main);
       display: -webkit-box;
@@ -177,19 +215,19 @@
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
-    .product-price { color: var(--primary); font-weight: 800; font-size: 1.1rem; margin-bottom: 4px; }
-    .product-location { font-size: 0.75rem; color: var(--accent); font-weight: 600; margin-bottom: 4px; }
-    .product-seller { font-size: 0.72rem; color: var(--text-muted); margin-bottom: 8px; }
+    .product-price { color: var(--primary); font-weight: 800; font-size: 1.05rem; margin-bottom: 4px; }
+    .product-location { font-size: 0.72rem; color: var(--accent); font-weight: 600; margin-bottom: 4px; }
+    .product-seller { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 6px; }
 
     .btn-buy {
       background: var(--primary);
       color: white;
       border: none;
       width: 100%;
-      padding: 9px;
+      padding: 8px;
       border-radius: 10px;
       font-weight: 700;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       cursor: pointer;
     }
     .btn-buy:disabled { background: #cbd5e1; cursor: not-allowed; }
@@ -279,7 +317,7 @@
 </head>
 <body>
 
-  <!-- İLK GİRİŞ / PROFİL DÜZENLEME EKRANI -->
+  <!-- PROFİL GİRİŞ EKRANI -->
   <div id="profileOverlay">
     <div class="form-card" style="width: 100%; max-width: 440px; background: #ffffff; color: #0f172a; margin: auto;">
       <h2 style="margin-bottom: 6px; font-size: 1.25rem; color: var(--primary); text-align: center;">🌟 خۇش كەپسىز!</h2>
@@ -330,8 +368,25 @@
 
   <div id="toastBox" class="toast"></div>
 
+  <!-- KATEGORİ & FİLTRE ÇUBUĞU -->
+  <div class="filter-bar" id="categoryFilterBar">
+    <div class="filter-chip active" data-cat="all">🌟 ھەممىسى</div>
+    <div class="filter-chip" data-cat="food">🍲 يېمەكلىك</div>
+    <div class="filter-chip" data-cat="clothes">👕 كىيىم-كېچەك</div>
+    <div class="filter-chip" data-cat="electronics">💻 ئېلېكترونلۇق</div>
+    <div class="filter-chip" data-cat="home">🏠 ئۆي سايمانلىرى</div>
+    <div class="filter-chip" data-cat="favs">❤️ ياقتۇرغانلىرىم</div>
+  </div>
+
   <div class="search-box">
-    <input type="text" id="searchInput" class="search-input" placeholder="🔍 مەھسۇلات ياكى جاي (كونوم) ئىزدەڭ...">
+    <div style="display:flex; gap:8px;">
+      <input type="text" id="searchInput" class="search-input" placeholder="🔍 مەھسۇلات ياكى جاي (كونوم) ئىزدەڭ...">
+      <select id="sortSelect" class="form-control" style="width: 130px; font-size: 0.8rem; padding: 0 8px;">
+        <option value="new">يېڭى قوشۇلغان</option>
+        <option value="asc">باھاسى: ئەرزان</option>
+        <option value="desc">باھاسى: قىممەت</option>
+      </select>
+    </div>
   </div>
 
   <div class="container">
@@ -347,6 +402,16 @@
         <div class="form-group">
           <label class="form-label">مەھسۇلات سۈرىتى:</label>
           <input type="file" id="prodImageFile" class="form-control" accept="image/*">
+        </div>
+        <div class="form-group">
+          <label class="form-label">مەھسۇلات كاتېگورىيىسى:</label>
+          <select id="prodCategoryInput" class="form-control">
+            <option value="food">🍲 يېمەكلىك</option>
+            <option value="clothes">👕 كىيىم-كېچەك</option>
+            <option value="electronics">💻 ئېلېكترونلۇق</option>
+            <option value="home">🏠 ئۆي سايمانلىرى</option>
+            <option value="other">📦 باشقىلار</option>
+          </select>
         </div>
         <div class="form-group">
           <label class="form-label">مەھسۇلات نامى:</label>
@@ -371,9 +436,12 @@
     <!-- PROFİL / HESABIM -->
     <section id="authTab" class="tab-content">
       <div class="form-card">
-        <h3 style="margin-bottom: 10px; font-size: 1.05rem; color: var(--primary);">👤 مېنىڭ پروفىلىم</h3>
+        <h3 style="margin-bottom: 10px; font-size: 1.05rem; color: var(--primary);">👤 مېنىڭ پروفىلىم ۋە تارىخ</h3>
         <div id="profileDetails" style="font-size: 0.9rem; line-height: 1.8; margin-bottom: 15px;"></div>
-        <button type="button" id="changeProfileBtn" class="btn-primary" style="background:var(--accent);">✏️ پروفىل ئۇچۇرلىرىنى ئۆزگەرتىش</button>
+        <button type="button" id="changeProfileBtn" class="btn-primary" style="background:var(--accent); margin-bottom:10px;">✏️ پروفىل ئۇچۇرلىرىنى ئۆزگەرتىش</button>
+        <hr style="border-color:var(--border); margin:15px 0;">
+        <h4 style="font-size:0.9rem; color:var(--primary); margin-bottom:8px;">📦 ئۆزۈم قويغان مەھسۇلاتلار:</h4>
+        <div id="myProductsList" style="font-size: 0.85rem;"></div>
       </div>
     </section>
 
@@ -410,7 +478,6 @@
   </nav>
 
   <script>
-    // Firebase Bağlantı Adresi (Entegre Edildi)[cite: 14]
     const FIREBASE_DB_URL = "https://uyghurticaret-default-rtdb.firebaseio.com";
 
     const PROFILE_KEY = "uyghur_saved_user_profile_v1";
@@ -504,8 +571,11 @@
     let appState = {
       products: [],
       users: [],
-      chats: {}
+      chats: {},
+      favorites: [] // Favori ürün id listesi
     };
+
+    let currentCategory = "all";
 
     function showToast(msg) {
       const box = document.getElementById("toastBox");
@@ -551,7 +621,7 @@
           if (needsPush) {
             await pushToCloud();
           }
-          renderProducts(document.getElementById("searchInput")?.value || "");
+          renderProducts();
         } else if (appState.products.length > 0 || appState.users.length > 0) {
           await pushToCloud();
         }
@@ -589,14 +659,52 @@
       if (changed) pushToCloud();
     }
 
-    function renderProducts(filter = "") {
+    window.toggleFavorite = async function(id, event) {
+      if (event) event.stopPropagation();
+      const idx = appState.favorites.indexOf(id);
+      if (idx > -1) {
+        appState.favorites.splice(idx, 1);
+        showToast("💔 ياقتۇرغانلىرىمدىن ئۆچۈرۈلدى");
+      } else {
+        appState.favorites.push(id);
+        showToast("❤️ ياقتۇرغانلىرىمغا قوشۇلدى");
+      }
+      await PermanentDB.set(MARKET_KEY, appState);
+      renderProducts();
+    };
+
+    function renderProducts() {
       checkExpiredProducts();
       const container = document.getElementById("productList");
       if (!container) return;
       container.innerHTML = "";
 
-      const q = filter.trim().toLowerCase();
-      const list = appState.products.filter(p => p && (!q || p.name.toLowerCase().includes(q) || (p.location && p.location.toLowerCase().includes(q))));
+      const q = (document.getElementById("searchInput")?.value || "").trim().toLowerCase();
+      const sortVal = document.getElementById("sortSelect")?.value || "new";
+
+      let list = appState.products.filter(p => {
+        if (!p) return false;
+        // Kategori filtresi
+        if (currentCategory === "favs") {
+          if (!appState.favorites.includes(p.id)) return false;
+        } else if (currentCategory !== "all") {
+          if (p.category !== currentCategory) return false;
+        }
+        // Arama filtresi
+        if (q && !p.name.toLowerCase().includes(q) && !(p.location && p.location.toLowerCase().includes(q))) {
+          return false;
+        }
+        return true;
+      });
+
+      // Sıralama
+      if (sortVal === "asc") {
+        list.sort((a, b) => a.price - b.price);
+      } else if (sortVal === "desc") {
+        list.sort((a, b) => b.price - a.price);
+      } else {
+        list.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+      }
 
       if (list.length === 0) {
         container.innerHTML = `<div style="grid-column: span 2; text-align:center; padding:30px; color:var(--text-muted);">ھېچقانداق مەھسۇلات تېپىلمىدى.</div>`;
@@ -608,11 +716,13 @@
         card.className = "product-card";
         const imgTag = p.image ? `<img src="${p.image}" class="product-img">` : `<div style="height:100%; display:flex; align-items:center; justify-content:center; font-size:2rem;">🛍️</div>`;
         const soldBadge = p.isSold ? `<div class="sold-badge">ساتىلدى</div>` : "";
+        const isFav = appState.favorites.includes(p.id);
 
         card.innerHTML = `
           <div class="img-container" style="cursor:pointer;" onclick="openProductModal('${p.id}')">
             ${imgTag}
             ${soldBadge}
+            <button class="fav-btn" onclick="toggleFavorite('${p.id}', event)">${isFav ? '❤️' : '🤍'}</button>
           </div>
           <div class="product-body" style="cursor:pointer;" onclick="openProductModal('${p.id}')">
             <div class="product-title">${escapeHtml(p.name)}</div>
@@ -656,11 +766,17 @@
           <p><strong>👤 ساتقۇچى:</strong> ${escapeHtml(p.sellerName)}</p>
           <p><strong>📧 Gmail:</strong> ${escapeHtml(p.sellerEmail || '')}</p>
           <p><strong>💳 ShamCash ID:</strong> ${escapeHtml(p.shamCode)}</p>
-          ${p.whatsapp ? `<p><strong>📞 WhatsApp:</strong> <a href="https://wa.me/${p.whatsapp.replace(/[^0-9+]/g,'')}" target="_blank" style="color:#16a34a; font-weight:bold; text-decoration:none;">${escapeHtml(p.whatsapp)} (ئالاقىلىشىش)</a></p>` : ""}
-          ${p.telegram ? `<p><strong>✈️ Telegram:</strong> <a href="https://t.me/${p.telegram.replace('@','')}" target="_blank" style="color:#0284c7; font-weight:bold; text-decoration:none;">${escapeHtml(p.telegram)} (ئالاقىلىشىش)</a></p>` : ""}
+          ${p.whatsapp ? `<p><strong>📞 WhatsApp:</strong> <a href="https://wa.me/${p.whatsapp.replace(/[^0-9+]/g,'')}" target="_blank" style="color:#16a34a; font-weight:bold; text-decoration:none;">${escapeHtml(p.whatsapp)}</a></p>` : ""}
+          ${p.telegram ? `<p><strong>✈️ Telegram:</strong> <a href="https://t.me/${p.telegram.replace('@','')}" target="_blank" style="color:#0284c7; font-weight:bold; text-decoration:none;">${escapeHtml(p.telegram)}</a></p>` : ""}
         </div>
 
-        ${p.qrImage ? `<div style="text-align:center; margin-bottom:15px;"><p style="font-size:0.85rem; margin-bottom:5px;">ShamCash QR كودى (پۇل ئەۋەتىش ئۈچۈن):</p><img src="${p.qrImage}" style="max-width:180px; border-radius:8px; border:2px solid var(--primary);"></div>` : ""}
+        ${p.qrImage ? `
+          <div style="text-align:center; margin-bottom:15px;">
+            <p style="font-size:0.85rem; margin-bottom:5px;">ShamCash QR كودى (پۇل ئەۋەتىش ئۈچۈن):</p>
+            <img src="${p.qrImage}" style="max-width:180px; border-radius:8px; border:2px solid var(--primary); display:block; margin:0 auto 8px auto;">
+            <a href="${p.qrImage}" download="ShamCash_QR_${p.sellerName}.jpg" class="btn-primary" style="display:inline-block; width:auto; padding:6px 14px; font-size:0.8rem; text-decoration:none;">📥 QR كودىنى چۈشۈرۈش (İndir)</a>
+          </div>
+        ` : ""}
 
         ${!p.isSold ? `
           <div style="margin-bottom:15px;">
@@ -735,14 +851,31 @@
         <p><strong>✈️ Telegram:</strong> ${escapeHtml(currentUser.telegram || 'يوق')}</p>
         ${currentUser.qrImage ? `<div style="margin-top:10px;"><p><strong>ShamCash QR كودىڭىز:</strong></p><img src="${currentUser.qrImage}" style="max-width:150px; border-radius:8px; border:2px solid var(--primary); margin-top:5px;"></div>` : ""}
       `;
+
+      // Kullanıcının kendi ürünleri
+      const myProds = appState.products.filter(p => p && p.sellerEmail === currentUser.email);
+      const myProdContainer = document.getElementById("myProductsList");
+      if (myProds.length === 0) {
+        myProdContainer.innerHTML = `<div style="color:var(--text-muted);">ھېچقانداق مەھسۇلاتىڭىز يوق.</div>`;
+      } else {
+        myProdContainer.innerHTML = myProds.map(p => `
+          <div style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; padding:8px; border-radius:8px; margin-bottom:6px; border:1px solid var(--border);">
+            <span>${escapeHtml(p.name)} ($${p.price}) ${p.isSold ? '<b>[ساتىلدى]</b>' : ''}</span>
+            <button onclick="delProd('${p.id}')" style="background:none; border:none; color:#ef4444; font-weight:bold; cursor:pointer;">ئۆچۈرۈش</button>
+          </div>
+        `).join("");
+      }
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
       const savedProfile = await PermanentDB.get(PROFILE_KEY, null);
       const savedMarket = await PermanentDB.get(MARKET_KEY, null);
 
-      if (savedMarket && Array.isArray(savedMarket.products)) {
-        appState = savedMarket;
+      if (savedMarket) {
+        if (Array.isArray(savedMarket.products)) appState.products = savedMarket.products;
+        if (Array.isArray(savedMarket.users)) appState.users = savedMarket.users;
+        if (savedMarket.chats) appState.chats = savedMarket.chats;
+        if (Array.isArray(savedMarket.favorites)) appState.favorites = savedMarket.favorites;
       }
 
       const overlay = document.getElementById("profileOverlay");
@@ -761,6 +894,19 @@
       setInterval(() => {
         syncFromCloud();
       }, 4000);
+
+      // Kategori filtre butonları
+      document.querySelectorAll(".filter-chip").forEach(chip => {
+        chip.addEventListener("click", () => {
+          document.querySelectorAll(".filter-chip").forEach(c => c.classList.remove("active"));
+          chip.classList.add("active");
+          currentCategory = chip.getAttribute("data-cat");
+          renderProducts();
+        });
+      });
+
+      document.getElementById("searchInput").addEventListener("input", () => renderProducts());
+      document.getElementById("sortSelect").addEventListener("change", () => renderProducts());
 
       document.getElementById("createProfileBtn").addEventListener("click", async () => {
         const name = document.getElementById("regNameInput").value.trim();
@@ -820,6 +966,9 @@
           document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
           btn.classList.add("active");
           document.getElementById(btn.getAttribute("data-tab")).classList.add("active");
+          if (btn.getAttribute("data-tab") === "authTab") {
+            updateProfileView();
+          }
         });
       });
 
@@ -836,8 +985,6 @@
         }
       });
 
-      document.getElementById("searchInput").addEventListener("input", (e) => renderProducts(e.target.value));
-
       document.getElementById("publishProductBtn").addEventListener("click", async () => {
         if (!currentUser) {
           overlay.style.display = "flex";
@@ -846,6 +993,7 @@
 
         const name = document.getElementById("prodNameInput").value.trim();
         const price = parseFloat(document.getElementById("prodPriceInput").value);
+        const category = document.getElementById("prodCategoryInput").value;
         const location = document.getElementById("prodLocationInput").value.trim();
         const desc = document.getElementById("prodDescInput").value.trim();
         const imgFile = document.getElementById("prodImageFile").files[0];
@@ -868,6 +1016,7 @@
           createdAt: Date.now(),
           name,
           price,
+          category,
           location,
           desc,
           sellerName: currentUser.name,
