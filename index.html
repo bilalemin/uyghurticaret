@@ -277,7 +277,7 @@
 <body>
 
   <!-- PROFİL GİRİŞ EKRANI -->
-  <div id="profileOverlay">
+  <div id="profileOverlay" style="display:none;">
     <div class="form-card" style="width: 100%; max-width: 440px; background: #ffffff; color: #0f172a;">
       <h2 style="margin-bottom: 6px; font-size: 1.25rem; color: var(--primary); text-align: center;">🌟 خۇش كەپسىز!</h2>
       <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px; text-align: center;">
@@ -296,6 +296,14 @@
         <input type="text" id="regShamInput" class="form-control" placeholder="SC-5520-IDLIB">
       </div>
       <div class="form-group">
+        <label class="form-label">WhatsApp نومۇرىڭىز:</label>
+        <input type="text" id="regWhatsappInput" class="form-control" placeholder="+90 555 ...">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Telegram ئادرېسىڭىز (User/Nomer):</label>
+        <input type="text" id="regTelegramInput" class="form-control" placeholder="@username">
+      </div>
+      <div class="form-group">
         <label class="form-label">ShamCash QR كودىڭىز (رەسىم):</label>
         <input type="file" id="regQrFile" class="form-control" accept="image/*">
       </div>
@@ -312,7 +320,6 @@
       </div>
     </div>
     <div class="header-actions">
-      <button id="editProfileBtn" class="icon-round-btn" title="پروفىلنى تەھرىرلەش">⚙️</button>
       <button id="secretAdminBtn" class="icon-round-btn" title="باشقۇرغۇچى">🛡️</button>
     </div>
   </header>
@@ -399,6 +406,8 @@
   </nav>
 
   <script>
+    const STORAGE_KEY = "uyghur_market_permanent_v1";
+
     const StorageEngine = {
       async get(key, defaultVal) {
         try { const raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : defaultVal; }
@@ -426,7 +435,7 @@
     }
 
     async function saveState() {
-      await StorageEngine.set("real_sham_state_v12", appState);
+      await StorageEngine.set(STORAGE_KEY, appState);
     }
 
     function checkExpiredProducts() {
@@ -476,7 +485,7 @@
             <div class="product-seller">👤 ${escapeHtml(p.sellerName)}</div>
           </div>
           <div style="padding: 0 12px 12px 12px;">
-            <button class="btn-buy" ${p.isSold ? 'disabled' : ''} onclick="openProductModal('${p.id}')">${p.isSold ? 'ساتىلدى' : '💳 سېتىۋېلىش & QR'}</button>
+            <button class="btn-buy" ${p.isSold ? 'disabled' : ''} onclick="openProductModal('${p.id}')">${p.isSold ? 'ساتىلدى' : '💳 تەپسىلات & ئالاقە'}</button>
           </div>
         `;
         container.appendChild(card);
@@ -506,7 +515,13 @@
         <p style="font-size:0.9rem; margin-bottom:8px;">${escapeHtml(p.desc)}</p>
         <div style="font-size:0.85rem; color:var(--accent); font-weight:600; margin-bottom:8px;">📍 جايى: ${escapeHtml(p.location || 'بەلگىلەنمىگەن')}</div>
         <div style="font-size:1rem; font-weight:bold; color:var(--primary); margin-bottom:8px;">باھاسى: ${p.price}$</div>
-        <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:15px;">ساتقۇچى ShamCash ID: <strong>${p.shamCode}</strong></div>
+        
+        <div style="background:#f1f5f9; padding:10px; border-radius:10px; margin-bottom:12px; font-size:0.85rem;">
+          <p><strong>👤 ساتقۇچى:</strong> ${escapeHtml(p.sellerName)}</p>
+          <p><strong>💳 ShamCash ID:</strong> ${escapeHtml(p.shamCode)}</p>
+          ${p.whatsapp ? `<p><strong>📞 WhatsApp:</strong> <a href="https://wa.me/${p.whatsapp}" target="_blank" style="color:#25d366; font-weight:bold;">${escapeHtml(p.whatsapp)}</a></p>` : ""}
+          ${p.telegram ? `<p><strong>✈️ Telegram:</strong> <a href="https://t.me/${p.telegram.replace('@','')}" target="_blank" style="color:#0088cc; font-weight:bold;">${escapeHtml(p.telegram)}</a></p>` : ""}
+        </div>
 
         ${p.qrImage ? `<div style="text-align:center; margin-bottom:15px;"><p style="font-size:0.85rem; margin-bottom:5px;">ShamCash QR كودى (پۇل ئۆتۈش ئۈچۈن):</p><img src="${p.qrImage}" style="max-width:180px; border-radius:8px; border:2px solid var(--primary);"></div>` : ""}
 
@@ -579,12 +594,14 @@
         <p><strong>ئىسمى:</strong> ${escapeHtml(appState.currentUser.name)}</p>
         <p><strong>Gmail:</strong> ${escapeHtml(appState.currentUser.email)}</p>
         <p><strong>ShamCash ID:</strong> ${escapeHtml(appState.currentUser.shamCode)}</p>
+        <p><strong>WhatsApp:</strong> ${escapeHtml(appState.currentUser.whatsapp || 'يوق')}</p>
+        <p><strong>Telegram:</strong> ${escapeHtml(appState.currentUser.telegram || 'يوق')}</p>
         ${appState.currentUser.qrImage ? `<div style="margin-top:10px;"><p><strong>ShamCash QR كودىڭىز:</strong></p><img src="${appState.currentUser.qrImage}" style="max-width:150px; border-radius:8px; border:2px solid var(--primary); margin-top:5px;"></div>` : ""}
       `;
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
-      const saved = await StorageEngine.get("real_sham_state_v12", null);
+      const saved = await StorageEngine.get(STORAGE_KEY, null);
       if (saved) appState = saved;
 
       const overlay = document.getElementById("profileOverlay");
@@ -602,6 +619,8 @@
         const name = document.getElementById("regNameInput").value.trim();
         const email = document.getElementById("regEmailInput").value.trim();
         const sham = document.getElementById("regShamInput").value.trim();
+        const whatsapp = document.getElementById("regWhatsappInput").value.trim();
+        const telegram = document.getElementById("regTelegramInput").value.trim();
         const qrFile = document.getElementById("regQrFile").files[0];
 
         if (!name || !email.includes("@") || !sham) {
@@ -612,16 +631,16 @@
         const reader = new FileReader();
         if (qrFile) {
           reader.onload = async function(e) {
-            saveUserProfile(name, email, sham, e.target.result);
+            saveUserProfile(name, email, sham, whatsapp, telegram, e.target.result);
           };
           reader.readAsDataURL(qrFile);
         } else {
-          saveUserProfile(name, email, sham, "");
+          saveUserProfile(name, email, sham, whatsapp, telegram, appState.currentUser?.qrImage || "");
         }
       });
 
-      async function saveUserProfile(name, email, sham, qrImage) {
-        appState.currentUser = { name, email, shamCode: sham, qrImage };
+      async function saveUserProfile(name, email, sham, whatsapp, telegram, qrImage) {
+        appState.currentUser = { name, email, shamCode: sham, whatsapp, telegram, qrImage };
         if (!appState.users.some(u => u.email === email)) {
           appState.users.unshift({ name, email, shamCode: sham });
         }
@@ -629,21 +648,16 @@
         updateProfileView();
         renderProducts();
         overlay.style.display = "none";
-        showToast(`🎉 خۇش كەپسىز ${name}! پروفىلىڭىز ياسالدى.`);
+        showToast(`🎉 خۇش كەپسىز ${name}! پروفىلىڭىز ساقلاندى.`);
       }
 
       document.getElementById("changeProfileBtn").addEventListener("click", () => {
-        document.getElementById("regNameInput").value = appState.currentUser.name;
-        document.getElementById("regEmailInput").value = appState.currentUser.email;
-        document.getElementById("regShamInput").value = appState.currentUser.shamCode;
-        overlay.style.display = "flex";
-      });
-
-      document.getElementById("editProfileBtn").addEventListener("click", () => {
-        if(appState.currentUser) {
+        if (appState.currentUser) {
           document.getElementById("regNameInput").value = appState.currentUser.name;
           document.getElementById("regEmailInput").value = appState.currentUser.email;
           document.getElementById("regShamInput").value = appState.currentUser.shamCode;
+          document.getElementById("regWhatsappInput").value = appState.currentUser.whatsapp || "";
+          document.getElementById("regTelegramInput").value = appState.currentUser.telegram || "";
         }
         overlay.style.display = "flex";
       });
@@ -694,20 +708,22 @@
         }
       });
 
-      function saveProduct(name, price, location, desc, image) {
+      async function saveProduct(name, price, location, desc, image) {
         appState.products.unshift({
           id: "p_" + Date.now(),
           name, price, location, desc,
           sellerName: appState.currentUser.name,
           sellerEmail: appState.currentUser.email,
           shamCode: appState.currentUser.shamCode,
+          whatsapp: appState.currentUser.whatsapp || "",
+          telegram: appState.currentUser.telegram || "",
           qrImage: appState.currentUser.qrImage || "",
           image,
           isSold: false,
           buyerName: null,
           soldTime: null
         });
-        saveState();
+        await saveState();
         renderProducts();
         document.getElementById("prodNameInput").value = "";
         document.getElementById("prodPriceInput").value = "";
@@ -732,9 +748,9 @@
         });
       }
 
-      window.delProd = function(id) {
+      window.delProd = async function(id) {
         appState.products = appState.products.filter(item => item.id !== id);
-        saveState();
+        await saveState();
         renderProducts();
         renderAdmin();
         showToast("🗑️ ئۆچۈرۈلدى.");
