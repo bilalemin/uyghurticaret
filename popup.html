@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="ug" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ئۇيغۇر تىجارەتلىرى | ShamCash سودا سۇپىسى</title>
+  <style>
+    :root {
+      --bg-primary: #0b1120;
+      --bg-secondary: rgba(17, 24, 39, 0.78);
+      --glass-bg: rgba(30, 41, 59, 0.65);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #10b981;
+      --accent-hover: #059669;
+      --sham-blue: #0284c7;
+      --danger: #ef4444;
+      --gold: #f59e0b;
+      --shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.5);
+    }
+
+    body.light-mode {
+      --bg-primary: #f1f5f9;
+      --bg-secondary: rgba(255, 255, 255, 0.88);
+      --glass-bg: rgba(255, 255, 255, 0.75);
+      --glass-border: rgba(15, 23, 42, 0.1);
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'UKIJ Tuz', 'ALKATIP Basma', 'Uyghur Pashto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Tahoma, sans-serif;
+      transition: background-color 0.25s ease, color 0.2s ease, transform 0.18s ease, box-shadow 0.2s ease;
+    }
+
+    body {
+      direction: rtl;
+      background: radial-gradient(circle at top right, #064e3b, var(--bg-primary) 55%);
+      color: var(--text-main);
+      min-width: 375px;
+      max-width: 100%;
+      min-height: 600px;
+      margin: 0 auto;
+      overflow-x: hidden;
+      line-height: 1.75;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 440px;
+      margin: 0 auto;
+      padding: 14px;
+    }
+
+    @media (min-width: 768px) {
+      .app-container {
+        max-width: 920px;
+        padding: 24px;
+      }
+      .product-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+      }
+    }
+
+    p, .uyghur-paragraph {
+      text-align: justify;
+      text-justify: inter-word;
+      text-indent: 1.75em;
+      font-size: 0.94rem;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+
+    .glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      border-radius: 18px;
+      padding: 14px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    .top-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), var(--sham-blue));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 1.2rem;
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+    }
+
+    .brand-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .brand-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .icon-btn {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      color: var(--text-main);
+      border-radius: 10px;
+      padding: 7px 10px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
+    .icon-btn:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+    }
+
+    .shamcash-banner {
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.88), rgba(16, 185, 129, 0.85));
+      border-radius: 18px;
+      padding: 15px;
+      color: #fff;
+      margin-bottom: 14px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(2, 132, 199, 0.35);
+    }
+
+    .sham-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .sham-badge {
+      background: rgba(255, 255, 255, 0.22);
+      padding: 3px 10px;
+      border-radius: 99px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .balance-amount {
+      font-size: 1.55rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      margin: 4px 0;
+    }
+
+    .sham-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .nav-tabs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-bottom: 14px;
+      background: var(--bg-secondary);
+      padding: 5px;
+      border-radius: 14px;
+      border: 1px solid var(--glass-border);
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 8px 4px;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .tab-btn.active {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 10px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.82rem;
+      margin-bottom: 4px;
+      color: var(--text-muted);
+    }
+
+    .form-input, .form-textarea, .form-select {
+      width: 100%;
+      padding: 9px 12px;
+      border-radius: 11px;
+      border: 1px solid var(--glass-border);
+      background: rgba(15, 23, 42, 0.45);
+      color: var(--text-main);
+      font-size: 0.88rem;
+      outline: none;
+    }
+
+    body.light-mode .form-input,
+    body.light-mode .form-textarea,
+    body.light-mode .form-select {
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .form-input:focus, .form-textarea:focus {
+      border-color: var(--accent);
+    }
+
+    .btn {
+      border: none;
+      border-radius: 11px;
+      padding: 9px 14px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      width: 100%;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+    }
+
+    .btn-sham {
+      background: rgba(255, 255, 255, 0.22);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      flex: 1;
+      font-size: 0.78rem;
+      padding: 7px 10px;
+    }
+
+    .btn-google {
+      background: #ffffff;
+      color: #1e293b;
+      border: 1px solid #cbd5e1;
+      width: 100%;
+      margin-top: 6px;
+    }
+
+    .btn-translate {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: #fff;
+      font-size: 0.78rem;
+      padding: 6px 12px;
+      margin-top: 6px;
+    }
+
+    .product-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 15px;
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+
+    .product-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .product-title {
+      font-weight: 700;
+      font-size: 0.98rem;
+      color: var(--accent);
+    }
+
+    .product-price {
+      background: rgba(16, 185, 129, 0.18);
+      color: var(--accent);
+      padding: 3px 9px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .product-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--glass-border);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 14px;
+      right: 14px;
+      left: 14px;
+      background: #065f46;
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      text-align: center;
+      box-shadow: var(--shadow);
+      z-index: 999;
+      display: none;
+    }
+
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.78rem;
+      margin-top: 8px;
+    }
+
+    .admin-table th, .admin-table td {
+      border-bottom: 1px solid var(--glass-border);
+      padding: 7px 4px;
+      text-align: right;
+    }
+
+    .status-pill {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 99px;
+      font-size: 0.7rem;
+      background: rgba(16, 185, 129, 0.2);
+      color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <header class="top-header">
+      <div class="brand-box">
+        <div class="brand-logo">ئۇ</div>
+        <div>
+          <div class="brand-title">ئۇيغۇر تىجارەتلىرى</div>
+          <div class="brand-sub">شەرقىي تۈركىستان & سۈرىيە ShamCash بازىرى</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="themeToggleBtn" class="icon-btn" title="تېما ئالماشتۇرۇش">🌓</button>
+      </div>
+    </header>
+
+    <section class="shamcash-banner">
+      <div class="sham-top">
+        <span class="sham-badge">💳 ShamCash (شام كەش) ھېساباتى</span>
+        <span id="activeUserBadge" style="font-size: 0.78rem;">مېھمان ھالىتى</span>
+      </div>
+      <div class="balance-amount"><span id="walletBalance">1,250.00</span> $ (USD / SYP)</div>
+      <div style="font-size: 0.76rem; opacity: 0.9;">
+        شام كەش نومۇرى: <strong id="shamAccountCode">SC-9940-UYG</strong>
+      </div>
+      <div class="sham-actions">
+        <button id="receiveSalaryBtn" class="btn btn-sham">💰 ئايلىق مائاش قوبۇل قىلىش (+500$)</button>
+        <button id="topUpShamBtn" class="btn btn-sham">➕ پۇل قوشۇش (+100$)</button>
+      </div>
+    </section>
+
+    <div class="glass-card">
+      <p class="uyghur-paragraph">
+        ئەسسالامۇئەلەيكۇم! «ئۇيغۇر تىجارەتلىرى» سۇپىسى شەرقىي تۈركىستان ۋە سۈرىيەدىكى قېرىنداشلارنىڭ ئەھلى سۈننەت ۋەلجامائەت ئەخلاقى بويىچە ئىشەنچلىك، ھالال ۋە بىخەتەر سودا قىلىشى ئۈچۈن قۇرۇلدى. بارلىق ئېلىم-بېرىملار سۈرىيەدە كەڭ قوللىنىلىدىغان شام كەش (ShamCash) تۆلەم سىستېمىسى ئارقىلىق نەق پۇلسىز ۋە بىۋاسىتە ئەمەلىيلىشىدۇ.
+      </p>
+    </div>
+
+    <nav class="nav-tabs">
+      <button class="tab-btn active" data-tab="marketTab">🛍️ بازار</button>
+      <button class="tab-btn" data-tab="addProductTab">➕ مال قوشۇش</button>
+      <button class="tab-btn" data-tab="authTab">🔐 ھېسابات</button>
+      <button class="tab-btn" data-tab="adminTab">🛡️ باشقۇرغۇچى</button>
+    </nav>
+
+    <section id="marketTab" class="tab-content active">
+      <div class="form-group">
+        <input type="text" id="searchInput" class="form-input" placeholder="🔍 مەھسۇلات ياكى ساتقۇچى ئىزدەڭ...">
+      </div>
+      <div id="productList" class="product-grid"></div>
+    </section>
+
+    <section id="addProductTab" class="tab-content">
+      <div class="glass-card">
+        <h3 style="margin-bottom: 10px; font-size: 1rem;">📦 يېڭى مەھسۇلات ئېلان قىلىش</h3>
+        <div class="form-group">
+          <label class="form-label">مەھسۇلات نامى (ئىنگلىزچە يازسىڭىزمۇ ئاپتوماتىك ئۇيغۇرچىغا تەرجىمە قىلالايسىز):</label>
+          <input type="text" id="prodNameInput" class="form-input" placeholder="مەسىلەن: Doppa ياكى Fresh Honey">
+        </div>
+        <div class="form-group">
+          <label class="form-label">باھاسى (ShamCash $):</label>
+          <input type="number" id="prodPriceInput" class="form-input" placeholder="25" min="1">
+        </div>
+        <div class="form-group">
+          <label class="form-label">مەھسۇلات چۈشەندۈرۈشى:</label>
+          <textarea id="prodDescInput" class="form-textarea" rows="3" placeholder="مەھسۇلات ھەققىدە تەپسىلىي مەلۇمات يېزىڭ (ئىنگلىزچە ياكى ئۇيغۇرچە)..."></textarea>
+          <button type="button" id="translateBtn" class="btn btn-translate">
+            🌐 ئىنگلىزچىدىن ئۇيغۇرچىغا تەرجىمە قىلىش (translateGoogle)
+          </button>
+        </div>
+        <div class="form-group">
+          <label class="form-label">ساتقۇچىنىڭ ShamCash كودى:</label>
+          <input type="text" id="prodSellerShamInput" class="form-input" placeholder="SC-7781-DAM">
+        </div>
+        <button type="button" id="publishProductBtn" class="btn btn-primary">✅ بازارغا چىقىرىش</button>
+      </div>
+    </section>
+
+    <section id="authTab" class="tab-content">
+      <div class="glass-card">
+        <h3 style="margin-bottom: 8px; font-size: 1rem;">🔐 Google ھېساباتى بىلەن كىرىش</h3>
+        <p class="uyghur-paragraph">
+          ھەر بىر سودىگەر ۋە خېرىدار ئۆزىنىڭ Google ھېساباتى ئارقىلىق سىستېمىغا تىزىملىتىپ كىرەلەيدۇ. بارلىق شەخسىي ئۇچۇرلىرىڭىز سىرتقا ئەۋەتىلمەي، پۈتۈنلەي مەخپىي ۋە بىخەتەر ساقلىنىدۇ.
+        </p>
+        <div class="form-group">
+          <label class="form-label">ئىسمىڭىز ۋە فامىلىڭىز:</label>
+          <input type="text" id="googleNameInput" class="form-input" placeholder="مەسىلەن: ئابدۇللاھ كاشغەرىي">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Google ئېلخەت ئادرېسىڭىز (Gmail):</label>
+          <input type="email" id="googleEmailInput" class="form-input" placeholder="abdullah@gmail.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label">شەخسىي ShamCash ھېسابات نومۇرىڭىز:</label>
+          <input type="text" id="userShamInput" class="form-input" placeholder="SC-5520-IDLIB">
+        </div>
+        <button type="button" id="googleLoginBtn" class="btn btn-google">
+          🔵 Google ھېساباتى بىلەن تىزىملىتىش / كىرىش
+        </button>
+        <button type="button" id="logoutBtn" class="btn" style="width:100%; margin-top:8px; background:rgba(239,68,68,0.2); color:#fca5a5;">
+          🚪 ھېساباتتىن چېكىنىش
+        </button>
+      </div>
+    </section>
+
+    <section id="adminTab" class="tab-content">
+      <div class="glass-card">
+        <h3 style="margin-bottom: 8px; font-size: 1rem; color: var(--gold);">🛡️ يۇقىرى دەرىجىلىك باشقۇرغۇچى كۆزنىكى</h3>
+        <p class="uyghur-paragraph">
+          بۇ خاس بەتتە سىستېمىغا Google ھېساباتى بىلەن كىرگەن بارلىق ئەزالارنى، ئۇلار بازارغا چىقارغان مەھسۇلاتلارنى ۋە شام كەش (ShamCash) ئارقىلىق ئېلىپ بېرىلغان بارلىق سودا خاتىرىلىرىنى تولۇق كۆرەلەيسىز.
+        </p>
+
+        <h4 style="font-size: 0.88rem; margin-top: 10px; color: var(--accent);">👥 تىزىملاتقان ئەزالار (<span id="adminUserCount">0</span>):</h4>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ئىسمى</th>
+              <th>Google ئېلخەت</th>
+              <th>ShamCash كودى</th>
+            </tr>
+          </thead>
+          <tbody id="adminUsersTable"></tbody>
+        </table>
+
+        <h4 style="font-size: 0.88rem; margin-top: 14px; color: var(--accent);">📦 ئەزالار چىقارغان بارلىق مەھسۇلاتلار (<span id="adminProdCount">0</span>):</h4>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>مەھسۇلات</th>
+              <th>ساتقۇچى</th>
+              <th>باھاسى</th>
+              <th>ئەمەلىيەت</th>
+            </tr>
+          </thead>
+          <tbody id="adminProductsTable"></tbody>
+        </table>
+
+        <h4 style="font-size: 0.88rem; margin-top: 14px; color: var(--accent);">💳 ShamCash سودا خاتىرىسى:</h4>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>مەھسۇلات</th>
+              <th>سېتىۋالغۇچى</th>
+              <th>تۆلەم</th>
+            </tr>
+          </thead>
+          <tbody id="adminOrdersTable"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <div id="toastBox" class="toast"></div>
+  <script src="popup.js"></script>
+</body>
+</html>
