@@ -76,56 +76,8 @@
       color: var(--text-muted);
     }
 
-    .wallet-card {
-      background: linear-gradient(135deg, #0284c7, #059669);
-      color: white;
-      margin: 16px;
-      padding: 18px;
-      border-radius: var(--radius);
-      box-shadow: 0 10px 25px rgba(2, 132, 199, 0.3);
-    }
-
-    .wallet-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.85rem;
-      opacity: 0.95;
-      margin-bottom: 8px;
-    }
-
-    .wallet-balance {
-      font-size: 1.7rem;
-      font-weight: 800;
-      margin: 6px 0;
-      letter-spacing: 0.5px;
-    }
-
-    .wallet-actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 12px;
-    }
-
-    .w-btn {
-      background: rgba(255, 255, 255, 0.22);
-      border: 1px solid rgba(255, 255, 255, 0.35);
-      color: white;
-      padding: 8px 12px;
-      border-radius: 10px;
-      font-size: 0.8rem;
-      cursor: pointer;
-      font-weight: 600;
-      flex: 1;
-      text-align: center;
-    }
-
-    .w-btn:active {
-      transform: scale(0.97);
-    }
-
     .search-box {
-      padding: 0 16px 14px 16px;
+      padding: 16px;
     }
 
     .search-input {
@@ -138,10 +90,6 @@
       font-size: 0.92rem;
       outline: none;
       box-shadow: var(--shadow);
-    }
-
-    .search-input:focus {
-      border-color: var(--primary);
     }
 
     .container {
@@ -179,14 +127,11 @@
       justify-content: space-between;
     }
 
-    .product-img-placeholder {
+    .product-img {
       height: 140px;
-      background: linear-gradient(135deg, #334155, #1e293b);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.2rem;
-      color: var(--text-muted);
+      background: #334155;
+      object-fit: cover;
+      width: 100%;
     }
 
     .product-body {
@@ -202,7 +147,6 @@
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
-      line-height: 1.4;
     }
 
     .product-price {
@@ -228,10 +172,6 @@
       font-weight: 700;
       font-size: 0.82rem;
       cursor: pointer;
-    }
-
-    .btn-buy:active {
-      transform: scale(0.98);
     }
 
     .form-card {
@@ -264,10 +204,6 @@
       outline: none;
       background: rgba(15, 23, 42, 0.6);
       color: var(--text-main);
-    }
-
-    .form-control:focus {
-      border-color: var(--primary);
     }
 
     .btn-primary {
@@ -346,6 +282,24 @@
       display: none;
     }
 
+    /* Gizli Yönetici Butonu */
+    .secret-admin-btn {
+      position: fixed;
+      bottom: 75px;
+      left: 10px;
+      background: rgba(0,0,0,0.4);
+      color: #64748b;
+      border: none;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      z-index: 9999;
+      opacity: 0.3;
+    }
+    .secret-admin-btn:hover { opacity: 1; color: #f59e0b; }
+
     .admin-table {
       width: 100%;
       border-collapse: collapse;
@@ -366,27 +320,15 @@
       <div class="logo-icon">ئۇ</div>
       <div>
         <div class="logo-title">ئۇيغۇر تىجارەتلىرى</div>
-        <div class="logo-sub">ShamCash (Dolap Style)</div>
+        <div class="logo-sub">ShamCash Tövlemlik Bazarı</div>
       </div>
     </div>
   </header>
 
   <div id="toastBox" class="toast"></div>
 
-  <div class="wallet-card">
-    <div class="wallet-top">
-      <span>💳 ShamCash (شام كەش) ھېساباتى</span>
-      <span id="activeUserBadge">مېھمان</span>
-    </div>
-    <div class="wallet-balance"><span id="walletBalance">1,250.00</span> $</div>
-    <div style="font-size: 0.78rem; opacity: 0.9;">
-      شام كەش كودى: <strong id="shamAccountCode">SC-9940-UYG</strong>
-    </div>
-    <div class="wallet-actions">
-      <button id="receiveSalaryBtn" class="w-btn">💰 مائاش (+500$)</button>
-      <button id="topUpShamBtn" class="w-btn">➕ پۇل قوش (+100$)</button>
-    </div>
-  </div>
+  <!-- Gizli Yönetici Butonu (Sadece senin görebileceğin küçük köşe simgesi) -->
+  <button id="secretAdminToggle" class="secret-admin-btn" title="Admin">🛡️</button>
 
   <div class="search-box">
     <input type="text" id="searchInput" class="search-input" placeholder="🔍 مەھسۇلات ياكى ساتقۇچى ئىزدەڭ...">
@@ -394,16 +336,22 @@
 
   <div class="container">
     
+    <!-- MARKET -->
     <section id="marketTab" class="tab-content active">
       <div id="productList" class="product-grid"></div>
     </section>
 
+    <!-- ÜRÜN EKLE (FOTOĞRAF YÜKLEME DAHİL) -->
     <section id="addProductTab" class="tab-content">
       <div class="form-card">
-        <h3 style="margin-bottom: 14px; font-size: 1.05rem; color: var(--primary);">📦 مەھسۇلات ئېلان قىلىش</h3>
+        <h3 style="margin-bottom: 14px; font-size: 1.05rem; color: var(--primary);">📦 مەھسۇلات ئېلان قىلىش ۋە رەسمى</h3>
         <div class="form-group">
-          <label class="form-label">مەھسۇلات نامى (ئىنگلىزچە يازسىڭىزمۇ بولىدۇ):</label>
-          <input type="text" id="prodNameInput" class="form-control" placeholder="مەسىلەن: Uyghur Traditional Doppa">
+          <label class="form-label">مەھسۇلات سۈرىتى (رەسىم تاللاش):</label>
+          <input type="file" id="prodImageFile" class="form-control" accept="image/*">
+        </div>
+        <div class="form-group">
+          <label class="form-label">مەھسۇلات نامى:</label>
+          <input type="text" id="prodNameInput" class="form-control" placeholder="مەسىلەن: Uyghur Doppa">
         </div>
         <div class="form-group">
           <label class="form-label">باھاسى (ShamCash $):</label>
@@ -411,25 +359,21 @@
         </div>
         <div class="form-group">
           <label class="form-label">مەھسۇلات تەپسىلاتى:</label>
-          <textarea id="prodDescInput" class="form-control" rows="3" placeholder="مەھسۇلاتنىڭ ھالىتى ۋە سۈپىتىنى يېزىڭ..."></textarea>
-          <button type="button" id="translateBtn" class="btn-translate">
-            🌐 ئىنگلىزچىدىن ئۇيغۇرچىغا ئاپتوماتىك تەرجىمە
-          </button>
+          <textarea id="prodDescInput" class="form-control" rows="3" placeholder="مەھسۇلات ھالىتىنى يېزىڭ..."></textarea>
+          <button type="button" id="translateBtn" class="btn-translate">🌐 ئىنگلىزچىدىن ئۇيغۇرچىغا تەرجىمە</button>
         </div>
         <div class="form-group">
-          <label class="form-label">ساتقۇچىنىڭ ShamCash كودى:</label>
+          <label class="form-label">ساتقۇچىنىڭ ShamCash ھېسابات نومۇرى:</label>
           <input type="text" id="prodSellerShamInput" class="form-control" placeholder="SC-7781-DAM">
         </div>
-        <button type="button" id="publishProductBtn" class="btn-primary">✅ دەرھال بازارغا چىقىرىش</button>
+        <button type="button" id="publishProductBtn" class="btn-primary">✅ بازارغا چىقىرىش</button>
       </div>
     </section>
 
+    <!-- GOOGLE GİRİŞ / PROFİL -->
     <section id="authTab" class="tab-content">
       <div class="form-card">
         <h3 style="margin-bottom: 10px; font-size: 1.05rem;">🔐 Google ھېساباتى بىلەن كىرىش</h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px; text-align: justify;">
-          Google ئېلخەت ئادرېسىڭىز ئارقىلىق سىستېمىغا تىزىملىتىپ، مەھسۇلاتلىرىڭىزنى ساتالايسىز.
-        </p>
         <div class="form-group">
           <label class="form-label">ئىسم-فامىلىڭىز:</label>
           <input type="text" id="googleNameInput" class="form-control" placeholder="ئابدۇللاھ كاشغەرىي">
@@ -439,23 +383,20 @@
           <input type="email" id="googleEmailInput" class="form-control" placeholder="abdullah@gmail.com">
         </div>
         <div class="form-group">
-          <label class="form-label">ShamCash كودىڭىز:</label>
+          <label class="form-label">شەخسىي ShamCash كودىڭىز (رəsmi ID):</label>
           <input type="text" id="userShamInput" class="form-control" placeholder="SC-5520-IDLIB">
         </div>
-        <button type="button" id="googleLoginBtn" class="btn-primary" style="background:#2563eb;">
-          🔵 Google بىلەن كىرىش / تىزىملىتىش
-        </button>
-        <button type="button" id="logoutBtn" style="width:100%; margin-top:10px; background:rgba(239,68,68,0.2); color:#fca5a5; border:1px solid rgba(239,68,68,0.3); padding:11px; border-radius:12px; font-weight:600; cursor:pointer;">
-          🚪 ھېساباتتىن چېكىنىش
-        </button>
+        <button type="button" id="googleLoginBtn" class="btn-primary" style="background:#2563eb;">🔵 Google بىلەن كىرىش</button>
+        <button type="button" id="logoutBtn" style="width:100%; margin-top:10px; background:rgba(239,68,68,0.2); color:#fca5a5; border:1px solid rgba(239,68,68,0.3); padding:11px; border-radius:12px; font-weight:600; cursor:pointer;">🚪 چېكىنىش</button>
       </div>
     </section>
 
+    <!-- GİZLİ YÖNETİCİ PANELİ -->
     <section id="adminTab" class="tab-content">
-      <div class="form-card">
+      <div class="form-card" style="border-color: #f59e0b;">
         <h3 style="margin-bottom: 10px; font-size: 1.05rem; color: #f59e0b;">🛡️ باشقۇرغۇچى كۆزنىكى (Admin)</h3>
         
-        <h4 style="font-size: 0.85rem; margin-top: 10px; color: var(--primary);">👥 ئەزالار (<span id="adminUserCount">0</span>):</h4>
+        <h4 style="font-size: 0.85rem; margin-top: 10px; color: var(--primary);">👥 تىزىملاتقان ئەزالөр (<span id="adminUserCount">0</span>):</h4>
         <table class="admin-table">
           <thead><tr><th>ئىسمى</th><th>Gmail</th><th>ShamCash</th></tr></thead>
           <tbody id="adminUsersTable"></tbody>
@@ -467,9 +408,9 @@
           <tbody id="adminProductsTable"></tbody>
         </table>
 
-        <h4 style="font-size: 0.85rem; margin-top: 14px; color: var(--primary);">💳 سودا خاتىرىلىرى:</h4>
+        <h4 style="font-size: 0.85rem; margin-top: 14px; color: var(--primary);">💳 ShamCash سودا خاتىرىلىرى:</h4>
         <table class="admin-table">
-          <thead><tr><th>مەھسۇلات</th><th>سېتىۋالغۇچى</th><th>مىقدار</th></tr></thead>
+          <thead><tr><th>مەھسۇلات</th><th>سېتىۋالغۇچى</th><th>ساتقۇچى ShamCash</th><th>مىقدار</th></tr></thead>
           <tbody id="adminOrdersTable"></tbody>
         </table>
       </div>
@@ -489,10 +430,6 @@
     <button class="nav-item" data-tab="authTab">
       <span class="icon">👤</span>
       <span>ھېسابات</span>
-    </button>
-    <button class="nav-item" data-tab="adminTab">
-      <span class="icon">🛡️</span>
-      <span>باشقۇرغۇچى</span>
     </button>
   </nav>
 
@@ -530,43 +467,38 @@
         try {
           const raw = localStorage.getItem(key);
           return raw ? JSON.parse(raw) : defaultVal;
-        } catch (e) {
-          return defaultVal;
-        }
+        } catch (e) { return defaultVal; }
       },
       async set(key, val) {
-        try {
-          localStorage.setItem(key, JSON.stringify(val));
-          return true;
-        } catch (e) {
-          return false;
-        }
+        try { localStorage.setItem(key, JSON.stringify(val)); return true; }
+        catch (e) { return false; }
       }
     };
 
     const DEFAULT_PRODUCTS = [
       {
         id: "p1",
-        name: "ئەلا سۈپەتلىك شەرقىي تۈركىستان بادام ۋە ياڭاقلىرى",
+        name: "شەرقىي تۈركىستان بادام ۋە ياڭاقلىرى",
         price: 35,
-        desc: "تەبىئىي قۇرۇق يېمەكلىك. سۈرىيەنىڭ ھەممە شەھەرلىرىگە يەتكۈزۈپ بېرىلىدۇ.",
+        desc: "تەبىئىي قۇرۇق يېمەكلىك.",
         sellerName: "مۇھەممەد ئەمىن",
         sellerEmail: "amin@gmail.com",
-        shamCode: "SC-1042-IDLIB"
+        shamCode: "SC-1042-IDLIB",
+        image: ""
       },
       {
         id: "p2",
-        name: "قولدا تىكىلگەن ئۇيغۇر دوپپىسى ۋە ئەتلەس",
+        name: "قولدا تىكىلگەن ئۇيغۇر دوپپىسى",
         price: 20,
-        desc: "مىللىي ئەنئەنىۋى قول ھۈنەرۋەنچىلىك مەھسۇلاتى.",
+        desc: "مىللىي ئەنئەنىۋى قول ھۈنەرۋەنچىلىك.",
         sellerName: "زەينەپ خانىم",
         sellerEmail: "zeynep@gmail.com",
-        shamCode: "SC-8830-ALEPPO"
+        shamCode: "SC-8830-ALEPPO",
+        image: ""
       }
     ];
 
     let appState = {
-      balance: 1250.00,
       currentUser: { name: "مېھمان", email: "guest@gmail.com", shamCode: "SC-9940-UYG" },
       products: [],
       users: [],
@@ -582,13 +514,7 @@
     }
 
     async function saveState() {
-      await StorageEngine.set("dolap_sham_state_v2", appState);
-    }
-
-    function renderWallet() {
-      document.getElementById("walletBalance").textContent = appState.balance.toFixed(2);
-      document.getElementById("shamAccountCode").textContent = appState.currentUser.shamCode;
-      document.getElementById("activeUserBadge").textContent = appState.currentUser.name;
+      await StorageEngine.set("real_sham_state_v3", appState);
     }
 
     function renderProducts(filter = "") {
@@ -609,17 +535,19 @@
       list.forEach(p => {
         const card = document.createElement("div");
         card.className = "product-card";
+        const imgTag = p.image ? `<img src="${p.image}" class="product-img">` : `<div class="product-img" style="display:flex; align-items:center; justify-content:center; font-size:2rem;">🛍️</div>`;
         card.innerHTML = `
           <div>
-            <div class="product-img-placeholder">🛍️</div>
+            ${imgTag}
             <div class="product-body">
               <div class="product-title">${escapeHtml(p.name)}</div>
               <div class="product-price">${Number(p.price).toFixed(2)} $</div>
-              <div class="product-seller">👤 ${escapeHtml(p.sellerName)} (${escapeHtml(p.shamCode)})</div>
+              <div class="product-seller">👤 ${escapeHtml(p.sellerName)}</div>
+              <div style="font-size:0.7rem; color:#0284c7;">Sham: <strong>${escapeHtml(p.shamCode)}</strong></div>
             </div>
           </div>
           <div style="padding: 0 12px 12px 12px;">
-            <button class="btn-buy" data-id="${p.id}">💳 ShamCash بىلەن سېتىۋېلىش</button>
+            <button class="btn-buy" data-id="${p.id}">💳 ShamCash بىلەن تۆلەش</button>
           </div>
         `;
         container.appendChild(card);
@@ -656,9 +584,9 @@
       });
 
       const oTbody = document.getElementById("adminOrdersTable");
-      oTbody.innerHTML = appState.orders.length === 0 ? `<tr><td colspan="3" style="text-align:center; color:#94a3b8;">سودا يوق</td></tr>` : "";
+      oTbody.innerHTML = appState.orders.length === 0 ? `<tr><td colspan="4" style="text-align:center; color:#94a3b8;">سودا يوق</td></tr>` : "";
       appState.orders.forEach(o => {
-        oTbody.innerHTML += `<tr><td>${escapeHtml(o.productName)}</td><td>${escapeHtml(o.buyerName)}</td><td>${o.amount}$</td></tr>`;
+        oTbody.innerHTML += `<tr><td>${escapeHtml(o.productName)}</td><td>${escapeHtml(o.buyerName)}</td><td>${escapeHtml(o.sellerSham)}</td><td>${o.amount}$</td></tr>`;
       });
     }
 
@@ -669,20 +597,24 @@
     async function handleBuy(id) {
       const prod = appState.products.find(p => p.id === id);
       if (!prod) return;
-      if (appState.balance < prod.price) {
-        showToast("⚠️ ShamCash ھېساباتىڭىزدا پۇل يتەرسىز!");
-        return;
-      }
-      appState.balance -= prod.price;
-      appState.orders.unshift({ productName: prod.name, buyerName: appState.currentUser.name, amount: prod.price });
+      
+      const buyerSham = prompt(`💳 ShamCash تۆلەم جەزملەش:\n\n«${prod.name}» نى سېتىۋېلىش ئۈچۈن ShamCash ھېسابات نومۇرىڭىزنى (ID) كىرگۈزۈڭ:`, appState.currentUser.shamCode);
+      if (!buyerSham) return;
+
+      appState.orders.unshift({ 
+        productName: prod.name, 
+        buyerName: appState.currentUser.name + ` (${buyerSham})`, 
+        sellerSham: prod.shamCode,
+        amount: prod.price 
+      });
+
       await saveState();
-      renderWallet();
       renderAdmin();
-      showToast(`✅ «${prod.name}» سېتىۋېلىнды! شام كەش تۆلىنىدى.`);
+      showToast(`✅ ShamCash ئارقىلىق ${prod.price}$ سېتىۋالغۇچىدىن ساتقۇچىغا (${prod.shamCode}) يۆتكەلدى!`);
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
-      const saved = await StorageEngine.get("dolap_sham_state_v2", null);
+      const saved = await StorageEngine.get("real_sham_state_v3", null);
       if (saved && Array.isArray(saved.products)) {
         appState = saved;
       } else {
@@ -690,7 +622,6 @@
         await saveState();
       }
 
-      renderWallet();
       renderProducts();
       renderAdmin();
 
@@ -703,18 +634,12 @@
         });
       });
 
-      document.getElementById("receiveSalaryBtn").addEventListener("click", async () => {
-        appState.balance += 500;
-        await saveState();
-        renderWallet();
-        showToast("💰 شام كەش ھېساباتىڭىزغا مائاش قوشۇلدى (+500$)!");
-      });
-
-      document.getElementById("topUpShamBtn").addEventListener("click", async () => {
-        appState.balance += 100;
-        await saveState();
-        renderWallet();
-        showToast("➕ شام كەش ھېساباتىڭىزغا +100$ قوشۇلدى!");
+      // Gizli Admin Butonu Tıklanınca
+      document.getElementById("secretAdminToggle").addEventListener("click", () => {
+        document.querySelectorAll(".bottom-nav .nav-item").forEach(b => b.classList.remove("active"));
+        document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+        document.getElementById("adminTab").classList.add("active");
+        showToast("🛡️ باشقۇرغۇچى كۆزنىكى ئېچىلدى.");
       });
 
       document.getElementById("searchInput").addEventListener("input", (e) => {
@@ -735,18 +660,33 @@
         const price = parseFloat(document.getElementById("prodPriceInput").value);
         const desc = document.getElementById("prodDescInput").value.trim();
         const sham = document.getElementById("prodSellerShamInput").value.trim() || appState.currentUser.shamCode;
+        const fileInput = document.getElementById("prodImageFile");
 
         if (!name || isNaN(price) || !desc) {
-          showToast("⚠️ بارلىق كاتەكچىلەرنى تولۇق تولدۇرۇڭ!");
+          showToast("⚠️ زۆرۈر ئۇچۇرلارنى تولۇق تولدۇرۇڭ!");
           return;
         }
 
+        let imageUrl = "";
+        if (fileInput.files && fileInput.files[0]) {
+          const reader = new FileReader();
+          reader.onload = async function(e) {
+            imageUrl = e.target.result;
+            saveNewProduct(name, price, desc, sham, imageUrl);
+          };
+          reader.readAsDataURL(fileInput.files[0]);
+        } else {
+          saveNewProduct(name, price, desc, sham, "");
+        }
+      });
+
+      async function saveNewProduct(name, price, desc, sham, image) {
         appState.products.unshift({
           id: "p_" + Date.now(),
           name, price, desc,
           sellerName: appState.currentUser.name,
-          sellerEmail: appState.currentUser.email,
-          shamCode: sham
+          shamCode: sham,
+          image
         });
 
         await saveState();
@@ -755,8 +695,9 @@
         document.getElementById("prodNameInput").value = "";
         document.getElementById("prodPriceInput").value = "";
         document.getElementById("prodDescInput").value = "";
-        showToast("✅ مەھسۇلاتىڭىز بازارغا چىقتى!");
-      });
+        document.getElementById("prodImageFile").value = "";
+        showToast("✅ مەھسۇلاتىڭىز رەسىمى بىلەن بازارغا چىقتى!");
+      }
 
       document.getElementById("googleLoginBtn").addEventListener("click", async () => {
         const name = document.getElementById("googleNameInput").value.trim();
@@ -764,7 +705,7 @@
         const sham = document.getElementById("userShamInput").value.trim() || "SC-3350-SY";
 
         if (!name || !email.includes("@")) {
-          showToast("⚠️ توغرا ئىسىم ۋە ئېلخەت يېزىڭ!");
+          showToast("⚠️ توغرا ئىسىم ۋە ئېلخەت كىرگۈزۈڭ!");
           return;
         }
 
@@ -774,7 +715,6 @@
         }
 
         await saveState();
-        renderWallet();
         renderAdmin();
         showToast(`🔵 خۇش كەپسىز ${name}!`);
       });
@@ -782,7 +722,6 @@
       document.getElementById("logoutBtn").addEventListener("click", async () => {
         appState.currentUser = { name: "مېھمان", email: "guest@gmail.com", shamCode: "SC-9940-UYG" };
         await saveState();
-        renderWallet();
         showToast("🚪 تىزىمدىن چېكىندىڭىز.");
       });
     });
