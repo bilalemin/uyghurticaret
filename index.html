@@ -11,7 +11,7 @@
       --primary: #0284c7;       /* Gök Bayrak Mavisi */
       --primary-dark: #0369a1;
       --accent: #0ea5e9;
-      --bg-color: #f0f9ff;     /* Hafif maviye çalan ferah arka plan */
+      --bg-color: #f0f9ff;     /* Ferah arka plan */
       --card-bg: #ffffff;
       --text-main: #0f172a;
       --text-muted: #64748b;
@@ -75,7 +75,7 @@
       align-items: center;
       justify-content: center;
       font-weight: bold;
-      font-size: 1.25rem;
+      font-size: 1.15rem;
       box-shadow: 0 2px 8px rgba(2,132,199,0.3);
     }
 
@@ -112,25 +112,25 @@
     }
     .icon-round-btn:hover { border-color: var(--primary); background: #e0f2fe; }
 
-    /* Doğu Türkistan Özel Banner Detayı */
+    /* Doğu Türkistan Banner (Temiz ve Şık Tasarım) */
     .east-turkistan-banner {
       background: linear-gradient(135deg, #0284c7, #0369a1);
       color: white;
       margin: 12px 16px 0 16px;
-      padding: 12px 16px;
+      padding: 14px 16px;
       border-radius: 14px;
       text-align: center;
       box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
     }
     .east-turkistan-banner h4 {
-      font-size: 0.95rem;
+      font-size: 1rem;
       font-weight: 800;
-      margin-bottom: 2px;
+      margin-bottom: 3px;
       letter-spacing: 0.5px;
     }
     .east-turkistan-banner p {
-      font-size: 0.75rem;
-      opacity: 0.9;
+      font-size: 0.78rem;
+      opacity: 0.92;
     }
 
     #marketControls {
@@ -365,7 +365,7 @@
   <!-- PROFİL GİRİŞ EKRANI -->
   <div id="profileOverlay">
     <div class="form-card" style="width: 100%; max-width: 440px; background: #ffffff; color: #0f172a; margin: auto;">
-      <h2 style="margin-bottom: 6px; font-size: 1.25rem; color: var(--primary); text-align: center;">☪️ شەرقىي تۈركىستان بازىرىغا خۇش كەپسىز!</h2>
+      <h2 style="margin-bottom: 6px; font-size: 1.25rem; color: var(--primary); text-align: center;">شەرقىي تۈركىستان بازىرىغا خۇش كەپسىز</h2>
       <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 14px; text-align: center;">
         ئالاقە نومۇرىڭىزنى ۋە پروفىل ئۇچۇرلىرىڭىزنى تولدۇرۇڭ.
       </p>
@@ -417,7 +417,7 @@
 
   <header class="header">
     <div class="logo-area">
-      <div class="logo-icon">⭐</div>
+      <div class="logo-icon">ئۇ</div>
       <div>
         <div class="logo-title">شەرقىي تۈركىستان بازىرى</div>
         <div class="logo-sub" id="headerUserSub">ShamCash Tövlemlik Bazarı</div>
@@ -428,9 +428,9 @@
     </div>
   </header>
 
-  <!-- DOĞU TÜRKİSTAN ÖZEL BANNER -->
+  <!-- DOĞU TÜRKİSTAN BANNER (EMOJİSİZ VE TERTEMİZ) -->
   <div class="east-turkistan-banner">
-    <h4>☪️ شەرقىي تۈركىستان ئانا يۇرت سودا سارايلىرى</h4>
+    <h4>شەرقىي تۈركىستان ئانا يۇرت سودا سارايلىرى</h4>
     <p>ئەركىنلىك، بىرلىك ۋە تىجارەت - سىز ئۈچۈن مەخسۇس ئورتاق بازار!</p>
   </div>
 
@@ -1194,7 +1194,6 @@
         }
       };
 
-      // Admin Panelinden Ürünü Kaldırma / Silme Fonksiyonu
       window.adminDelProd = async function(id) {
         if (confirm("بۇ مەھسۇلاتنى بازاردىن راستلا ئۆچۈرەمسىز?")) {
           appState.products = appState.products.filter(item => item && item.id !== id);
