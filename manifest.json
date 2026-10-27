@@ -1,19 +1,13 @@
 {
-  "manifest_version": 3,
-  "name": "ئۇيغۇر تىجارەتلىرى - ShamCash بازىرى",
-  "version": "1.0.0",
-  "description": "شەرقىي تۈركىستان ۋە سۈرىيەدىكى قېرىنداشلار ئۈچۈن شام كەش (ShamCash) بىلەن بىرلەشتۈرۈلگەن بىخەتەر، ئەخلاقىي ۋە زامانىۋى سودا سۇپىسى.",
-  "action": {
-    "default_popup": "popup.html",
-    "default_title": "ئۇيغۇر تىجارەتلىرى"
-  },
-  "permissions": [
-    "storage"
-  ],
-  "host_permissions": [
-    "https://api.mymemory.translated.net/*"
-  ],
-  "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://api.mymemory.translated.net;"
-  }
+  "background_color": "#ffffff",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "Uyghur Bazaar",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "Uyghur BZ",
+  "start_url": "/",
+  "theme_color": "#ffffff",
+  "id": "com.uyghur.bazaar",
+  "description": "Uyghur community marketplace and trading platform"
 }
