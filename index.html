@@ -529,7 +529,7 @@
     }
 
     async function saveState() {
-      await StorageEngine.set("real_sham_state_v7", appState);
+      await StorageEngine.set("real_sham_state_v8", appState);
     }
 
     function renderProducts(filter = "") {
@@ -629,7 +629,7 @@
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
-      const saved = await StorageEngine.get("real_sham_state_v7", null);
+      const saved = await StorageEngine.get("real_sham_state_v8", null);
       if (saved && Array.isArray(saved.products)) {
         appState = saved;
       } else {
