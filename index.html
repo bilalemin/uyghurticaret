@@ -523,11 +523,19 @@
       <div class="form-card" style="border-color: #f59e0b;">
         <h3 style="margin-bottom: 10px; font-size: 1.05rem; color: #f59e0b;">🛡️ باشقۇرغۇچى كونترول مەركىزى</h3>
         
-        <h4 style="font-size: 0.85rem; margin-top: 10px; color: var(--primary);">👥 تىزىملاتقان ئەزالار ۋە پروفىيلار (<span id="adminUserCount">0</span>):</h4>
+        <h4 style="font-size: 0.85rem; margin-top: 10px; color: var(--primary);">👥 تىزىملاتقان ئەزالار (<span id="adminUserCount">0</span>):</h4>
         <div class="table-responsive">
           <table class="admin-table">
             <thead><tr><th>ئىسمى</th><th>Gmail</th><th>ShamCash ID</th><th>ئەمەلىيەت</th></tr></thead>
             <tbody id="adminUsersTable"></tbody>
+          </table>
+        </div>
+
+        <h4 style="font-size: 0.85rem; margin-top: 20px; color: #ef4444;">🚫 چەكلەنگەن ئەزالөр (Engellenenler):</h4>
+        <div class="table-responsive">
+          <table class="admin-table">
+            <thead><tr><th>ئىسمى</th><th>Gmail</th><th>ShamCash ID</th><th>ئەمەلىيەت</th></tr></thead>
+            <tbody id="adminBlockedTable"></tbody>
           </table>
         </div>
 
@@ -650,6 +658,7 @@
     let appState = {
       products: [],
       users: [],
+      blockedUsers: [],
       chats: {},
       favorites: []
     };
@@ -675,17 +684,10 @@
         if (!res.ok) return;
         const cloudData = await res.json();
         if (cloudData) {
-          const cloudProducts = Array.isArray(cloudData.products)
-            ? cloudData.products
-            : Object.values(cloudData.products || {});
-          const cloudUsers = Array.isArray(cloudData.users)
-            ? cloudData.users
-            : Object.values(cloudData.users || {});
-          const cloudChats = cloudData.chats || {};
-
-          appState.products = cloudProducts;
-          appState.users = cloudUsers;
-          appState.chats = cloudChats;
+          appState.products = Array.isArray(cloudData.products) ? cloudData.products : Object.values(cloudData.products || {});
+          appState.users = Array.isArray(cloudData.users) ? cloudData.users : Object.values(cloudData.users || {});
+          appState.blockedUsers = Array.isArray(cloudData.blockedUsers) ? cloudData.blockedUsers : Object.values(cloudData.blockedUsers || {});
+          appState.chats = cloudData.chats || {};
 
           await PermanentDB.set(MARKET_KEY, appState);
           renderProducts();
@@ -753,6 +755,9 @@
       let list = appState.products.filter(p => {
         if (!p) return false;
         
+        // Engellenen kullanıcıların ürünlerini pazarda gizle
+        if (appState.blockedUsers.some(b => b.email === p.sellerEmail)) return false;
+
         if (currentCategory === "favs") {
           if (!appState.favorites.includes(p.id)) return false;
         } else if (currentCategory === "expensive") {
@@ -946,6 +951,7 @@
       if (savedMarket) {
         if (Array.isArray(savedMarket.products)) appState.products = savedMarket.products;
         if (Array.isArray(savedMarket.users)) appState.users = savedMarket.users;
+        if (Array.isArray(savedMarket.blockedUsers)) appState.blockedUsers = savedMarket.blockedUsers;
         if (savedMarket.chats) appState.chats = savedMarket.chats;
         if (Array.isArray(savedMarket.favorites)) appState.favorites = savedMarket.favorites;
       }
@@ -1133,6 +1139,7 @@
       });
 
       function renderAdmin() {
+        // Aktif Kullanıcılar Tablosu
         document.getElementById("adminUserCount").textContent = appState.users.length;
         const uTbody = document.getElementById("adminUsersTable");
         uTbody.innerHTML = "";
@@ -1147,12 +1154,32 @@
                 <td>${escapeHtml(u.name)}</td>
                 <td>${escapeHtml(u.email)}</td>
                 <td>${escapeHtml(u.shamCode)}</td>
-                <td><button onclick="banUser(${index})" style="color:red; background:none; border:none; cursor:pointer; font-weight:bold;">چەكلەش / ئۆچۈر</button></td>
+                <td><button onclick="blockUser(${index})" style="color:#f59e0b; background:none; border:none; cursor:pointer; font-weight:bold;">چەكلەش (Engelle)</button></td>
               </tr>
             `;
           });
         }
 
+        // Engellenenler Tablosu
+        const bTbody = document.getElementById("adminBlockedTable");
+        bTbody.innerHTML = "";
+        if (!appState.blockedUsers || appState.blockedUsers.length === 0) {
+          bTbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">چەكلەنگەن ئەزا يوق</td></tr>`;
+        } else {
+          appState.blockedUsers.forEach((u, index) => {
+            if (!u) return;
+            bTbody.innerHTML += `
+              <tr>
+                <td>${escapeHtml(u.name)}</td>
+                <td>${escapeHtml(u.email)}</td>
+                <td>${escapeHtml(u.shamCode)}</td>
+                <td><button onclick="unblockUser(${index})" style="color:#10b981; background:none; border:none; cursor:pointer; font-weight:bold;">ئەسلىگە قايتۇرۇش</button></td>
+              </tr>
+            `;
+          });
+        }
+
+        // Ürünler Tablosu
         document.getElementById("adminProdCount").textContent = appState.products.length;
         const pTbody = document.getElementById("adminProductsTable");
         pTbody.innerHTML = "";
@@ -1174,12 +1201,26 @@
         }
       }
 
-      window.banUser = async function(index) {
+      window.blockUser = async function(index) {
         if (confirm("بۇ ئەزانى راستلا چەكلەمسىز?")) {
-          appState.users.splice(index, 1);
+          const userToBlock = appState.users.splice(index, 1)[0];
+          if (!appState.blockedUsers) appState.blockedUsers = [];
+          appState.blockedUsers.push(userToBlock);
           await pushToCloud();
           renderAdmin();
-          showToast("🚫 ئەزا چەكلەندى ۋە ئۆچۈرۈلدى.");
+          renderProducts();
+          showToast("🚫 ئەزا چەكلەندى ۋە چەكلەنگەنلەر تىزىملىكىگە ئۆتكۈزۈلدى.");
+        }
+      };
+
+      window.unblockUser = async function(index) {
+        if (confirm("بۇ ئەزانىڭ چېكىنىشىنى بىكار قىلامسىز?")) {
+          const userToUnblock = appState.blockedUsers.splice(index, 1)[0];
+          appState.users.unshift(userToUnblock);
+          await pushToCloud();
+          renderAdmin();
+          renderProducts();
+          showToast("✅ ئەزا ئەسلىگە قايتۇرۇلدى.");
         }
       };
 
