@@ -33,6 +33,17 @@
       min-height: 100vh;
     }
 
+    /* Profil Zorunlu Ekranı (Modal / Tam Ekran) */
+    #profileOverlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: #0f172a;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
     .header {
       background: var(--card-bg);
       border-bottom: 1px solid var(--border);
@@ -266,15 +277,43 @@
 </head>
 <body>
 
+  <!-- İLK GİRİŞ ZORUNLU PROFİL OLUŞTURMA EKRANI -->
+  <div id="profileOverlay">
+    <div class="form-card" style="width: 100%; max-width: 440px; background: #ffffff; color: #0f172a;">
+      <h2 style="margin-bottom: 6px; font-size: 1.25rem; color: var(--primary); text-align: center;">🌟 خۇش كەپسىز!</h2>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px; text-align: center;">
+        بازارغا كىرىشتىن بۇرۇن ئۆزىڭىزگە شەخسىي profil (ھېسابات) ھاسىل قىلىڭ.
+      </p>
+      <div class="form-group">
+        <label class="form-label">ئىسم - فامىلىڭىز:</label>
+        <input type="text" id="regNameInput" class="form-control" placeholder="مەسىلەن: مۇھەممەد ئەمىن">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Google ئېلخەت ئادرېسىڭىز (Gmail):</label>
+        <input type="email" id="regEmailInput" class="form-control" placeholder="example@gmail.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">ShamCash ھېسابات نومۇرى (ID):</label>
+        <input type="text" id="regShamInput" class="form-control" placeholder="SC-5520-IDLIB">
+      </div>
+      <div class="form-group">
+        <label class="form-label">ShamCash QR كودىڭىز (رەسىم):</label>
+        <input type="file" id="regQrFile" class="form-control" accept="image/*">
+      </div>
+      <button type="button" id="createProfileBtn" class="btn-primary">🚀 پروفىل ياساش ۋە بازارغا كىرىش</button>
+    </div>
+  </div>
+
   <header class="header">
     <div class="logo-area">
       <div class="logo-icon">ئۇ</div>
       <div>
         <div class="logo-title">ئۇيغۇر تىجارەتلىرى</div>
-        <div class="logo-sub">ShamCash Tövlemlik Bazarı</div>
+        <div class="logo-sub" id="headerUserSub">ShamCash Tövlemlik Bazarı</div>
       </div>
     </div>
     <div class="header-actions">
+      <button id="editProfileBtn" class="icon-round-btn" title="پروفىلنى تەھرىرلەش">⚙️</button>
       <button id="secretAdminBtn" class="icon-round-btn" title="باشقۇرغۇچى">🛡️</button>
     </div>
   </header>
@@ -300,10 +339,6 @@
           <input type="file" id="prodImageFile" class="form-control" accept="image/*">
         </div>
         <div class="form-group">
-          <label class="form-label">ShamCash QR كودىڭىز (رەسىم):</label>
-          <input type="file" id="prodQrFile" class="form-control" accept="image/*">
-        </div>
-        <div class="form-group">
           <label class="form-label">مەھسۇلات نامى:</label>
           <input type="text" id="prodNameInput" class="form-control" placeholder="مەسىلەن: Uyghur Doppa">
         </div>
@@ -319,32 +354,16 @@
           <label class="form-label">مەھسۇلات تەپسىلاتى:</label>
           <textarea id="prodDescInput" class="form-control" rows="3" placeholder="مەھسۇلات ئەھۋالى..."></textarea>
         </div>
-        <div class="form-group">
-          <label class="form-label">ساتقۇچىنىڭ ShamCash نومۇرى (ID):</label>
-          <input type="text" id="prodSellerShamInput" class="form-control" placeholder="SC-7781-DAM">
-        </div>
         <button type="button" id="publishProductBtn" class="btn-primary">✅ بازارغا چىقىرىش</button>
       </div>
     </section>
 
-    <!-- GOOGLE GİRİŞ -->
+    <!-- PROFİL / HESABIM -->
     <section id="authTab" class="tab-content">
       <div class="form-card">
-        <h3 style="margin-bottom: 10px; font-size: 1.05rem;">🔐 Google ھېساباتى بىلەن كىرىش</h3>
-        <div class="form-group">
-          <label class="form-label">ئىسم-فامىلىڭىز:</label>
-          <input type="text" id="googleNameInput" class="form-control" placeholder="ئابدۇللاھ">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Google ئېلخەت (Gmail):</label>
-          <input type="email" id="googleEmailInput" class="form-control" placeholder="abdullah@gmail.com">
-        </div>
-        <div class="form-group">
-          <label class="form-label">ShamCash كودىڭىز (ID):</label>
-          <input type="text" id="userShamInput" class="form-control" placeholder="SC-5520">
-        </div>
-        <button type="button" id="googleLoginBtn" class="btn-primary">🔵 كىرىش</button>
-        <button type="button" id="logoutBtn" style="width:100%; margin-top:10px; background:#fee2e2; color:#b91c1c; border:none; padding:11px; border-radius:12px; font-weight:600; cursor:pointer;">🚪 چېكىنىش</button>
+        <h3 style="margin-bottom: 10px; font-size: 1.05rem; color: var(--primary);">👤 مېنىڭ پروفىلىم</h3>
+        <div id="profileDetails" style="font-size: 0.9rem; line-height: 1.6; margin-bottom: 15px;"></div>
+        <button type="button" id="changeProfileBtn" class="btn-primary" style="background:var(--accent);">⚙️ پروفىل ئۇچۇرلىرىنى ئۆزگەرتىش</button>
       </div>
     </section>
 
@@ -377,7 +396,7 @@
   <nav class="bottom-nav">
     <button class="nav-item active" data-tab="marketTab"><span class="icon">🛍️</span><span>بازار</span></button>
     <button class="nav-item" data-tab="addProductTab"><span class="icon">➕</span><span>مال سېتىش</span></button>
-    <button class="nav-item" data-tab="authTab"><span class="icon">👤</span><span>ھېسابات</span></button>
+    <button class="nav-item" data-tab="authTab"><span class="icon">👤</span><span>ھېساباتىم</span></button>
   </nav>
 
   <script>
@@ -393,7 +412,7 @@
     };
 
     let appState = {
-      currentUser: { name: "مېھمان", email: "guest@gmail.com", shamCode: "SC-9940" },
+      currentUser: null,
       products: [],
       users: [],
       chats: {}
@@ -408,7 +427,7 @@
     }
 
     async function saveState() {
-      await StorageEngine.set("real_sham_state_v10", appState);
+      await StorageEngine.set("real_sham_state_v11", appState);
     }
 
     function checkExpiredProducts() {
@@ -475,7 +494,7 @@
 
       const modal = document.getElementById("productModal");
       const body = document.getElementById("modalBody");
-      const isOwner = appState.currentUser.email === p.sellerEmail;
+      const isOwner = appState.currentUser && appState.currentUser.email === p.sellerEmail;
 
       let chatMsgs = (appState.chats[p.id] || []).map(m => `
         <div style="margin-bottom:6px; background:#f1f5f9; padding:8px; border-radius:8px;">
@@ -506,7 +525,7 @@
         ` : ""}
 
         <hr style="border-color:var(--border); margin:15px 0;">
-        <h4 style="font-size:0.9rem; margin-bottom:8px;">💬 ساتقۇچى بىلەن پاراڭلىشىش (تاراتقۇ):</h4>
+        <h4 style="font-size:0.9rem; margin-bottom:8px;">💬 ساتقۇچى بىلەن پاراڭلىشىش:</h4>
         <div style="max-height:120px; overflow-y:auto; margin-bottom:10px; background:#f8fafc; padding:8px; border-radius:8px; border:1px solid var(--border);">
           ${chatMsgs}
         </div>
@@ -521,7 +540,7 @@
 
     window.requestBuy = async function(id) {
       const p = appState.products.find(item => item.id === id);
-      if (!p) return;
+      if (!p || !appState.currentUser) return;
       p.buyerName = appState.currentUser.name;
       await saveState();
       showToast("✅ پۇل ئەۋەتكەنلىكىڭىز ساتقۇچىغا ئۇقتۇرۇلدى!");
@@ -542,7 +561,7 @@
     window.sendChatMessage = async function(id) {
       const input = document.getElementById("chatInput");
       const text = input.value.trim();
-      if (!text) return;
+      if (!text || !appState.currentUser) return;
       if (!appState.chats[id]) appState.chats[id] = [];
       appState.chats[id].push({ sender: appState.currentUser.name, text });
       input.value = "";
@@ -554,11 +573,81 @@
       document.getElementById("productModal").style.display = "none";
     });
 
+    function updateProfileView() {
+      if (!appState.currentUser) return;
+      document.getElementById("headerUserSub").textContent = appState.currentUser.name + " (" + appState.currentUser.shamCode + ")";
+      document.getElementById("profileDetails").innerHTML = `
+        <p><strong>ئىسمى:</strong> ${escapeHtml(appState.currentUser.name)}</p>
+        <p><strong>Gmail:</strong> ${escapeHtml(appState.currentUser.email)}</p>
+        <p><strong>ShamCash ID:</strong> ${escapeHtml(appState.currentUser.shamCode)}</p>
+        ${appState.currentUser.qrImage ? `<div style="margin-top:10px;"><p><strong>ShamCash QR كودىڭىز:</strong></p><img src="${appState.currentUser.qrImage}" style="max-width:150px; border-radius:8px; border:2px solid var(--primary); margin-top:5px;"></div>` : ""}
+      `;
+    }
+
     document.addEventListener("DOMContentLoaded", async () => {
-      const saved = await StorageEngine.get("real_sham_state_v10", null);
-      if (saved && Array.isArray(saved.products)) appState = saved;
+      const saved = await StorageEngine.get("real_sham_state_v11", null);
+      if (saved) appState = saved;
+
+      const overlay = document.getElementById("profileOverlay");
+
+      if (appState.currentUser) {
+        overlay.style.display = "none";
+        updateProfileView();
+      } else {
+        overlay.style.display = "flex";
+      }
 
       renderProducts();
+
+      document.getElementById("createProfileBtn").addEventListener("click", async () => {
+        const name = document.getElementById("regNameInput").value.trim();
+        const email = document.getElementById("regEmailInput").value.trim();
+        const sham = document.getElementById("regShamInput").value.trim();
+        const qrFile = document.getElementById("regQrFile").files[0];
+
+        if (!name || !email.includes("@") || !sham) {
+          showToast("⚠️ بارلىق كاتەكچىلەرنى توغرا تولدۇرۇڭ!");
+          return;
+        }
+
+        const reader = new FileReader();
+        if (qrFile) {
+          reader.onload = async function(e) {
+            saveUserProfile(name, email, sham, e.target.result);
+          };
+          reader.readAsDataURL(qrFile);
+        } else {
+          saveUserProfile(name, email, sham, "");
+        }
+      });
+
+      async function saveUserProfile(name, email, sham, qrImage) {
+        appState.currentUser = { name, email, shamCode: sham, qrImage };
+        if (!appState.users.some(u => u.email === email)) {
+          appState.users.unshift({ name, email, shamCode: sham });
+        }
+        await saveState();
+        updateProfileView();
+        renderProducts();
+        overlay.style.display = "none";
+        showToast(`🎉 خۇش كەپسىز ${name}! پروفىلىڭىز ياسالدى.`);
+      }
+
+      document.getElementById("changeProfileBtn").addEventListener("click", () => {
+        document.getElementById("regNameInput").value = appState.currentUser.name;
+        document.getElementById("regEmailInput").value = appState.currentUser.email;
+        document.getElementById("regShamInput").value = appState.currentUser.shamCode;
+        overlay.style.display = "flex";
+      });
+
+      document.getElementById("editProfileBtn").addEventListener("click", () => {
+        if(appState.currentUser) {
+          document.getElementById("regNameInput").value = appState.currentUser.name;
+          document.getElementById("regEmailInput").value = appState.currentUser.email;
+          document.getElementById("regShamInput").value = appState.currentUser.shamCode;
+        }
+        overlay.style.display = "flex";
+      });
 
       document.querySelectorAll(".bottom-nav .nav-item").forEach(btn => {
         btn.addEventListener("click", () => {
@@ -587,54 +676,34 @@
         const price = parseFloat(document.getElementById("prodPriceInput").value);
         const location = document.getElementById("prodLocationInput").value.trim();
         const desc = document.getElementById("prodDescInput").value.trim();
-        const sham = document.getElementById("prodSellerShamInput").value.trim() || appState.currentUser.shamCode;
         const imgFile = document.getElementById("prodImageFile").files[0];
-        const qrFile = document.getElementById("prodQrFile").files[0];
 
         if (!name || isNaN(price) || !desc) {
           showToast("⚠️ زۆرۈر ئۇچۇرلارنى تولۇق تولدۇرۇڭ!");
           return;
         }
 
-        let image = "", qrImage = "";
         const readerImg = new FileReader();
-        const readerQr = new FileReader();
-
         readerImg.onload = function(e) {
-          image = e.target.result;
-          if (qrFile) {
-            readerQr.onload = function(ev) {
-              qrImage = ev.target.result;
-              saveProduct(name, price, location, desc, sham, image, qrImage);
-            };
-            readerQr.readAsDataURL(qrFile);
-          } else {
-            saveProduct(name, price, location, desc, sham, image, "");
-          }
+          saveProduct(name, price, location, desc, e.target.result);
         };
 
         if (imgFile) {
           readerImg.readAsDataURL(imgFile);
         } else {
-          if (qrFile) {
-            readerQr.onload = function(ev) {
-              saveProduct(name, price, location, desc, sham, "", ev.target.result);
-            };
-            readerQr.readAsDataURL(qrFile);
-          } else {
-            saveProduct(name, price, location, desc, sham, "", "");
-          }
+          saveProduct(name, price, location, desc, "");
         }
       });
 
-      function saveProduct(name, price, location, desc, sham, image, qrImage) {
+      function saveProduct(name, price, location, desc, image) {
         appState.products.unshift({
           id: "p_" + Date.now(),
           name, price, location, desc,
           sellerName: appState.currentUser.name,
           sellerEmail: appState.currentUser.email,
-          shamCode: sham,
-          image, qrImage,
+          shamCode: appState.currentUser.shamCode,
+          qrImage: appState.currentUser.qrImage || "",
+          image,
           isSold: false,
           buyerName: null,
           soldTime: null
@@ -646,7 +715,6 @@
         document.getElementById("prodLocationInput").value = "";
         document.getElementById("prodDescInput").value = "";
         document.getElementById("prodImageFile").value = "";
-        document.getElementById("prodQrFile").value = "";
         showToast("✅ مەھسۇلات بازارغا چىقتى!");
       }
 
@@ -672,20 +740,6 @@
         renderAdmin();
         showToast("🗑️ ئۆچۈرۈلدى.");
       };
-
-      document.getElementById("googleLoginBtn").addEventListener("click", async () => {
-        const name = document.getElementById("googleNameInput").value.trim();
-        const email = document.getElementById("googleEmailInput").value.trim();
-        const sham = document.getElementById("userShamInput").value.trim() || "SC-5520";
-        if (!name || !email.includes("@")) {
-          showToast("⚠️ توغرا ئۇچۇر يېزىڭ!");
-          return;
-        }
-        appState.currentUser = { name, email, shamCode: sham };
-        if (!appState.users.some(u => u.email === email)) appState.users.unshift({ name, email, shamCode: sham });
-        saveState();
-        showToast(`🔵 خۇش كەپسىز ${name}!`);
-      });
     });
   </script>
 </body>
