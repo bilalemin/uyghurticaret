@@ -690,6 +690,7 @@
           appState.chats = cloudData.chats || {};
 
           await PermanentDB.set(MARKET_KEY, appState);
+          checkUserBlocked();
           renderProducts();
           if (document.getElementById("adminTab").classList.contains("active")) {
             renderAdmin();
@@ -711,6 +712,23 @@
         });
       } catch (e) {
         console.warn("Cloud push error:", e);
+      }
+    }
+
+    function checkUserBlocked() {
+      if (!currentUser || !currentUser.email) return;
+      const isBlocked = appState.blockedUsers.some(b => b.email === currentUser.email);
+      if (isBlocked) {
+        document.body.innerHTML = `
+          <div style="position:fixed; top:0; left:0; right:0; bottom:0; background:#0f172a; color:#ffffff; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px; text-align:center; z-index:999999;">
+            <div style="font-size:4rem; margin-bottom:16px;">🚫</div>
+            <h1 style="font-size:1.5rem; color:#ef4444; margin-bottom:12px;">بۇ تور بېكەتنىڭ باشقۇرغۇچىسى سىزنى چەكلىdi!</h1>
+            <p style="font-size:0.95rem; color:#94a3b8; max-width:400px; line-height:1.6;">
+              باشقۇرغۇچى تەرىپىدىن bu تور بېكەتكە كىرىشىڭىز چەكلەندى. شۇڭلاشقا بۇ سۇپىدىن پايدicialىنەلمەйсىز.
+            </p>
+          </div>
+        `;
+        throw new Error("User blocked");
       }
     }
 
@@ -755,7 +773,6 @@
       let list = appState.products.filter(p => {
         if (!p) return false;
         
-        // Engellenen kullanıcıların ürünlerini pazarda gizle
         if (appState.blockedUsers.some(b => b.email === p.sellerEmail)) return false;
 
         if (currentCategory === "favs") {
@@ -860,7 +877,7 @@
           <div style="margin-bottom:15px;">
             <button onclick="requestBuy('${p.id}')" class="btn-primary" style="background:var(--accent);">💳 پۇل ئەۋەتتىم (ساتقۇچىغا ئۇقتۇرۇش)</button>
           </div>
-        ` : `<div style="color:#ef4444; font-weight:bold; text-align:center; margin-bottom:15px;">بۇ مەھسۇلات ساتىлды!</div>`}
+        ` : `<div style="color:#ef4444; font-weight:bold; text-align:center; margin-bottom:15px;">بۇ مەھسۇلات ساتىلدى!</div>`}
 
         ${isOwner && p.buyerName && !p.isSold ? `
           <div style="background:#ecfdf5; border:1px solid var(--accent); padding:10px; border-radius:8px; margin-bottom:15px; text-align:center;">
@@ -960,6 +977,11 @@
 
       if (savedProfile && savedProfile.name && savedProfile.email) {
         currentUser = savedProfile;
+        try {
+          checkUserBlocked();
+        } catch (e) {
+          return;
+        }
         overlay.style.display = "none";
         updateProfileView();
       } else {
@@ -968,6 +990,12 @@
 
       renderProducts();
       await syncFromCloud();
+
+      try {
+        checkUserBlocked();
+      } catch (e) {
+        return;
+      }
 
       setInterval(() => {
         syncFromCloud();
@@ -1000,12 +1028,19 @@
           return;
         }
 
-        let qrImage = currentUser?.qrImage || "";
+        currentUser = { name, email, shamCode: sham, whatsapp, telegram, qrImage: currentUser?.qrImage || "" };
+        try {
+          checkUserBlocked();
+        } catch (e) {
+          return;
+        }
+
+        let qrImage = currentUser.qrImage;
         if (qrFile) {
           qrImage = await compressImage(qrFile, 450, 0.7);
         }
+        currentUser.qrImage = qrImage;
 
-        currentUser = { name, email, shamCode: sham, whatsapp, telegram, qrImage };
         await saveProfileData();
 
         await syncFromCloud();
@@ -1139,7 +1174,6 @@
       });
 
       function renderAdmin() {
-        // Aktif Kullanıcılar Tablosu
         document.getElementById("adminUserCount").textContent = appState.users.length;
         const uTbody = document.getElementById("adminUsersTable");
         uTbody.innerHTML = "";
@@ -1154,13 +1188,12 @@
                 <td>${escapeHtml(u.name)}</td>
                 <td>${escapeHtml(u.email)}</td>
                 <td>${escapeHtml(u.shamCode)}</td>
-                <td><button onclick="blockUser(${index})" style="color:#f59e0b; background:none; border:none; cursor:pointer; font-weight:bold;">چەكلەش (Engelle)</button></td>
+                <td><button onclick="blockUser(${index})" style="color:#f59e0b; background:none; border:none; cursor:pointer; font-weight:bold;">چەكلەش</button></td>
               </tr>
             `;
           });
         }
 
-        // Engellenenler Tablosu
         const bTbody = document.getElementById("adminBlockedTable");
         bTbody.innerHTML = "";
         if (!appState.blockedUsers || appState.blockedUsers.length === 0) {
@@ -1179,7 +1212,6 @@
           });
         }
 
-        // Ürünler Tablosu
         document.getElementById("adminProdCount").textContent = appState.products.length;
         const pTbody = document.getElementById("adminProductsTable");
         pTbody.innerHTML = "";
@@ -1209,7 +1241,7 @@
           await pushToCloud();
           renderAdmin();
           renderProducts();
-          showToast("🚫 ئەزا چەكلەندى ۋە چەكلەنگەنلەر تىزىملىكىگە ئۆتكۈزۈلدى.");
+          showToast("🚫 ئەزا چەكلەندى.");
         }
       };
 
