@@ -1,4 +1,4 @@
-{
+﻿{
   "background_color": "#ffffff",
   "dir": "ltr",
   "display": "standalone",
@@ -12,16 +12,16 @@
   "description": "Uyghur community marketplace and trading platform",
   "icons": [
     {
-      "src": "icon192.png",
+      "src": "/uyghurticaret/icon192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "icon512.png",
+      "src": "/uyghurticaret/icon512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ]
 }
