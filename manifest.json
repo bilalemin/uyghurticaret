@@ -12,13 +12,13 @@
   "description": "Uyghur community marketplace and trading platform",
   "icons": [
     {
-      "src": "icon192.png",
+      "src": "https://i.ibb.co/L9Qk36vY/icon192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "icon512.png",
+      "src": "https://i.ibb.co/g80N30yS/icon512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
