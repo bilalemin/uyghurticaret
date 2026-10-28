@@ -1,0 +1,8 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "io.github.bilalemin.twa",
+    "sha256_cert_fingerprints": ["4A:35:C7:E0:86:AD:47:D8:BB:30:9F:BD:BE:9F:C6:A0:45:18:05:8B:5C:EF:69:A4:57:C1:B3:B8:89:97:9D:8C"]
+  }
+}]
